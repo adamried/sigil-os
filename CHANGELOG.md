@@ -1,40 +1,5 @@
 # Changelog
 
-## [Unreleased] - 2026-02-21
-
-### Added
-
-#### Testing Framework Phase 1: Tier 0 Static Analysis (Linter Extension)
-- **3 new linter checks in `tools/workflow-linter.py`:** Check 8 (cross-file constants consistency — validates shared numeric constants like max iterations, complexity ranges, and string constants like phase names and human tiers across files), Check 9 (CLAUDE.md enforcement pointer — conditional, skips dev repo), Check 10 (hook file references — validates hook scripts referenced in hooks.json exist).
-- **`.github/workflows/lint.yml`:** CI workflow runs linter on every push.
-
-#### Testing Framework: Phase 2 Enforcement Contracts
-- **E-001, E-002, E-003:** Three enforcement level contract tests covering required (hard-block), recommended (warn with override), and informational (silent log) standards routing. Tests grade Discrepancy Detection's enforcement-to-severity mapping deterministically.
-- **"enforcement" category** added to contract-runner.py for discovery.
-- **Archived** `remaining-prerequisites.md` — all claimed blockers resolved in current codebase.
-
-#### Testing Framework Phase 2: Tier 1 Contract Tests
-- **`tools/contract-runner.py`:** Standalone contract test executor. 35 single-turn `claude -p` contracts across 6 categories (routing, constitution, workflow, jargon, specialist, learning). Deterministic JSON grading — no LLM judgment. Supports parallel execution, dry-run validation, category filtering.
-- **`test-runs/contracts/`:** Contract test definitions organized by category with `CONTRACT-REGISTRY.md` master index.
-
-#### Testing Framework Phase 3: Tier 2 Behavioral Assertions
-- **`tools/behavioral_assertions.py`:** New deterministic behavioral assertion module for multi-turn persona test transcripts. 8 checks (clarification limits, jargon avoidance, progress indicators, human checkpoints, artifact ordering, graceful recovery, constitution compliance, specialist visibility). Zero LLM cost — all regex/string operations.
-- **`--no-llm-grading` flag in test-grader.py:** Runs structural + behavioral grading layers without LLM UX scoring. Free alternative to full grading.
-- **3-layer GRADE-REPORT.md format:** Behavioral assertions section inserted between structural checks and UX scores. Includes pass/fail table and violation details.
-- **`test-runs/grading-rubric.md` updated:** Added behavioral assertions section with all 8 checks, thresholds, and applicability notes.
-- **`dev-docs/testing/tier-2-behavioral-tests.md`:** Tier 2 documentation covering architecture, all 8 checks, CLI usage, and user track behavior.
-
-#### Testing Framework Phase 4: Consolidation
-- **Reclassified `test-runs/prompts/` → `test-runs/reference-flows/`:** Legacy flow test prompts preserved as reference documentation. Index updated with contract test cross-references showing which Tier 1 contracts cover each flow test's behavioral rules.
-- **Archived `tests/scenarios/` → `archive/tests-scenarios/`:** Legacy scenario files moved to archive after confirming zero external references.
-- **`dev-docs/testing/README.md`:** Framework overview tying all 3 tiers together with architecture table, directory structure, quick reference commands, and recommended cadences.
-- **`dev-docs/testing/running-tests.md`:** Step-by-step how-to guide for running all tiers, with CLI flags, exit codes, troubleshooting, and recommended workflows (quick validation, pre-commit, PR, weekly regression, pre-release).
-
-#### Post-Implementation Cleanup
-- **Jargon suppression in orchestrator (`sigil.md`):** Added global output rule — never expose internal skill/agent/chain names to users. Reinforced in `business-analyst.md` non-technical notes.
-- **`tools/install-hooks.sh`:** Pre-commit hook installer for local development. Safe to run multiple times.
-- **Linter Check 8 expanded:** Added phase names and human tiers as validated string constants.
-
 ## [0.28.0] - 2026-02-20
 
 ### Fixed
