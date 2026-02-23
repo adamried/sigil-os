@@ -8,6 +8,11 @@
 - **3 new linter checks in `tools/workflow-linter.py`:** Check 8 (cross-file constants consistency — validates shared numeric constants like max iterations, complexity ranges, and string constants like phase names and human tiers across files), Check 9 (CLAUDE.md enforcement pointer — conditional, skips dev repo), Check 10 (hook file references — validates hook scripts referenced in hooks.json exist).
 - **`.github/workflows/lint.yml`:** CI workflow runs linter on every push.
 
+#### Testing Framework: Phase 2 Enforcement Contracts
+- **E-001, E-002, E-003:** Three enforcement level contract tests covering required (hard-block), recommended (warn with override), and informational (silent log) standards routing. Tests grade Discrepancy Detection's enforcement-to-severity mapping deterministically.
+- **"enforcement" category** added to contract-runner.py for discovery.
+- **Archived** `remaining-prerequisites.md` — all claimed blockers resolved in current codebase.
+
 #### Testing Framework Phase 2: Tier 1 Contract Tests
 - **`tools/contract-runner.py`:** Standalone contract test executor. 35 single-turn `claude -p` contracts across 6 categories (routing, constitution, workflow, jargon, specialist, learning). Deterministic JSON grading — no LLM judgment. Supports parallel execution, dry-run validation, category filtering.
 - **`test-runs/contracts/`:** Contract test definitions organized by category with `CONTRACT-REGISTRY.md` master index.
