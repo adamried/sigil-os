@@ -6,7 +6,7 @@ category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer]
-tools: [Read, Write, Glob, Grep, WebSearch]
+tools: Read, Write, Glob, Grep, WebSearch
 inputs: [target_platforms, team_constraints, performance_requirements]
 outputs: [framework_recommendation, rationale]
 ---

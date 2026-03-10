@@ -6,7 +6,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [view_files, test_files]
 ---
@@ -326,6 +326,100 @@ Features/Common/UI/
 - Use @ViewBuilder efficiently
 - Avoid expensive operations in body
 - Use task modifiers for async work
+
+## End-to-End Example
+
+**Spec input** — UI Designer produces a component spec for a status badge:
+
+```json
+{
+  "component_spec": {
+    "name": "StatusBadge",
+    "type": "presentational",
+    "props": [
+      { "name": "status", "type": "enum", "values": ["active", "pending", "error"], "required": true },
+      { "name": "label", "type": "string", "required": true }
+    ]
+  },
+  "design_tokens": {
+    "colors": { "active": "#22C55E", "pending": "#F59E0B", "error": "#EF4444" }
+  },
+  "accessibility_requirements": { "role": "status", "aria": { "live": "polite" } }
+}
+```
+
+**Generated view** — `Sources/Components/StatusBadge.swift`:
+
+```swift
+import SwiftUI
+
+enum BadgeStatus {
+    case active, pending, error
+
+    var color: Color {
+        switch self {
+        case .active:  return Color(hex: "#22C55E")
+        case .pending: return Color(hex: "#F59E0B")
+        case .error:   return Color(hex: "#EF4444")
+        }
+    }
+}
+
+struct StatusBadge: View {
+    let status: BadgeStatus
+    let label: String
+
+    var body: some View {
+        Text(label)
+            .font(.system(size: 13, weight: .semibold))
+            .foregroundColor(status.color)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(status.color.opacity(0.15))
+            .cornerRadius(12)
+            .accessibilityLabel("\(label): \(String(describing: status))")
+            .accessibilityAddTraits(.updatesFrequently)
+    }
+}
+
+#Preview {
+    VStack(spacing: 12) {
+        StatusBadge(status: .active, label: "Live")
+        StatusBadge(status: .pending, label: "Pending")
+        StatusBadge(status: .error, label: "Failed")
+    }
+    .padding()
+}
+```
+
+**Generated test** — `Tests/ComponentTests/StatusBadgeTests.swift`:
+
+```swift
+import XCTest
+@testable import YourApp
+
+final class StatusBadgeTests: XCTestCase {
+    func testLabelIsStored() {
+        let badge = StatusBadge(status: .active, label: "Live")
+        XCTAssertEqual(badge.label, "Live")
+    }
+
+    func testStatusColorMapping() {
+        XCTAssertEqual(BadgeStatus.active.color, Color(hex: "#22C55E"))
+        XCTAssertEqual(BadgeStatus.error.color, Color(hex: "#EF4444"))
+    }
+}
+```
+
+**Handoff:**
+```json
+{
+  "files_created": ["Sources/Components/StatusBadge.swift", "Tests/ComponentTests/StatusBadgeTests.swift"],
+  "min_ios_version": "15.0",
+  "accessibility_implemented": true,
+  "previews_included": true
+}
+```
 
 ## Human Checkpoint
 

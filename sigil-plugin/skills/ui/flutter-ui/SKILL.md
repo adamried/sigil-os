@@ -6,7 +6,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [widget_files, test_files]
 ---
@@ -288,6 +288,105 @@ test/widgets/
 - Platform.isIOS / Platform.isAndroid
 - Cupertino widgets for iOS feel
 - Adaptive widgets when available
+
+## End-to-End Example
+
+**Spec input** — UI Designer produces a component spec for a status badge:
+
+```json
+{
+  "component_spec": {
+    "name": "StatusBadge",
+    "type": "presentational",
+    "props": [
+      { "name": "status", "type": "enum", "values": ["active", "pending", "error"], "required": true },
+      { "name": "label", "type": "string", "required": true }
+    ]
+  },
+  "design_tokens": {
+    "colors": { "active": "#22C55E", "pending": "#F59E0B", "error": "#EF4444" }
+  },
+  "accessibility_requirements": { "role": "status", "aria": { "live": "polite" } }
+}
+```
+
+**Generated widget** — `lib/widgets/status_badge.dart`:
+
+```dart
+import 'package:flutter/material.dart';
+
+enum BadgeStatus { active, pending, error }
+
+class StatusBadge extends StatelessWidget {
+  final BadgeStatus status;
+  final String label;
+
+  const StatusBadge({super.key, required this.status, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      liveRegion: true,
+      label: '$label: ${status.name}',
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        decoration: BoxDecoration(
+          color: _color.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: _color,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color get _color {
+    switch (status) {
+      case BadgeStatus.active:  return const Color(0xFF22C55E);
+      case BadgeStatus.pending: return const Color(0xFFF59E0B);
+      case BadgeStatus.error:   return const Color(0xFFEF4444);
+    }
+  }
+}
+```
+
+**Generated test** — `test/widgets/status_badge_test.dart`:
+
+```dart
+testWidgets('renders label text', (tester) async {
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: Scaffold(body: StatusBadge(status: BadgeStatus.active, label: 'Live')),
+    ),
+  );
+  expect(find.text('Live'), findsOneWidget);
+});
+
+testWidgets('has live-region semantics', (tester) async {
+  await tester.pumpWidget(
+    const MaterialApp(
+      home: Scaffold(body: StatusBadge(status: BadgeStatus.error, label: 'Failed')),
+    ),
+  );
+  final semantics = tester.getSemantics(find.byType(StatusBadge));
+  expect(semantics.hasFlag(SemanticsFlag.isLiveRegion), isTrue);
+});
+```
+
+**Handoff:**
+```json
+{
+  "files_created": ["lib/widgets/status_badge.dart", "test/widgets/status_badge_test.dart"],
+  "design_system": "material",
+  "accessibility_implemented": true
+}
+```
 
 ## Human Checkpoint
 

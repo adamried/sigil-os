@@ -566,7 +566,7 @@ When blockers appear, they need action.
 
 ### Project Profiles
 
-If you work on more than one project, Sigil can create a **project profile** for each one. A profile is a short file that describes what the project does, what technologies it uses, and what it shares with other projects.
+If you work on more than one project, Sigil can create a **project profile** for each one. A profile is a short file that describes what the project does, what technologies it uses, and what it shares with other projects. It can also include optional sections for databases, API surface, auth model, domain glossary, and project structure.
 
 **Creating a profile:**
 

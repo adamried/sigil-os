@@ -6,7 +6,7 @@ category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer]
-tools: [Read, Glob, Grep]
+tools: Read, Glob, Grep
 inputs: [codebase_path]
 outputs: [existing_components, design_tokens, patterns, style_conventions]
 ---

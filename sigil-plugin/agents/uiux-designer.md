@@ -2,6 +2,7 @@
 name: uiux-designer
 description: Component designer, UX specialist, and accessibility champion. Determines UI framework, creates component hierarchies, validates accessibility requirements, and integrates with design tools like Figma.
 version: 1.0.0
+model: sonnet
 tools: [Read, Write, Edit, Glob, Grep, WebFetch, WebSearch]
 active_phases: [Plan]
 human_tier: review

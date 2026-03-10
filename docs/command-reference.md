@@ -77,7 +77,11 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
    - No active workflow → Suggests starting one
    - Active workflow → Shows status and suggests next step
    - With a description → Starts the spec-first workflow
-   - With a ticket key (e.g., `PROJ-123`) → Fetches ticket details and routes by work type
+   - With a ticket key (e.g., `PROJ-123`) → Fetches ticket details and routes by work type:
+     - `maintenance` tickets → Quick Flow
+     - `pre-decomposed` stories (Stories with acceptance criteria) → Implement-Ready chain (skips spec writing — AC is the spec)
+     - `bug` → Standard track
+     - `feature`/`enhancement` → Normal routing
 7. After a feature completes (code review passes):
    - If the feature came from a ticket, **automatically updates the ticket** with a summary and status transition
    - Presents a **next-action prompt**:
@@ -386,8 +390,26 @@ Generate or view your project's profile — a description of your tech stack, ex
 2. Shows detected languages, frameworks, and tools for confirmation
 3. Asks for a short project description
 4. Optionally asks what APIs or events your project exposes and consumes
-5. Generates `.sigil/project-profile.yaml`
-6. If connected to shared context, publishes the profile for sibling projects to see
+5. Optionally asks about databases, auth model, domain glossary, and project structure (Steps 7a–7e)
+6. Generates `.sigil/project-profile.yaml`
+7. If connected to shared context, publishes the profile for sibling projects to see
+
+### Profile Sections
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| `name` | Yes | Repository/project name |
+| `description` | Yes | Plain-language project summary |
+| `tech_stack` | Yes | Languages, frameworks, infrastructure, testing |
+| `exposes` | Yes | APIs, events, or packages this project provides |
+| `consumes` | Yes | External services or APIs this project uses |
+| `depends_on` | Yes | Sibling project dependencies |
+| `contacts` | Yes | Owner and team contact info |
+| `databases` | Optional | Data stores with names and purposes |
+| `api_surface` | Optional | Route modules with path and description |
+| `auth_model` | Optional | Auth type, description, and roles |
+| `domain_glossary` | Optional | Project-specific business term definitions |
+| `project_structure` | Optional | Key directory annotations |
 
 ### When to Use
 

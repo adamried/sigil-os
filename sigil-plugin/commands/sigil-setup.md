@@ -131,6 +131,31 @@ If yes, invoke:
 Skill(skill: "sigil-profile")
 ```
 
+### Step 5.5: MCP Profile Selection (if integrations discovered)
+
+If Step 3.5 discovered any MCP adapters (Jira, Slack, etc.), ask:
+
+```
+You have MCP integrations available. What's your primary development focus?
+
+1. Backend / API
+2. Frontend / UI
+3. Full-Stack
+4. Custom (I'll describe it)
+```
+
+Use `AskUserQuestion` for this choice.
+
+Based on response, write to `.sigil/config.yaml`:
+- Option 1 → `mcp_profile: backend`
+- Option 2 → `mcp_profile: frontend`
+- Option 3 → `mcp_profile: full-stack`
+- Option 4 → prompt for brief description, write `mcp_profile: custom` and `mcp_profile_description: {description}`
+
+This controls which MCP tool warnings skills display during implementation.
+
+If no MCP adapters were discovered in Step 3.5, skip this step silently.
+
 ### Step 6: Run Preflight Check
 
 The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`. Read the preflight-check SKILL.md and follow its process to create these files.

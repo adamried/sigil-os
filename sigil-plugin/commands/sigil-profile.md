@@ -58,7 +58,31 @@ Display the current project profile.
    Depends On: {depends_on}
 
    Contacts: {owner} / {team}
+
+   # Optional sections (shown only if present):
+   Databases: {name} — {purpose}
+   API Surface: /{route} — {description}
+   Auth Model: {type} — {description} (roles: {roles})
+   Domain Glossary: {Term}: {Definition}
+   Project Structure: {dir/}: {purpose}
    ```
+
+**Profile Sections** (10 total — 5 required, 5 optional):
+
+| Section | Required | Description |
+|---------|----------|-------------|
+| `name` | Yes | Repository/project name |
+| `description` | Yes | Plain-language project summary |
+| `tech_stack` | Yes | Languages, frameworks, infrastructure, testing |
+| `exposes` | Yes | APIs, events, or packages this project provides |
+| `consumes` | Yes | External services or APIs this project uses |
+| `depends_on` | Yes | Sibling project dependencies |
+| `contacts` | Yes | Owner and team contact info |
+| `databases` | Optional | Data stores with names and purposes |
+| `api_surface` | Optional | Route modules with path and description |
+| `auth_model` | Optional | Auth type, description, and roles |
+| `domain_glossary` | Optional | Project-specific business term definitions |
+| `project_structure` | Optional | Key directory annotations |
 
 ## Output Validation
 

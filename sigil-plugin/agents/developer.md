@@ -2,6 +2,7 @@
 name: developer
 description: Code implementation specialist. Writes code to fulfill tasks, follows test-first patterns, implements fixes when needed.
 version: 1.1.0
+model: opus
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Implement, Validate]
 human_tier: auto

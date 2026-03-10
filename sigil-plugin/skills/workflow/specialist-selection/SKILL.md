@@ -1,7 +1,7 @@
 ---
 name: specialist-selection
 description: Selects appropriate specialist agents for implementation and validation tasks based on file scope, keywords, and project context. Invoke during task decomposition and before implementation/validation phases.
-version: 1.0.0
+version: 1.1.0
 category: workflow
 chainable: true
 invokes: []
@@ -40,6 +40,8 @@ For implementation tasks, run a selection cascade to find the best developer spe
 #### 1a. File Scope Matching (Highest Priority)
 
 Match file paths against specialist domains:
+
+<!-- payment-developer: tabled, see dev-docs/payment-developer-draft.md -->
 
 | Path Pattern | Specialist |
 |-------------|-----------|
@@ -141,6 +143,58 @@ When a specialist is assigned, the implementation loop loads it by:
 
 Tasks without a specialist assignment use the base agent directly.
 
+## Worked Example
+
+A feature spec calls for "Add Stripe webhook endpoint to handle payment confirmations and update the orders table."
+
+**Input:**
+```json
+{
+  "task_description": "Implement Stripe webhook endpoint for payment_intent.succeeded events, validate signature, update order status in DB",
+  "task_files": [
+    "src/api/webhooks/stripe.ts",
+    "src/api/webhooks/stripe.test.ts",
+    "src/models/order.ts",
+    "src/migrations/20260301_add_payment_status.ts"
+  ]
+}
+```
+
+**Step 1 — Developer Specialist Selection:**
+
+File scope matching:
+- `src/api/webhooks/stripe.ts` → matches `**/api/**` → `api-developer` (2 files)
+- `src/models/order.ts` → matches `**/models/**` → `data-developer` (1 file)
+- `src/migrations/20260301_add_payment_status.ts` → matches `**/migrations/**` → `data-developer` (1 file)
+
+Domain breakdown: api-developer 50%, data-developer 50% — even split (within 20%).
+
+However, keyword matching breaks the tie: "webhook", "endpoint" strongly signal `api-developer`.
+
+Secondary domain note added for `data-developer` (migration + model file).
+
+**Step 2 — Validation Specialist Selection:**
+
+- `functional-qa` — always assigned
+- `appsec-reviewer` — description contains "validate signature" (security keyword), files touch input handling
+- `edge-case-qa` — project type is Standard (from constitution)
+
+**Result:**
+```json
+{
+  "task_id": "T007",
+  "developer_specialist": "api-developer",
+  "developer_specialist_reason": "Files match API path pattern (src/api/webhooks/stripe.ts); keywords 'webhook', 'endpoint' confirm",
+  "collaboration_notes": "Secondary domain: data-developer (touches src/models/order.ts and migration file — ensure ORM conventions followed)",
+  "validation_specialists": ["functional-qa", "edge-case-qa", "appsec-reviewer"],
+  "validation_reasons": {
+    "functional-qa": "Always assigned",
+    "edge-case-qa": "Project type is Standard",
+    "appsec-reviewer": "Task involves webhook signature validation and external input handling"
+  }
+}
+```
+
 ## Error Handling
 
 | Error | Resolution |
@@ -155,3 +209,4 @@ Tasks without a specialist assignment use the base agent directly.
 | Version | Date | Changes |
 |---------|------|---------|
 | 1.0.0 | 2026-02-19 | Initial release (S3-101) |
+| 1.1.0 | 2026-02-26 | Removed payment-developer routing (tabled — specialist file removed in af0e2c8) |

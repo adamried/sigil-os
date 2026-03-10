@@ -6,7 +6,7 @@ category: ui
 chainable: false
 invokes: []
 invoked_by: [developer, uiux-designer]
-tools: [Read, Write, Edit, Bash, Glob, Grep, WebSearch]
+tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch
 inputs: [framework_name, framework_docs]
 outputs: [skill_definition_file]
 ---
@@ -87,7 +87,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [component_files, style_files, test_files]
 ---
@@ -238,7 +238,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [component_files, style_files, test_files]
 ---

@@ -108,6 +108,24 @@ Depends On:
   - {project}
 
 Contacts: {owner} / {team}
+
+# Optional sections — shown only when present in profile:
+
+Databases:
+  - {name}: {purpose}
+
+API Surface:
+  - /{route}: {description}
+
+Auth Model: {type}
+  {description}
+  Roles: {role1}, {role2}
+
+Domain Glossary:
+  {Term}: {Definition}
+
+Project Structure:
+  {dir/}: {purpose}
 ```
 
 ## Constitution Summary

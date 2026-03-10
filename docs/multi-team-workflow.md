@@ -125,7 +125,7 @@ Key details:
 
 ### Project profiles
 
-Each project can publish a profile describing its tech stack, exposed APIs, and consumed dependencies. Run `/sigil-profile` to create one.
+Each project can publish a profile describing its tech stack, exposed APIs, consumed dependencies, and optional sections for databases, auth model, domain glossary, and project structure. Run `/sigil-profile` to create one.
 
 - Profiles publish to the shared repo's `profiles/` directory automatically.
 - When you start a session, sibling profiles load so Sigil knows what other projects expose.

@@ -6,7 +6,7 @@ category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer]
-tools: [Read, Write, Glob]
+tools: Read, Write, Glob
 inputs: [spec_path, user_scenarios]
 outputs: [user_flows, interaction_patterns, state_map]
 ---

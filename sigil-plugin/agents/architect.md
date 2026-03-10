@@ -2,6 +2,7 @@
 name: architect
 description: Technical designer and decision maker. Researches technical approaches, creates implementation plans, documents architecture decisions (ADRs), validates against constitution gates.
 version: 1.2.0
+model: opus
 tools: [Read, Write, Edit, Bash, Glob, Grep, WebFetch, WebSearch]
 active_phases: [Plan]
 human_tier: review

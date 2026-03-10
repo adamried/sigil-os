@@ -6,7 +6,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [component_files, style_files, test_files]
 ---

@@ -9,6 +9,7 @@ Contains skill chain definitions that orchestrate multi-skill workflows.
 | Full Pipeline | `full-pipeline.md` | Standard/Enterprise track features (includes UI/UX design phase) |
 | Quick Flow | `quick-flow.md` | Bug fixes, small changes |
 | Discovery Chain | `discovery-chain.md` | New project setup and stack selection |
+| Implement-Ready | `implement-ready.md` | Streamlined workflow for pre-decomposed tickets with acceptance criteria — skips spec/clarify/task-decompose, treats story as single task |
 
 ## Full Pipeline Overview
 

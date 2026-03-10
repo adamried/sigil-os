@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.29.0] - 2026-03-09
+
+### Added
+
+#### Group A — Pure Enhancements (sigil-gb → sigil-os merge)
+- **Model tier assignments:** Added `model:` frontmatter field to all 9 agent files and 2 workflow skills — `opus` for Orchestrator, Developer, QA Engineer, Architect, Security; `sonnet` for Business Analyst, DevOps, Task Planner, UI/UX Designer; `haiku` for preflight-check and status-reporter.
+- **Implement-Ready chain v1.0.0:** New chain for pre-decomposed tickets (Stories with acceptance criteria). Skips spec-writer, clarifier, and task-decomposer; treats the story as a single task with AC as the spec.
+- **Quick Flow handoff-back step (v1.3.0):** Added conditional handoff-back step after qa-fixer/learning-capture — writes results back to the originating ticket when `ticket_key` exists in context.
+- **Skill-frontmatter JSON Schema:** New `sigil-plugin/schemas/skill-frontmatter.json` for linting SKILL.md frontmatter fields including model tier validation.
+- **UI skill worked examples:** Full end-to-end StatusBadge examples added to Flutter, SwiftUI, and Vue 3 UI skills (component + tests + handoff JSON).
+- **knowledge-search worked example:** Added full query→result worked example (user profiles search through all 5 steps) and updated invocation triggers in description.
+- **specialist-selection v1.1.0:** Removed tabled `payment-developer` specialist routing; added Stripe webhook worked example with keyword tiebreaking; updated version history.
+- **figma-review updates:** Added invocation triggers to description; expanded `tools` field with explicit Figma MCP tool names (`mcp__figma__get_design_context`, `mcp__figma__get_screenshot`, `mcp__figma__get_metadata`, `mcp__figma__get_variable_defs`).
+- **status-reporter invocation triggers:** Updated description to include "where are we", "show progress", "what's done" triggers.
+- **clarifier invokes comment:** Documented that orchestrator handles routing after clarifier completes, not direct invocation.
+
+#### Group B — Items Requiring Setup Docs
+- **Pre-decomposed ticket routing in `/sigil`:** Ticket routing table now shows `pre-decomposed → Implement-Ready chain` (Stories with non-empty acceptance criteria bypass spec/clarify/task-decompose).
+- **Jira skill v1.2.1:** Pre-decomposed category detection (Story + non-empty AC → `pre-decomposed`); epic name override (parent epic summary matched against `maintenance_epic_patterns` → `maintenance`); configurable custom field IDs for story_points and acceptance_criteria via `config.custom_fields`.
+- **Jira adapter config template:** New `sigil-plugin/integrations/jira.yaml` — generalized template with setup instructions for copying to a shared context repo.
+- **Team config hook:** New `sigil-plugin/hooks/load-team-config.sh` — detects active team from repo context using user-configured glob patterns in `.sigil/team-config.yaml`; writes `sigil_team`, `sigil_team_id`, `sigil_board_id` to config on session start.
+- **Enhanced project profiles (profile-generator v1.1.0):** 5 new optional profile sections with auto-detection and interactive prompts: Databases, API Surface, Auth Model, Domain Glossary, Project Structure. YAML template extended with all 5 sections.
+- **MCP profile selection in setup (Step 5.5):** During `/sigil-setup`, if MCP adapters were discovered, user is asked for their primary dev focus (Backend/Frontend/Full-Stack/Custom). Writes `mcp_profile:` to `.sigil/config.yaml` to control MCP tool warnings.
+
+#### Group C — Documentation
+- **codebase-assessment reference extraction:** Extracted ~130-line stack detection section to `references/stack-signals.md`; SKILL.md references the file instead of inlining content.
+- **shared-context-sync v1.6.0 reference extraction:** Extracted ~570-line protocol documentation to `references/sync-protocol.md`; SKILL.md updated to note it is an infrastructure skill and references the protocol file.
+
+### Changed
+
+- **`tools:` format normalization:** Changed array syntax (`[Read, Write]`) to comma-string (`Read, Write`) across 10+ skill files for consistency with the frontmatter schema.
+- **`docs/mcp-integration.md` major rewrite:** Added comprehensive Jira setup section (5 steps: field IDs → template → fill values → push → test) and Team Config Hook documentation. Replaced Slack with Context7 in integrations table; added Status column.
+- **`docs/command-reference.md`:** Updated `/sigil-profile` step count 6→7; added Profile Sections table listing all 10 sections (5 required, 5 optional); added pre-decomposed routing details to ticket routing description.
+- **`docs/glossary.md`:** Added 5 new entries for optional profile sections (Databases, API Surface, Auth Model, Domain Glossary, Project Structure).
+- **Profile description updates:** `docs/user-guide.md`, `docs/shared-context-setup.md`, and `docs/multi-team-workflow.md` updated to mention optional profile sections.
+- **`templates/output-formats.md`:** Extended Project Profile format with 5 optional sections.
+- **`hooks/hooks.json`:** Added `load-team-config.sh` to SessionStart hooks (async, 5s timeout).
+- **chains/README.md:** Added `implement-ready` to chain listing.
+
 ## [0.28.0] - 2026-02-20
 
 ### Fixed

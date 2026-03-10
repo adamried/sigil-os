@@ -176,6 +176,7 @@ When resuming implement phase:
 → If ticket-loader fails: show error message, offer plain-text input as fallback
 → Route by category from ticket-loader:
   - `maintenance` → Quick Flow (skip complexity assessor, use lighter quick-spec)
+  - `pre-decomposed` → Implement-Ready chain (skip spec-writer/clarifier/task-decomposer, story = single task with AC as spec)
   - `bug` (no security labels) → Standard track (cap, skip Enterprise)
   - `feature` / `enhancement` → normal routing via Step 3
 

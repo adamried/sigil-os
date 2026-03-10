@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sigil-os.dev/schemas/skill-frontmatter.json",
+  "title": "SKILL.md Frontmatter",
+  "description": "Validates the YAML frontmatter block in SKILL.md files.",
+  "type": "object",
+  "required": ["name", "description", "version", "category", "chainable", "tools"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique kebab-case identifier for the skill.",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable summary of what the skill does and when to invoke it.",
+      "minLength": 20
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the skill.",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "category": {
+      "type": "string",
+      "description": "Top-level category the skill belongs to.",
+      "enum": [
+        "workflow",
+        "design",
+        "ui",
+        "qa",
+        "review",
+        "research",
+        "learning",
+        "engineering",
+        "specification",
+        "shared-context",
+        "integration"
+      ]
+    },
+    "chainable": {
+      "type": "boolean",
+      "description": "Whether the orchestrator may chain this skill with others in a single turn."
+    },
+    "invokes": {
+      "type": "array",
+      "description": "Skills this skill may call downstream.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "invoked_by": {
+      "type": "array",
+      "description": "Skills or actors that call this skill.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tools": {
+      "type": "string",
+      "description": "Comma-separated list of tools the skill is allowed to use (e.g. \"Read, Glob, Grep\")."
+    },
+    "inputs": {
+      "type": "array",
+      "description": "Named context inputs the skill expects.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Named context outputs the skill produces.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "model": {
+      "type": "string",
+      "description": "Preferred model tier for running the skill.",
+      "enum": ["haiku", "sonnet", "opus"]
+    },
+    "type": {
+      "type": "string",
+      "description": "Optional qualifier for the skill kind (e.g. \"reference\" for policy/lookup skills)."
+    }
+  }
+}

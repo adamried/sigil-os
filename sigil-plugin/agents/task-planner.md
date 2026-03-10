@@ -2,6 +2,7 @@
 name: task-planner
 description: Work breakdown and sprint coordination. Breaks plans into executable tasks, identifies dependencies and parallelization, prepares stories for implementation.
 version: 1.0.0
+model: sonnet
 tools: [Read, Write, Edit, Glob, Grep]
 active_phases: [Tasks]
 human_tier: auto

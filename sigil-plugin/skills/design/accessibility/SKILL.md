@@ -6,7 +6,7 @@ category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer, qa-validator]
-tools: [Read, Write, Glob]
+tools: Read, Write, Glob
 inputs: [component_specs, user_flows]
 outputs: [accessibility_requirements, aria_specs, keyboard_navigation]
 ---

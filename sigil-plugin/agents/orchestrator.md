@@ -2,6 +2,7 @@
 name: orchestrator
 description: Central routing and coordination agent. Routes requests to appropriate agents, manages workflow state, tracks progress, provides status updates.
 version: 1.6.0
+model: opus
 tools: [Read, Write, Glob, Grep]
 active_phases: all
 human_tier: auto

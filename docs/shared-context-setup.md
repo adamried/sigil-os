@@ -77,7 +77,7 @@ Each project gets its own entry in `~/.sigil/registry.json`. All projects connec
 
 ### Project profiles sync too
 
-Run `/sigil-profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects.
+Run `/sigil-profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects. Optional sections cover databases, API surface, auth model, domain glossary, and project structure.
 
 - When you create or update a profile, it publishes to the shared repo's `profiles/` directory.
 - When you start a session, profiles from connected projects load automatically.

@@ -18,74 +18,115 @@ MCP lets Claude access project trackers, wikis, chat tools, and more. You add a 
 
 ### Overview Table
 
-| Integration | Agent | Skill | Purpose |
-|-------------|-------|-------|---------|
-| Jira/Linear | Task Planner | task-decomposer | Sync tasks to project tracker |
-| Confluence/Notion | Business Analyst | spec-writer | Publish specs to wiki |
-| Context7 | Architect | researcher | Access documentation context |
-| CI/CD (GitHub Actions, etc.) | DevOps | deploy-checker | Trigger/monitor pipelines |
-| Slack/Teams | Orchestrator | status-reporter | Post status updates |
-| Sentry/DataDog | QA Engineer | qa-validator | Access error monitoring |
+| Integration | Agent | Skill | Purpose | Status |
+|-------------|-------|-------|---------|--------|
+| Jira | Orchestrator | jira, ticket-loader | Route tickets through the right workflow | Setup Required |
+| Confluence/Notion | Business Analyst | spec-writer | Publish specs to wiki | Available |
+| Context7 | Architect | researcher | Access documentation context | Available |
+| CI/CD (GitHub Actions, etc.) | DevOps | deploy-checker | Trigger/monitor pipelines | Available |
+| Sentry/DataDog | QA Engineer | qa-validator | Access error monitoring | Available |
 
 ---
 
-## Jira/Linear Integration
+## Jira Integration
 
-### Purpose
+Sigil's Jira integration does more than sync tasks — it reads your tickets and routes them to the right workflow automatically. A Story with acceptance criteria goes directly to implementation; a chore labeled `tech-debt` goes to Quick Flow.
 
-Automatically sync tasks from Sigil to your project tracking system.
+### Prerequisites
 
-### Integration Points
+1. Atlassian MCP configured in Claude Code:
+   ```bash
+   # The Atlassian MCP is available via claude.ai — enable it in Settings > Integrations
+   # or add it manually to your Claude Code MCP config
+   ```
+2. Access to your Jira instance
 
-| Agent | Skill | Action |
-|-------|-------|--------|
-| Task Planner | task-decomposer | Create tickets from tasks |
-| Developer | — | Update ticket status on completion |
-| QA Engineer | qa-validator | Link validation reports |
+### Step 1: Find Your Custom Field IDs
 
-### Configuration
+Jira uses custom field IDs that vary between instances. You need two:
+- **Story Points** — usually `customfield_10016` but check yours
+- **Acceptance Criteria** — your instance may not have this field at all
 
-```json
-{
-  "mcp_server": "jira",
-  "config": {
-    "instance_url": "https://your-instance.atlassian.net",
-    "project_key": "PROJ",
-    "default_issue_type": "Task",
-    "status_mapping": {
-      "pending": "To Do",
-      "in_progress": "In Progress",
-      "completed": "Done"
-    }
-  }
-}
+**How to find your field IDs:**
+
+Option A — Jira Admin (requires admin access):
+1. Go to Jira Settings → Issues → Custom Fields
+2. Click the field name to see its ID in the URL
+
+Option B — Raw API response (any user):
+1. Open `https://your-instance.atlassian.net/rest/api/3/issue/PROJ-1` in a browser (replace PROJ-1 with any ticket)
+2. Search for "customfield_" in the response — the field name nearby will tell you which is which
+
+### Step 2: Copy the Config Template
+
+Copy `sigil-plugin/integrations/jira.yaml` to your shared context repo:
+
+```
+your-org/platform-context/
+└── integrations/
+    └── jira.yaml
 ```
 
-### Workflow Enhancement
+Or inline it under `integrations.jira:` in `.sigil/config.yaml` for project-specific overrides.
 
-**Without MCP:**
-```
-Task Planner creates → /.sigil/specs/###/tasks.md
-Developer references → tasks.md manually
+### Step 3: Fill In Your Values
+
+```yaml
+config:
+  project_key: ENG          # Your team's Jira project key
+
+  custom_fields:
+    story_points: "customfield_10016"   # From Step 1
+    acceptance_criteria: "customfield_13505"  # From Step 1, or "" if unused
 ```
 
-**With MCP:**
-```
-Task Planner creates → tasks.md AND creates Jira tickets
-Developer → tickets update automatically on completion
+Also update `status_mapping` if your statuses don't match the defaults, and add any `maintenance_epic_patterns` your org uses for tech debt epics.
+
+### Step 4: Push and Test
+
+1. Commit and push `integrations/jira.yaml` to your shared context repo
+2. Run `/sigil PROJ-123` with a real ticket key
+3. Sigil will show which workflow it selected:
+   - Maintenance ticket → Quick Flow
+   - Story with AC → Implement-Ready chain
+   - Feature/Bug → Standard track
+
+### Understanding Ticket Routing
+
+When you run `/sigil PROJ-123`, Sigil categorizes the ticket:
+
+| Category | When | Workflow |
+|----------|------|----------|
+| `maintenance` | Label matches `maintenance_epic_patterns`, or label is tech-debt/chore, or parent epic summary matches | Quick Flow |
+| `pre-decomposed` | Story type + non-empty acceptance criteria field | Implement-Ready chain (skips spec writing — AC is the spec) |
+| `bug` | Bug/Defect type | Standard track (capped, no Enterprise) |
+| `feature` / `enhancement` | Everything else | Normal routing via complexity assessment |
+
+**What `pre-decomposed` means:** When a story already has acceptance criteria written out in Jira, Sigil treats it as ready to implement without going through the full spec-writing and clarification phases. The AC becomes the spec, and the story is treated as a single task.
+
+**What `maintenance` means:** Maintenance work skips the spec phase entirely and goes straight to Quick Flow — a lighter, faster workflow for chores, refactors, and tech debt.
+
+### Team Config Hook
+
+If your team works across multiple repos, the `load-team-config` hook can automatically detect which team is working on a repo and set routing defaults.
+
+**Setup:** Create `.sigil/team-config.yaml`:
+
+```yaml
+teams:
+  - name: platform
+    patterns: ["platform-*", "*-api", "*-infra"]
+    team_id: "your-jira-team-id"
+    board_id: "123"
+  - name: mobile
+    patterns: ["*-mobile", "*-ios", "*-android"]
+    team_id: "another-team-id"
+    board_id: "456"
 ```
 
-### Sample Task Sync
+The hook runs at session start, matches the current repo name against the patterns, and writes `sigil_team`, `sigil_team_id`, and `sigil_board_id` to `.sigil/config.yaml`. These values are then available to Jira queries and status reporting.
 
-```markdown
-### T001: Implement login form
-
-This task will sync to Jira as:
-- Summary: T001: Implement login form
-- Description: [Full task description from tasks.md]
-- Labels: [feature-id, track]
-- Story Points: [Estimated from complexity]
-```
+**Pattern matching:** Patterns use glob syntax — `*` matches any characters. Matches are checked against both the repo name and the git remote URL.
 
 ---
 
@@ -221,52 +262,6 @@ Deployment → Manual trigger
 ```
 DevOps checks → Automated status from GitHub Actions
 Deployment → Triggered through MCP with approval
-```
-
----
-
-## Slack/Teams Integration
-
-### Purpose
-
-Post workflow status updates to team channels.
-
-### Integration Points
-
-| Agent | Skill | Action |
-|-------|-------|--------|
-| Orchestrator | status-reporter | Post status to channel |
-| Security | security-reviewer | Alert on critical findings |
-| DevOps | deploy-checker | Notify on deployment |
-
-### Configuration
-
-```json
-{
-  "mcp_server": "slack",
-  "config": {
-    "channel": "#dev-updates",
-    "notifications": {
-      "phase_complete": true,
-      "blockers": true,
-      "deployment": true,
-      "security_critical": true
-    }
-  }
-}
-```
-
-### Sample Notification
-
-```
-#dev-updates
-
-[Sigil] Feature: User Authentication
-Phase: Implement → Validate
-Status: 5/8 tasks complete
-Next: QA validation running
-
-View details: /.sigil/specs/001-user-auth/
 ```
 
 ---

@@ -2,6 +2,7 @@
 name: qa-engineer
 description: Quality assurance and validation. Runs automated quality checks, verifies requirements coverage, identifies and categorizes issues, coordinates fix loops.
 version: 1.3.0
+model: opus
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Validate]
 human_tier: auto

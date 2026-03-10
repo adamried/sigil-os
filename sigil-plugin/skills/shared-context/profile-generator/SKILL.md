@@ -1,7 +1,7 @@
 ---
 name: profile-generator
 description: Auto-detect project tech stack and interactively generate a project profile for cross-repo awareness.
-version: 1.0.0
+version: 1.1.0
 category: shared-context
 chainable: false
 invokes: [shared-context-sync]
@@ -96,6 +96,12 @@ Scan for the following files to detect tech stack:
    - **Infrastructure:** Hosting, databases, services
    - **Testing:** Test frameworks and tools
 
+4. **Detect enhanced context** (signals for optional profile sections):
+   - **Databases:** Check `.env` / `.env.example` for `DATABASE_URL`, `REDIS_URL`, `MONGO_URI`; check `docker-compose.yml` for service images (`postgres`, `redis`, `mongo`, `mysql`); check `package.json` for db driver packages (`pg`, `mongoose`, `mysql2`, `ioredis`)
+   - **API Surface:** Check for route directories (`src/routes/`, `src/api/`, `app/api/`, `pages/api/`); list immediate subdirectory names as potential route modules
+   - **Auth Model:** Check for auth middleware files (`middleware.ts`, `auth.ts`, `guards/`, `passport.js`); check `package.json` for auth packages (`next-auth`, `passport`, `jsonwebtoken`, `clerk`, `supabase`)
+   - **Project Structure:** List top-level directories under `src/` (or project root if no `src/`); filter out common tooling dirs (`.git`, `node_modules`, `.next`, `dist`, `build`)
+
 ### Step 3: Display Detected Stack
 
 ```
@@ -169,6 +175,95 @@ List the project names (comma-separated):
 >
 ```
 
+### Step 7a: Databases (optional)
+
+If databases were detected in Step 2 sub-step 4:
+```
+I detected these data stores: postgres, redis
+
+Are these right? Any others to add? [Enter to confirm or describe changes]:
+>
+```
+
+For each confirmed store, ask:
+```
+What's {store_name} used for? (brief phrase, e.g. "primary app database", "session cache")
+>
+```
+
+If no databases detected, ask:
+```
+Does this project use any databases or data stores? [y/N]:
+```
+If yes, prompt for name and purpose. Skip this section if no.
+
+### Step 7b: API Surface (optional)
+
+If route directories were detected:
+```
+I found these route modules: auth, users, orders, payments
+
+Would you like to describe any of these? [y/N]:
+```
+
+If yes, for each route module they want to describe:
+```
+What does /{route} do? (brief description + path prefix if non-obvious)
+>
+```
+
+Skip if user declines or no routes detected.
+
+### Step 7c: Auth Model (optional)
+
+If auth signals were detected, or always ask:
+```
+Does this project handle authentication or authorization? [y/N]:
+```
+
+If yes:
+```
+Auth type (e.g. JWT, OAuth2, session, API key, magic link):
+>
+Brief description (who logs in, what they can do):
+>
+Roles (e.g. admin, user, viewer — comma-separated, or leave blank):
+>
+```
+
+### Step 7d: Domain Glossary (optional)
+
+```
+Does your project have business terms that are project-specific?
+(e.g. "Listing" means something specific here, not just any listing)
+[y/N]:
+```
+
+If yes:
+```
+Enter up to 10 terms, one per line, in format: Term = Definition
+(Leave a blank line when done)
+>
+```
+
+Parse each line as `Term = Definition`. Accept up to 10 entries.
+
+### Step 7e: Project Structure (optional)
+
+Show detected top-level directories:
+```
+Here are your main directories:
+  src/api, src/components, src/hooks, src/lib, src/models, src/pages, src/utils
+
+Would you like to annotate what 5-7 of these do? [y/N]:
+```
+
+If yes, for each selected directory:
+```
+What is {dir}/ for? (brief phrase)
+>
+```
+
 ### Step 8: Generate YAML
 
 Generate `.sigil/project-profile.yaml` with inline comments:
@@ -215,9 +310,37 @@ contacts:
   # Optional — who to ask about this project
   owner: {from git config user.name}
   team: ""
+
+# ── Optional sections — omit entirely if empty ──────────────
+
+databases:
+  # Data stores this project depends on
+  - name: {store_name}
+    purpose: {brief purpose}
+
+api_surface:
+  # Route modules / exposed endpoint groups
+  - route: /{path}
+    description: {what it does}
+
+auth_model:
+  # Authentication and authorization approach
+  type: {auth_type}
+  description: {who logs in and what they can do}
+  roles:
+    - {role1}
+    - {role2}
+
+domain_glossary:
+  # Project-specific business terms
+  {Term}: {Definition}
+
+project_structure:
+  # Key directories and their purpose
+  {dir/}: {brief purpose}
 ```
 
-ALWAYS include ALL sections. For sections with no data, use descriptive N/A messages:
+ALWAYS include ALL required sections (name through contacts). Omit optional sections (databases through project_structure) entirely if the user skipped or provided no data for them. For required sections with no data, use descriptive N/A messages:
 - `exposes:` → `# This project does not expose APIs or services to other projects`
 - `consumes:` → `# This project does not consume external APIs or services`
 - `depends_on:` → `# This project has no sibling project dependencies`

@@ -1,0 +1,56 @@
+# Jira Adapter Configuration Template
+# ─────────────────────────────────────────────────────────────
+# HOW TO USE THIS TEMPLATE:
+# 1. Copy this file to your shared context repo at:
+#      integrations/jira.yaml
+# 2. Fill in the values for your organization's Jira instance
+# 3. Commit and push to your shared context repo
+# 4. Sigil will pick it up automatically on next /sigil run
+#
+# Alternatively, inline under `integrations.jira:` in .sigil/config.yaml
+# ─────────────────────────────────────────────────────────────
+
+adapter: jira
+name: Jira                       # Display name for your org's Jira
+
+mcp_tools:
+  - mcp__claude_ai_Atlassian__getJiraIssue
+  - mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
+  - mcp__claude_ai_Atlassian__addCommentToJiraIssue
+  - mcp__claude_ai_Atlassian__transitionJiraIssue
+  - mcp__claude_ai_Atlassian__getTransitionsForJiraIssue
+
+config:
+  project_key: YOUR_PROJECT_KEY   # e.g., ENG, PROJ, APP
+  description_format: markdown    # or plain_text
+
+  category_mapping:
+    bug: [Bug, Defect]
+    feature: [Story, "User Story", Feature, Epic]
+    enhancement: [Task, Improvement, "Sub-task"]
+    maintenance: [Chore, "Tech Debt"]
+
+  label_overrides:
+    maintenance: [tech-debt, refactor, cleanup, chore, maintenance]
+    bug: [bug, defect, regression]
+    feature: [feature, new-feature]
+
+  status_mapping:
+    done: [Done, Closed, Resolved]
+    in_progress: ["In Progress", "In Review", "In Development"]
+    todo: ["To Do", Open, Backlog]
+
+  # Custom field IDs — find yours in Jira Admin > Fields
+  # or by inspecting a raw API response from your instance
+  custom_fields:
+    story_points: "customfield_10016"    # Standard Jira; may vary
+    acceptance_criteria: ""              # Leave empty if not used
+    epic_link: ""                        # Only needed for older Jira configurations
+
+  # Maintenance epic patterns — if a story's parent epic summary
+  # matches any of these patterns, the story is routed as maintenance
+  # even if no maintenance label is set
+  maintenance_epic_patterns:
+    - "Technical Debt"
+    - "Platform Maintenance"
+    # Add your org's maintenance epic naming patterns here

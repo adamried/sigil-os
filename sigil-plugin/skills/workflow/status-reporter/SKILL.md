@@ -1,12 +1,13 @@
 ---
 name: status-reporter
-description: Generates clear, non-technical workflow status output. Reads project context and presents current state in plain language.
+description: Shows current workflow status. Invoke when user says "where are we", "show progress", "what's done", "what's the status", "what's happening", "/sigil status", or asks about current state of work. Presents progress in plain language.
 version: 1.1.0
 category: workflow
 chainable: false
 invokes: []
 invoked_by: [orchestrator]
 tools: Read, Glob
+model: haiku
 inputs: [context_path, user_track]
 outputs: [status_output]
 ---

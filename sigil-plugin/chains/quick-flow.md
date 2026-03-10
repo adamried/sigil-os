@@ -1,7 +1,7 @@
 ---
 name: quick-flow
 description: Streamlined workflow for simple changes—bug fixes, small features, well-understood work.
-version: 1.2.0
+version: 1.3.0
 track: quick
 entry_skill: complexity-assessor
 ---
@@ -78,6 +78,12 @@ When the orchestrator routes a maintenance ticket to Quick Flow (category `maint
 │ learning-capture (review)│ ← Rare: only for Major+ fixes
 │ (silent, non-blocking)   │
 └──────────────────────────┘
+         │
+         │ [If ticket_key exists in context]
+         ▼
+┌─────────────────────┐
+│    handoff-back      │ ← Write results back to ticket
+└─────────────────────┘
          │
          ▼
       Complete
@@ -194,6 +200,12 @@ Abbreviated validation:
 **Condition:** `fix resolved AND any issue severity in [Major, Critical]`
 **Data Passed:** `{ mode: "review-findings", source: "qa-fix-loop", feature_id, task_id, findings, iterations: 1 }`
 **Note:** This triggers rarely in Quick Flow since there is only 1 fix attempt and most Quick Flow issues are minor.
+
+### qa-fixer/learning-capture → handoff-back
+**Trigger:** Work complete (after qa-fixer or learning-capture)
+**Condition:** `ticket_key` exists in chain context (feature originated from a ticket)
+**Data Passed:** `{ ticket_key, adapter, review_status: "APPROVED", tasks_completed, files_changed }`
+**Note:** Skipped silently when no ticket_key is present (non-ticket-driven work).
 
 ## Human Checkpoints
 
@@ -349,6 +361,7 @@ Quick Flow is "less ceremony," not "less quality."
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-03-05 | Added conditional handoff-back step after qa-fixer/learning-capture — writes results back to originating ticket when ticket_key exists in context. |
 | 1.2.0 | 2026-02-20 | S4-104: Maintenance flag handling — maintenance tickets skip complexity assessor, use lighter quick-spec with ticket metadata. |
 | 1.1.0 | 2026-02-10 | Audit: Added constitution existence check, task count escalation (>5 tasks) |
 | 1.0.0 | 2026-01-20 | Initial release |

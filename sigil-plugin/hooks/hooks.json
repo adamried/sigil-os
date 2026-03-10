@@ -10,6 +10,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/preflight-check.sh",
             "timeout": 10000,
             "statusMessage": "Checking Sigil OS configuration..."
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/load-team-config.sh",
+            "timeout": 5000,
+            "async": true
           }
         ]
       }

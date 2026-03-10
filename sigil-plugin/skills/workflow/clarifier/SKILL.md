@@ -4,7 +4,7 @@ description: Reduces specification ambiguity through structured Q&A. Invoke when
 version: 1.2.0
 category: workflow
 chainable: true
-invokes: []
+invokes: [] # Routing after completion handled by orchestrator, not direct invocation
 invoked_by: [spec-writer, business-analyst]
 tools: Read, Write, Edit
 ---

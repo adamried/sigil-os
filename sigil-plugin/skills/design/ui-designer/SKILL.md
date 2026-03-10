@@ -6,7 +6,7 @@ category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer]
-tools: [Read, Write, Glob]
+tools: Read, Write, Glob
 inputs: [spec_path, ux_patterns, framework, design_tokens]
 outputs: [component_hierarchy, component_specs, layout_patterns]
 ---

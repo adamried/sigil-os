@@ -2,6 +2,7 @@
 name: devops
 description: Deployment and infrastructure. Manages CI/CD pipelines, validates deployment readiness, handles infrastructure changes, coordinates releases.
 version: 1.0.0
+model: sonnet
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Review]
 human_tier: approve

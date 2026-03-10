@@ -6,6 +6,7 @@ category: workflow
 chainable: true
 invoked_by: [hook:SessionStart]
 tools: Read, Write, Edit
+model: haiku
 ---
 
 # Skill: Preflight Check

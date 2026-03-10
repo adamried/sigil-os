@@ -6,7 +6,7 @@ category: ui
 chainable: true
 invokes: []
 invoked_by: [developer]
-tools: [Read, Write, Edit, Bash, Glob]
+tools: Read, Write, Edit, Bash, Glob
 inputs: [component_spec, design_tokens, accessibility_requirements]
 outputs: [component_files, style_files, test_files]
 ---
@@ -281,6 +281,122 @@ export { default as CustomButton } from './CustomButton.vue';
 - :deep() for child component styles
 - CSS modules for isolation
 - Tailwind integration
+
+## End-to-End Example
+
+**Spec input** — UI Designer produces a component spec for a status badge:
+
+```json
+{
+  "component_spec": {
+    "name": "StatusBadge",
+    "type": "presentational",
+    "props": [
+      { "name": "status", "type": "enum", "values": ["active", "pending", "error"], "required": true },
+      { "name": "label", "type": "string", "required": true }
+    ]
+  },
+  "design_tokens": {
+    "colors": { "active": "#22C55E", "pending": "#F59E0B", "error": "#EF4444" }
+  },
+  "accessibility_requirements": { "role": "status", "aria": { "live": "polite" } }
+}
+```
+
+**Generated component** — `src/components/StatusBadge/StatusBadge.vue`:
+
+```vue
+<script setup lang="ts">
+import { computed } from 'vue';
+
+type BadgeStatus = 'active' | 'pending' | 'error';
+
+interface Props {
+  status: BadgeStatus;
+  label: string;
+}
+
+const props = defineProps<Props>();
+
+const colorMap: Record<BadgeStatus, string> = {
+  active: '#22C55E',
+  pending: '#F59E0B',
+  error: '#EF4444',
+};
+
+const badgeStyle = computed(() => ({
+  color: colorMap[props.status],
+  backgroundColor: `${colorMap[props.status]}26`, /* 15% opacity */
+}));
+</script>
+
+<template>
+  <span
+    class="status-badge"
+    :style="badgeStyle"
+    role="status"
+    aria-live="polite"
+  >
+    {{ label }}
+  </span>
+</template>
+
+<style scoped>
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+</style>
+```
+
+**Generated test** — `src/components/StatusBadge/StatusBadge.test.ts`:
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import StatusBadge from './StatusBadge.vue';
+
+describe('StatusBadge', () => {
+  it('renders label text', () => {
+    const wrapper = mount(StatusBadge, {
+      props: { status: 'active', label: 'Live' },
+    });
+    expect(wrapper.text()).toBe('Live');
+  });
+
+  it('applies correct color for error status', () => {
+    const wrapper = mount(StatusBadge, {
+      props: { status: 'error', label: 'Failed' },
+    });
+    expect(wrapper.attributes('style')).toContain('#EF4444');
+  });
+
+  it('has status role and aria-live for accessibility', () => {
+    const wrapper = mount(StatusBadge, {
+      props: { status: 'pending', label: 'Waiting' },
+    });
+    expect(wrapper.attributes('role')).toBe('status');
+    expect(wrapper.attributes('aria-live')).toBe('polite');
+  });
+});
+```
+
+**Handoff:**
+```json
+{
+  "files_created": [
+    "src/components/StatusBadge/StatusBadge.vue",
+    "src/components/StatusBadge/StatusBadge.test.ts",
+    "src/components/StatusBadge/index.ts"
+  ],
+  "styling_approach": "scoped",
+  "test_framework": "vitest",
+  "accessibility_implemented": true
+}
+```
 
 ## Human Checkpoint
 

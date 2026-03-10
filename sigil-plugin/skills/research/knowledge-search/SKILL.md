@@ -1,6 +1,6 @@
 ---
 name: knowledge-search
-description: Searches project knowledge base for relevant context, past decisions, and established patterns. Invoke before starting new work to find applicable precedents.
+description: Searches project knowledge base for context, decisions, and patterns. Invoke when user asks "have we done this before", "what's our approach to X", "how do we handle X", "find examples of X", or "check existing patterns". Also invoked by agents before proposing new approaches to verify consistency with established conventions.
 version: 1.0.0
 category: research
 chainable: true
@@ -363,6 +363,75 @@ Agent: "Why do we use PostgreSQL?"
 → Finds constitution Article 1
 → Finds ADR-G001 if exists
 → Returns decision context
+```
+
+## End-to-End Example
+
+**User says:** "Have we done something like user profiles before?"
+
+**Step 1 — Parse Query:**
+```
+Extracted concepts: "user profile", "profile editing", "user settings"
+Related terms: account, preferences, avatar, personal info
+Search intent: Feature similarity — looking for prior implementations
+```
+
+**Step 2 — Search Specifications:**
+```
+Glob: /.sigil/specs/**/*.md → 14 spec files found
+
+/.sigil/specs/003-account-settings/spec.md
+  Relevance: 88%
+  Excerpt: "FR-012: User can update display name, avatar, and bio from Settings > Profile"
+  Why relevant: Direct profile editing feature
+
+/.sigil/specs/001-user-auth/spec.md
+  Relevance: 62%
+  Excerpt: "FR-008: Registration collects name, email, and optional avatar"
+  Why relevant: Initial profile data collection
+```
+
+**Step 3 — Search Decisions:**
+```
+/.sigil/specs/003-account-settings/adr/ADR-003.md
+  Relevance: 91%
+  Status: Accepted
+  Decision: Profile images stored in S3, referenced by URL in users table
+  Implication: Reuse same avatar upload pattern
+```
+
+**Step 4 — Search Learnings:**
+```
+/.sigil/learnings/active/patterns.md
+  Pattern: "Image Upload Pattern"
+  Relevance: 78%
+  Content: "Use presigned S3 URLs for client-side upload. Resize to 256×256 on
+  Lambda trigger. See /src/lib/uploads/presigned.ts"
+
+/.sigil/learnings/active/gotchas.md
+  Gotcha: "Avatar cache busting"
+  Relevance: 72%
+  Content: "Append ?v={timestamp} to avatar URLs — CloudFront caches aggressively"
+```
+
+**Step 5 — Compile Results:**
+```markdown
+## Knowledge Search Results
+
+**Query:** "user profiles"
+**Results Found:** 8 total (top results shown)
+
+### Summary
+
+Yes — profile editing was implemented in spec 003 (Account Settings).
+
+1. **Reuse the profile form pattern** from /src/features/settings/ProfileForm.tsx
+2. **Follow S3 avatar upload** per ADR-003 (presigned URL → Lambda resize)
+3. **Apply cache-busting** on avatar URLs (gotcha: CloudFront caching)
+4. **Reference registration flow** for initial field set
+
+**Confidence:** High
+**Suggested Next Step:** Review /src/features/settings/ProfileForm.tsx as template
 ```
 
 ## Integration Points

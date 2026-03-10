@@ -95,6 +95,11 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Adapter Write Protocol** | The part of an integration adapter that writes data back to external tools (posting comments, transitioning statuses, linking artifacts). Write protocols are always non-blocking — failures produce warnings, not halts |
 | **Offline Queue** | When the shared repo is unreachable, learnings save locally and sync automatically on your next session start |
 | **Project Profile** | A YAML file (`.sigil/project-profile.yaml`) that describes your project's tech stack, exposed APIs, consumed dependencies, and sibling relationships — used by agents for context and cross-repo impact warnings |
+| **Profile: Databases** | Optional profile section listing the datastores the project depends on (e.g., PostgreSQL, Redis) with a brief description of each store's purpose |
+| **Profile: API Surface** | Optional profile section describing the exposed route modules or endpoint groups, with path prefixes and brief descriptions |
+| **Profile: Auth Model** | Optional profile section describing the project's authentication and authorization approach — type (JWT, OAuth2, session, etc.), description, and user roles |
+| **Profile: Domain Glossary** | Optional profile section defining project-specific business terms that have meanings unique to this project (e.g., "Listing" means something specific here) |
+| **Profile: Project Structure** | Optional profile section annotating key top-level directories with brief descriptions of what each one contains or does |
 
 ---
 

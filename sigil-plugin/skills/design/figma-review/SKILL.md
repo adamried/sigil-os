@@ -1,12 +1,12 @@
 ---
 name: figma-review
-description: Extracts design specifications from Figma via MCP connection. Captures tokens, components, spacing, and layout details.
+description: Extracts design specifications from Figma. Invoke when user says "I have a Figma file", "here's the design", "check the Figma", shares a figma.com URL, or references Figma designs/mockups/wireframes. Also triggers when uiux-designer needs design source of truth before component design.
 version: 1.0.0
 category: design
 chainable: true
 invokes: []
 invoked_by: [uiux-designer]
-tools: [Read, Write]
+tools: Read, Write, ToolSearch, mcp__figma__get_design_context, mcp__figma__get_screenshot, mcp__figma__get_metadata, mcp__figma__get_variable_defs
 inputs: [figma_file_url, figma_node_ids]
 outputs: [design_tokens, component_specs, layout_specs]
 ---

@@ -1,7 +1,7 @@
 ---
 name: jira
 description: Adapter for Atlassian Jira — fetches tickets, parents, categorizes work types, and writes implementation results back via Atlassian MCP tools.
-version: 1.1.0
+version: 1.2.1
 category: integration
 chainable: false
 invokes: []
@@ -41,20 +41,30 @@ mcp_tools:
   - mcp__claude_ai_Atlassian__getJiraIssue
   - mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
 config:
-  project_keys: [PROJ, TEAM, PLAT]
+  project_key: YOUR_PROJECT_KEY
   category_mapping:
     bug: [Bug, Defect]
     feature: [Story, "User Story", Feature, Epic]
     enhancement: [Task, Improvement, "Sub-task"]
     maintenance: [Chore, "Tech Debt"]
   label_overrides:
-    maintenance: [tech-debt, refactor, cleanup, chore]
+    maintenance: [tech-debt, refactor, cleanup, chore, maintenance]
     bug: [bug, defect, regression]
     feature: [feature, new-feature]
   status_mapping:
     done: [Done, Closed, Resolved]
     in_progress: ["In Progress", "In Review", "In Development"]
-    todo: ["To Do", Open, Backlog, "Selected for Development"]
+    todo: ["To Do", Open, Backlog]
+  # Custom field IDs — find yours in Jira Admin > Fields
+  custom_fields:
+    story_points: "customfield_10016"    # Standard Jira; may vary
+    acceptance_criteria: ""              # Leave empty if not used
+    epic_link: ""                        # Only needed for older Jira configurations
+  # Maintenance epic patterns — stories whose parent epic summary matches
+  # any of these patterns are routed as maintenance even without a label
+  maintenance_epic_patterns:
+    - "Technical Debt"
+    - "Platform Maintenance"
 ```
 
 ## Protocols
@@ -100,7 +110,8 @@ Called by `ticket-loader` Step 2.
    - `priority` → `fields.priority.name`
    - `status` → `fields.status.name`
    - `labels` → `fields.labels`
-   - `story_points` → `fields.story_points` or `fields.customfield_10016` (common Jira field)
+   - `story_points` → `fields[config.custom_fields.story_points]` (fallback: `fields.customfield_10016`)
+   - `acceptance_criteria` → `fields[config.custom_fields.acceptance_criteria]` if configured, else `null`
    - `assignee` → `fields.assignee.emailAddress`
    - `reporter` → `fields.reporter.emailAddress`
    - `parent_key` → `fields.parent.key` (if exists)
@@ -158,9 +169,17 @@ Called by `ticket-loader` Step 4.
    - If any label matches a category override, that category wins
    - Labels take precedence over issue type
 
-4. If no match found, default to `enhancement`
+4. **Epic name override** (if category not yet overridden by label AND `parent_key` is non-empty):
+   - Fetch parent issue using the Fetch Parent protocol
+   - If parent type is "Epic", compare parent summary against `config.maintenance_epic_patterns`
+   - If summary matches any pattern (case-insensitive substring match), override category to `maintenance`
 
-5. Return: `{ category: "feature" }`
+5. **Pre-decomposed detection** (if category is still not overridden):
+   - If issue type is "Story" AND `acceptance_criteria` field is non-empty → set category to `pre-decomposed`
+
+6. If no match found, default to `enhancement`
+
+7. Return: `{ category: "feature" }`
 
 ## Phase 2 Write Protocols
 
@@ -256,5 +275,6 @@ Called by `handoff-back` Step 3.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.1 | 2026-03-09 | Configurable custom fields (story_points, acceptance_criteria); epic name override for maintenance routing; pre-decomposed detection for Stories with AC; generalized config schema with maintenance_epic_patterns. |
 | 1.1.0 | 2026-02-20 | S4-104 Phase 2: Added write protocols — Post Summary (addComment), Transition Status (transitionJiraIssue), Link Artifact (remote links with fallback). |
 | 1.0.0 | 2026-02-20 | Initial release — S4-104 Phase 1: Fetch Ticket, Fetch Parent, Categorize protocols (read-only) |

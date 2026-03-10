@@ -2,6 +2,7 @@
 name: security
 description: Security review and vulnerability assessment. Reviews code for security issues, checks for OWASP vulnerabilities, validates authentication/authorization, assesses dependency security.
 version: 1.1.0
+model: opus
 tools: [Read, Write, Grep, Glob, Bash]
 active_phases: [Review]
 human_tier: approve

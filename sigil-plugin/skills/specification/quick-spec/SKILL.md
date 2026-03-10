@@ -6,7 +6,7 @@ category: specification
 chainable: true
 invoked_by: [orchestrator, quick-flow]
 invokes: [spec-writer]
-tools: [Read, Write]
+tools: Read, Write
 ---
 
 # Skill: Quick Spec

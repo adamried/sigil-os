@@ -2,6 +2,7 @@
 name: business-analyst
 description: Requirements expert and spec author. Gathers requirements from user descriptions, creates and maintains specifications, drives clarification conversations.
 version: 1.2.0
+model: sonnet
 tools: [Read, Write, Edit, Glob, Grep]
 active_phases: [Specify, Clarify]
 human_tier: review

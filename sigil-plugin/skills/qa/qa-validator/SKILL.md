@@ -6,7 +6,7 @@ category: qa
 chainable: true
 invokes: [qa-fixer]
 invoked_by: [qa-engineer]
-tools: [Read, Write, Bash, Glob, Grep]
+tools: Read, Write, Bash, Glob, Grep
 ---
 
 # Skill: QA Validator
