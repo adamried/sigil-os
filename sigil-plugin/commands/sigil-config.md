@@ -1,5 +1,5 @@
 ---
-description: View or change Sigil OS configuration (user track, execution mode)
+description: View or change Sigil OS configuration (user track, execution mode, audit mode)
 argument-hint: [optional: set <key> <value> | reset]
 ---
 
@@ -19,7 +19,7 @@ $ARGUMENTS
 
 If no arguments provided:
 
-1. Read `.sigil/config.yaml`. If file does not exist, use defaults (`user_track: non-technical`, `execution_mode: automatic`).
+1. Read `.sigil/config.yaml`. If file does not exist, use defaults (`user_track: non-technical`, `execution_mode: automatic`, `audit_mode: false`).
 2. Parse the YAML content
 3. Display human-readable descriptions of current settings:
 
@@ -31,6 +31,9 @@ User Track:      [non-technical | technical]
   → [Description of what this means]
 
 Execution Mode:  [automatic | directed]
+  → [Description of what this means]
+
+Audit Mode:      [true | false]
   → [Description of what this means]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -50,6 +53,8 @@ To reset:  /sigil-config reset
 | `user_track` | `technical` | "Sigil shows technical details, agent names, and implementation trade-offs. Best for engineers and technical leads." |
 | `execution_mode` | `automatic` | "Sigil automatically selects the best approach for each task." |
 | `execution_mode` | `directed` | "You control which specialists and approaches are used. Requires technical track." |
+| `audit_mode` | `false` | "Workflow events are not logged. Use this for normal day-to-day work." |
+| `audit_mode` | `true` | "Every workflow step is logged to `.sigil/audit-log.md` — useful for reviewing what happened after the fact." |
 
 ### Set Mode (`set <key> <value>`)
 
@@ -57,9 +62,10 @@ If arguments start with "set":
 
 1. Parse the key and value from arguments
 2. Validate:
-   - **Valid keys:** `user_track`, `execution_mode`
+   - **Valid keys:** `user_track`, `execution_mode`, `audit_mode`
    - **Valid values for `user_track`:** `non-technical`, `technical`
    - **Valid values for `execution_mode`:** `automatic`, `directed`
+   - **Valid values for `audit_mode`:** `true`, `false`
    - **Constraint:** `execution_mode: directed` requires `user_track: technical`. If user tries to set `directed` with `non-technical` track, show:
      ```
      Directed mode requires the technical track.
@@ -68,7 +74,8 @@ If arguments start with "set":
        /sigil-config set user_track technical
        /sigil-config set execution_mode directed
      ```
-   - **Invalid key:** Show: `Unknown setting "[key]". Available settings: user_track, execution_mode`
+   - **On `audit_mode: true`:** If `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
+   - **Invalid key:** Show: `Unknown setting "[key]". Available settings: user_track, execution_mode, audit_mode`
    - **Invalid value:** Show: `Invalid value "[value]" for [key]. Allowed values: [list]`
 3. Read `.sigil/config.yaml`. If file does not exist, start from defaults.
 4. Parse the YAML content
@@ -91,6 +98,7 @@ If argument is "reset":
    Current → Default:
      user_track:     [current] → non-technical
      execution_mode: [current] → automatic
+     audit_mode:     [current] → false
    ```
 3. Use AskUserQuestion to confirm: "Reset to defaults?" with options "Yes, reset" / "Cancel"
 4. If confirmed, write defaults to `.sigil/config.yaml`:
@@ -98,6 +106,7 @@ If argument is "reset":
    # Sigil OS Personal Configuration
    user_track: non-technical    # non-technical | technical
    execution_mode: automatic    # automatic | directed (directed requires technical track)
+   audit_mode: false            # true | false — log workflow events to .sigil/audit-log.md
    ```
 5. Confirm: `Configuration reset to defaults.`
 
@@ -125,3 +134,4 @@ Use plain-language error messages. Never show error codes or stack traces.
 - `/sigil-setup` — Full project setup (includes track selection)
 - `/sigil` — Show project status
 - `/sigil-constitution` — View/edit project principles
+- `/sigil-audit` — View or manage the audit log (when audit mode is enabled)

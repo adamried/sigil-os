@@ -355,6 +355,7 @@ Between skills, preserve:
 - `ticket_key`: External ticket key if input came from ticket-loader (e.g., `PROJ-123`)
 - `ticket_metadata`: Full ticket metadata from ticket-loader (for handoff-back)
 - `ticket_category`: Sigil category from ticket categorization (feature/bug/enhancement/maintenance)
+- `audit_enabled`: Whether audit mode is active for this session (from config.yaml)
 
 ## Example Execution
 

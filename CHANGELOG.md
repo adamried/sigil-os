@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.31.0] - 2026-03-18
+
+### Added
+
+- **`/sigil-audit` command** — View and manage the workflow audit log. Supports summary, full, session, and clear modes. Shows a plain-language view for non-technical track and skill/agent names for technical track. (`commands/sigil-audit.md`)
+- **Audit log protocol** — Reusable shared protocol for appending workflow events to `.sigil/audit-log.md`. Defines session headers, entry types (workflow-start, phase, handoff, task, completion), and append-only rules. (`skills/shared-protocols/audit-log-protocol.md`)
+- **Audit log template** — Starter file created when audit mode is first enabled. (`templates/audit-log-template.md`)
+- **Audit status in status dashboard** — When `audit_mode: true`, the `/sigil` status dashboard shows `Audit Mode: Active | Entries: {n}` after the Constitution line, so users can confirm audit is running at a glance. (`commands/sigil.md`, `templates/output-formats.md`)
+- **Shared Standard template** — `templates/shared-standard-template.md` for organizations to define structured, machine-readable engineering standards that can be pulled into project constitutions via shared context sync. Includes YAML frontmatter (enforcement level, article mapping, description), rules, exceptions, constitution article snippet, and verification checklist. Referenced in `connect-wizard/references/standards-integration.md`.
+
+### Changed
+
+- **`/sigil-config`** — Added `audit_mode` setting (true/false). Displays audit mode status and description in config view. Creates audit log file when enabled. (`commands/sigil-config.md`)
+- **`/sigil-setup`** — Step 3.5 (shared context connection) now runs before Step 4 (constitution creation), so discovered shared standards can be passed to the constitution writer during initial setup. (`commands/sigil-setup.md`)
+- **`sigil.md` orchestrator** — Added Step 0b (load audit mode flag), per-phase audit logging throughout the workflow, and audit entry count detection for the status dashboard. (`commands/sigil.md`)
+- **Pre-execution check protocol** — Extended with optional audit log step: skills record a `phase` entry when `audit_mode: true`. (`skills/shared-protocols/pre-execution-check.md`)
+- **Full pipeline and Quick Flow chains** — Updated to reflect audit logging at phase transitions. (`chains/full-pipeline.md`, `chains/quick-flow.md`)
+- **Command reference** — Added `/sigil-audit` command documentation and audit mode configuration details. (`docs/command-reference.md`)
+
+### Version
+
+- Plugin version bumped from 0.30.0 to 0.31.0 (plugin.json, marketplace.json, README.md).
+
+---
+
 ## [0.30.0] - 2026-03-11
 
 ### Added

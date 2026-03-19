@@ -15,7 +15,8 @@
 | `/sigil-learn` | View, search, or review learnings | Reviewing institutional memory |
 | `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
 | `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
-| `/sigil-config` | View or change configuration (user track, execution mode) | Adjusting Sigil's behavior |
+| `/sigil-config` | View or change configuration (user track, execution mode, audit mode) | Adjusting Sigil's behavior |
+| `/sigil-audit` | View or manage the workflow audit log | Reviewing what happened in a workflow |
 | `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
 
 ---
@@ -517,6 +518,8 @@ View or change your project's Sigil configuration.
 | `/sigil-config set user_track technical` | Switch to technical mode |
 | `/sigil-config set user_track non-technical` | Switch to non-technical mode |
 | `/sigil-config set execution_mode directed` | Enable directed execution (technical track only) |
+| `/sigil-config set audit_mode true` | Enable workflow audit logging |
+| `/sigil-config set audit_mode false` | Disable workflow audit logging |
 | `/sigil-config reset` | Reset all settings to defaults |
 
 ### Settings
@@ -525,6 +528,7 @@ View or change your project's Sigil configuration.
 |---------|---------|---------|-----------------|
 | **User Track** | `non-technical`, `technical` | `non-technical` | Communication style, question depth, detail level |
 | **Execution Mode** | `automatic`, `directed` | `automatic` | How specialists are selected (directed requires technical track) |
+| **Audit Mode** | `true`, `false` | `false` | Whether workflow events are logged to `.sigil/audit-log.md` |
 
 ### User Track Details
 
@@ -545,6 +549,56 @@ View or change your project's Sigil configuration.
 - After initial setup if you want to change your track
 - When switching between non-technical and technical workflows
 - To enable directed mode for manual specialist selection
+
+---
+
+## /sigil-audit
+
+View or manage the workflow audit log.
+
+### Syntax
+
+```
+/sigil-audit
+/sigil-audit full
+/sigil-audit session
+/sigil-audit clear
+```
+
+### Variants
+
+| Usage | What It Does |
+|-------|-------------|
+| `/sigil-audit` | Show summary of the most recent workflow session |
+| `/sigil-audit full` | Show the complete audit log (all sessions) |
+| `/sigil-audit session` | Show details for the current/most recent session only |
+| `/sigil-audit clear` | Archive the current log and start fresh |
+
+### What It Does
+
+1. Reads the audit log at `.sigil/audit-log.md`
+2. Displays workflow events — which phases ran, in what order, what decisions were made
+3. Adapts detail level to your user track (plain language for non-technical, agent/skill names for technical)
+
+### Prerequisites
+
+Audit mode must be enabled first:
+
+```
+/sigil-config set audit_mode true
+```
+
+Once enabled, every `/sigil` workflow automatically logs events. Disable with `/sigil-config set audit_mode false`.
+
+### When to Use
+
+- After a workflow completes — review what happened step by step
+- Debugging — understand why a specific decision was made
+- Handoff — share the audit log with an engineer for context
+
+### Related
+
+- `/sigil-config` — Enable/disable audit mode
 
 ---
 
@@ -598,6 +652,7 @@ Run the update? (Y/n)
 | `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
 | `/sigil-profile` | Project profile | `/sigil-profile --view` |
 | `/sigil-config` | Configure Sigil | `/sigil-config set user_track technical` |
+| `/sigil-audit` | View audit log | `/sigil-audit` |
 | `/sigil-update` | Check for updates | `/sigil-update` |
 
 ### Typical Workflow

@@ -206,6 +206,8 @@ Check if `.gitignore` exists. If not, create it. Add the following entries (with
 .sigil/learnings/
 .sigil/waivers.md
 .sigil/tech-debt.md
+.sigil/audit-log.md
+.sigil/audit-log-*.md
 .sigil/specs/**/clarifications.md
 ```
 

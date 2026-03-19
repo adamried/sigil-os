@@ -26,6 +26,14 @@ If the hook output indicates files need to be created/updated, follow the instru
 
 ---
 
+### Step 0b: Load Audit Mode
+
+After preflight, read `.sigil/config.yaml` and check the `audit_mode` key. If `audit_mode: true`, carry an `audit_enabled` flag for the remainder of this session. All subsequent steps reference this flag to decide whether to append entries to `.sigil/audit-log.md` per the `shared-protocols/audit-log-protocol.md`.
+
+If the flag is true and `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
+
+---
+
 ### Step 1: State Detection
 
 Read the following files to understand current project state:
@@ -118,6 +126,11 @@ Read the following files to understand current project state:
 7. **Specs Directory:** `/.sigil/specs/`
    - Scan for existing feature directories
    - Check for incomplete specs (missing plan.md or tasks.md)
+
+8. **Audit Mode** (already loaded in Step 0b — just derive display value here):
+   - If `audit_enabled` is true, count the number of `### [` markers in `.sigil/audit-log.md` to get the entry count
+   - If the file does not exist or is empty, count is 0
+   - Store as `audit_entry_count` for use in the status dashboard
 
 #### 1b. Context Staleness Check
 
@@ -220,6 +233,7 @@ If user provided a feature description (plain text or enriched):
      - **Score 17-21 (Enterprise):** Continue to spec-writer, flag for Enterprise extensions in Step 4
    - Store the `track` result in project-context.md and chain context for downstream use
    - If ticket-loader already set a track override (e.g., maintenance → Quick Flow, bug → cap at Standard), respect it — complexity-assessor confirms or adjusts
+   - **Audit:** If `audit_enabled`, write a session header and a `workflow-start` entry with the user's input and the selected track/score
 
 4. **Start spec-writer**
    → Start spec-writer with user's description
@@ -242,12 +256,14 @@ Constitution is already verified in Step 3.1 (blocking) before reaching this pat
 
 ### Step 4: Auto-Continue Logic
 
+**Audit logging at phase transitions:** If `audit_enabled`, append a `phase` entry per `audit-log-protocol` at the start of each phase transition below. Log the skill being invoked and, after it completes, update the entry's Outcome field with the result summary.
+
 After each phase completes successfully:
 
 | From | To | Behavior |
 |------|-----|----------|
 | spec-writer | clarifier | Auto-continue (always check for ambiguities) |
-| clarifier | uiux-designer | Auto-continue IF spec or clarifier output indicates UI components (has_ui: true). Read the uiux-designer agent definition and adopt its behavior. It invokes framework-selector, ux-patterns, ui-designer, and accessibility skills. Produces design artifacts at `/.sigil/specs/###-feature/design.md`. |
+| clarifier | uiux-designer | Auto-continue IF spec or clarifier output indicates UI components (has_ui: true). Read the uiux-designer agent definition and adopt its behavior. It invokes framework-selector, ux-patterns, ui-designer, and accessibility skills. Produces design artifacts at `/.sigil/specs/###-feature/design.md`. **Audit:** If `audit_enabled`, log a `handoff` entry with reason "Feature has UI components", skills used, and outcome. |
 | clarifier | technical-planner | Auto-continue if no UI components AND no blocking questions |
 | uiux-designer | technical-planner | Auto-continue after design approved (pass UI framework as constraint) |
 | technical-planner | researcher | Auto-continue IF Enterprise track OR plan identifies unknowns requiring research. Read the researcher SKILL.md. |
@@ -284,6 +300,7 @@ Runs after task-decomposer completes OR when `/sigil continue` resumes an implem
 For each incomplete task (respecting dependency order):
 
 **A. Developer Phase**
+- **Audit:** If `audit_enabled`, append a `task` entry with the task ID, specialist name, and status "started"
 - Read the task's `Specialist:` field. If a specialist is assigned (not "base"):
   1. Load `agents/specialists/[specialist-name].md`
   2. Read the base agent from the `extends` field (e.g., `agents/developer.md`)
@@ -316,7 +333,8 @@ For each incomplete task (respecting dependency order):
 1. Mark task done in tasks.md
 2. Update project-context.md: Tasks Completed count, add to Recent Activity
 3. Emit: `Implementation Loop: [completed]/[total] tasks - Task T### complete`
-4. Auto-continue to next unblocked task
+4. **Audit:** If `audit_enabled`, update the task's audit entry Outcome to `Complete (attempt N/5)`
+5. Auto-continue to next unblocked task
 
 **Invocation distinction:**
 - Agents (developer, qa-engineer) -> Read the agent .md file and adopt its behavior
@@ -325,17 +343,20 @@ For each incomplete task (respecting dependency order):
 #### After All Tasks: Code Review and Security Review
 
 1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
-2. If blockers found → present to user for decision. Do not proceed until resolved.
-3. **Security review** (conditional): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
+2. **Audit:** If `audit_enabled`, append a `phase` entry for code review with outcome (blockers/warnings/suggestions counts)
+3. If blockers found → present to user for decision. Do not proceed until resolved.
+4. **Security review** (conditional): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
    a. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks
    b. If `appsec-reviewer` or `data-privacy-reviewer` is assigned, load the specialist and merge with base `security` agent
    c. Read the security-reviewer SKILL.md and run security review with specialist overlay
    d. If security blockers found → present to user for decision
+   e. **Audit:** If `audit_enabled`, append a `phase` entry for security review with outcome
 4. **Learning capture** (conditional): If code review or security review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list. This is silent and non-blocking.
 5. If approved → show completion summary (use Feature Complete format from output-formats.md)
 6. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill. Automatic and non-blocking.
 7. Update context: Current Phase → none
-8. Present next-action prompt using AskUserQuestion:
+8. **Audit:** If `audit_enabled`, append a `completion` entry with task count, code review status, security review status, and approximate duration since session start
+9. Present next-action prompt using AskUserQuestion:
    - Option 1: "Build another feature" → prompt for description → route to Step 3
    - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package
    - Option 3: "Update ticket and close" → (only if `ticket_key` in context AND handoff-back hasn't run)
@@ -415,6 +436,7 @@ Run /sigil-setup to get started.
 
 ✅ Foundation    - Next.js 14 + Supabase + TypeScript
 ✅ Constitution  - 7 articles (3 inherited: 1 required, 2 recommended) | 1 active override (expires Feb 28)
+Audit Mode: Active | Entries: 12   ← shown only when audit_mode: true
 
 Active Feature: "User Authentication"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -446,6 +468,7 @@ Primary Command:
 Additional Commands:
   /sigil-setup              Set up Sigil OS in this project
   /sigil-config             View/change configuration (track, mode)
+  /sigil-audit              View workflow audit log (when enabled)
   /sigil-handoff            Generate engineer review package
   /sigil-constitution       View/edit project principles
   /sigil-learn              View, search, or review learnings

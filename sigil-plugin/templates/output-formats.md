@@ -56,6 +56,8 @@ Run /sigil-setup to get started.
 
 ✅ Foundation    - {Stack summary}
 ✅ Constitution  - {N} articles defined
+# Optional — shown only when audit_mode: true in .sigil/config.yaml:
+Audit Mode: Active | Entries: {n}
 
 Active Feature: "{Feature Name}"
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -78,11 +80,15 @@ When no active feature:
 
 ✅ Foundation    - {Stack summary}
 ✅ Constitution  - {N} articles defined
+# Optional — shown only when audit_mode: true in .sigil/config.yaml:
+Audit Mode: Active | Entries: {n}
 
 No active feature.
 
 Describe what you want to build, or run /sigil help for options.
 ```
+
+The `Audit Mode` line is shown only when `audit_mode: true`. The entry count `{n}` is the number of `### [` markers in `.sigil/audit-log.md` (each represents one logged event). If the log is empty or missing, show `Entries: 0`.
 
 ## Profile View
 
@@ -190,6 +196,7 @@ Primary Command:
 Additional Commands:
   /sigil-setup              Set up Sigil OS in this project
   /sigil-config             View/change configuration (track, mode)
+  /sigil-audit              View workflow audit log (when enabled)
   /sigil-handoff            Generate engineer review package
   /sigil-constitution       View/edit project principles
   /sigil-learn              View, search, or review learnings
@@ -215,6 +222,32 @@ Tasks: {N} completed
 Code review: {Status} ({blockers} blockers, {warnings} warnings, {suggestions} suggestions)
 Spec: {spec_path}
 {If learnings captured: Learnings captured: {N} patterns, {N} gotchas}
+```
+
+## Audit Log Summary
+
+```
+Audit Log — Latest Session
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feature: {Feature Name}
+Started: {timestamp}
+Track:   {track} (complexity: {score})
+
+Phases completed:
+  ✅ Specification    — {outcome summary}
+  ✅ Clarification    — {outcome summary}
+  ✅ Planning         — {outcome summary}
+  ✅ Implementation   — {N} tasks completed
+  ✅ Code Review      — {outcome summary}
+  ✅ Security Review  — {outcome summary or "Skipped"}
+
+Duration: ~{duration}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+/sigil-audit full     — show complete log
+/sigil-audit session  — current session details
+/sigil-audit clear    — archive and reset
 ```
 
 ---

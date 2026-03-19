@@ -21,6 +21,8 @@ Before starting any process steps, the invoking skill MUST:
 
 3. **Preserve** all other fields (do not overwrite unrelated sections)
 
+4. **Audit log** (optional): If `audit_mode: true` in `.sigil/config.yaml`, append a `phase` entry to `.sigil/audit-log.md` per `audit-log-protocol.md`. Use the skill's phase name (e.g., `specify`, `clarify`, `plan`) as the entry title and the skill name as the Skill field. The Outcome field is updated after the skill completes.
+
 ## When to Reference
 
 Any skill that:
@@ -42,3 +44,5 @@ Any skill that:
 - This protocol replaces inline Pre-Execution Check sections in individual skills
 - Skills should reference this file rather than duplicating the instructions
 - The `/sigil continue` command relies on accurate phase tracking to resume correctly
+- Step 4 (audit log) is opt-in via config and adds no overhead when audit mode is disabled
+- See `audit-log-protocol.md` in this directory for the full logging specification

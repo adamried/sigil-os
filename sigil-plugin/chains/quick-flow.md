@@ -357,6 +357,19 @@ Even in Quick Flow:
 
 Quick Flow is "less ceremony," not "less quality."
 
+## Context Preservation
+
+Between skills, preserve:
+- `chain_id`: Unique identifier for this chain execution
+- `spec_path`: Current spec location (if persisted)
+- `track`: `quick`
+- `user_track`: Configuration user track (non-technical | technical)
+- `execution_mode`: Configuration execution mode (automatic | directed)
+- `audit_enabled`: Whether audit mode is active for this session (from config.yaml)
+- `ticket_key`: External ticket key if input came from ticket-loader
+- `ticket_metadata`: Full ticket metadata from ticket-loader (for handoff-back)
+- `ticket_category`: Sigil category from ticket categorization
+
 ## Version History
 
 | Version | Date | Changes |
