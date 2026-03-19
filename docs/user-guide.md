@@ -177,6 +177,40 @@ The execution mode controls how Sigil selects specialists for tasks:
 
 Run `/sigil-config` with no arguments to see your current settings and get an offer to change them.
 
+### Audit Mode
+
+Audit mode records every step Sigil takes during a workflow. When enabled, Sigil writes each phase to a log file (`.sigil/audit-log.md`) so you can review what happened after the fact.
+
+**When audit mode is useful:**
+
+- After a workflow completes and you want to understand what decisions were made
+- When handing off to an engineer and you want to share a step-by-step record
+- When something unexpected happened and you want to trace the cause
+
+**Enabling audit mode:**
+
+```
+/sigil-config set audit_mode true
+```
+
+Once enabled, every `/sigil` workflow logs events automatically. When audit mode is on, the status dashboard shows `Audit Mode: Active | Entries: N` as a reminder.
+
+**Viewing the log:**
+
+```
+/sigil-audit
+```
+
+This shows a plain-language summary of what happened in the most recent workflow. Run `/sigil-audit full` to see the entire log across all sessions.
+
+**Disabling audit mode:**
+
+```
+/sigil-config set audit_mode false
+```
+
+Audit mode is off by default. The log file stays on disk after you disable it, so you can still review past sessions with `/sigil-audit`.
+
 ### Resetting to Defaults
 
 If you want to start over with default settings:

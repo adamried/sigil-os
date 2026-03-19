@@ -283,7 +283,7 @@ Add a section to your specification like the example below.
 
 ### "No config file found"
 
-Your personal configuration file (`.sigil/config.yaml`) hasn't been created yet. Sigil uses defaults (`non-technical` track, `automatic` mode) when the file is missing. To create it explicitly:
+Your personal configuration file (`.sigil/config.yaml`) hasn't been created yet. Sigil uses defaults (`non-technical` track, `automatic` mode, `audit_mode: false`) when the file is missing. To create it explicitly:
 
 ```
 /sigil-config set user_track non-technical
@@ -504,6 +504,9 @@ Status: blocked — QA fix cycle exceeded
 Having all five items ready makes it much easier for someone to help you.
 
 ### Common Questions
+
+**Q: How do I see what Sigil did during a workflow?**
+A: Enable audit mode, then use `/sigil-audit` to review a step-by-step record of what happened. To enable: `/sigil-config set audit_mode true`. Once on, every workflow logs events automatically to `.sigil/audit-log.md`. Run `/sigil-audit` after a workflow completes to see a plain-language summary, or `/sigil-audit full` for the complete log.
 
 **Q: Can I undo a clarification answer?**
 A: Not directly. Run `/sigil "description"` again to start fresh if you need to change a key decision.

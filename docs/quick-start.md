@@ -532,6 +532,7 @@ These four commands cover most use cases:
 | `/sigil "..."` | Start building a feature from your description |
 | `/sigil continue` | Resume work on an in-progress feature |
 | `/sigil-constitution` | Set up or update project rules |
+| `/sigil-audit` | View the workflow audit log (requires audit mode enabled) |
 
 You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/sigil "Add login"`.
 

@@ -108,6 +108,8 @@ Create markdown files directly in the `shared-standards/` directory of your shar
 
 Each file should contain the rules in plain language. Sigil agents read and follow them just like local constitution rules.
 
+> **Tip:** Sigil includes a `templates/shared-standard-template.md` starter file in the plugin. It provides the recommended structure and frontmatter for a new standard file, including how to set enforcement levels. Copy and adapt it when creating your first standards.
+
 **How standards reach your project:**
 
 Standards flow into your project's constitution automatically at three points:

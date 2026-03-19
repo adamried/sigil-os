@@ -50,9 +50,11 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 
 | Term | What It Means |
 |------|---------------|
-| **Personal Config** | Your personal settings stored in `.sigil/config.yaml`. This file is gitignored — each team member has their own. Contains user track and execution mode. |
+| **Personal Config** | Your personal settings stored in `.sigil/config.yaml`. This file is gitignored — each team member has their own. Contains user track, execution mode, and audit mode. |
 | **User Track** | A personal setting that controls how Sigil communicates with you: `non-technical` (plain English, auto-decides technical details) or `technical` (shows implementation details, trade-offs, and specialist names) |
 | **Execution Mode** | A personal setting that controls how specialists are selected: `automatic` (Sigil chooses) or `directed` (you choose, requires technical track) |
+| **Audit Mode** | An optional setting that logs every workflow step to `.sigil/audit-log.md`. Useful for reviewing what happened after a workflow completes. Enable with `/sigil-config set audit_mode true`. |
+| **Audit Log** | The file (`.sigil/audit-log.md`) that records workflow events when audit mode is enabled. View with `/sigil-audit`. |
 | **Specialist** | A domain-specific overlay that customizes a base agent's behavior for a particular type of work (e.g., an API Developer specialist makes the Developer agent focus on API contracts and backwards compatibility) |
 | **Base Agent** | One of the 9 core agents (like Developer or QA Engineer) that a specialist extends with domain-specific behavior |
 | **Specialist Selection** | The process of matching a task to the most appropriate specialist based on what files it touches and what it's about |
