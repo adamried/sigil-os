@@ -76,14 +76,14 @@ Do you work across multiple code projects that share
 organization rules (security policies, coding standards)?
 
 - Yes — Let's connect now
-- No / Not sure — Skip (connect later with /sigil-connect)
+- No / Not sure — Skip (connect later with /sigil:connect)
 ```
 
 Use the `AskUserQuestion` tool for this choice.
 
 **If Yes:**
 
-1. Invoke the `connect-wizard` skill (same as `/sigil-connect`)
+1. Invoke the `connect-wizard` skill (same as `/sigil:connect`)
 2. After connection succeeds, invoke the Standards Discover protocol from `shared-context-sync` to list available standards
 3. Store discovered `shared_standards` array for use in Step 4
 4. Invoke the Integration Discovery Protocol from `shared-context-sync` to check for org-level tool configs
@@ -95,14 +95,14 @@ Use the `AskUserQuestion` tool for this choice.
 
 **If No / Not sure:**
 
-Proceed to Step 4 with no `shared_standards` and no integrations. The user can connect later with `/sigil-connect`.
+Proceed to Step 4 with no `shared_standards` and no integrations. The user can connect later with `/sigil:connect`.
 
 ### Step 4: Run Constitution Writer
 
 Invoke the constitution writer skill:
 
 ```
-Skill(skill: "sigil-constitution")
+Skill(skill: "constitution")
 ```
 
 If `shared_standards` were discovered in Step 3.5, pass them to the constitution writer so it can emit `@inherit` markers for covered articles instead of generating local content.
@@ -120,7 +120,7 @@ A profile describes your tech stack, APIs, and dependencies.
 It helps when sharing context across multiple projects.
 
 - Yes (Recommended) — Scan and generate profile
-- Skip — You can run /sigil-profile later
+- Skip — You can run /sigil:profile later
 ```
 
 Use the `AskUserQuestion` tool for this choice.
@@ -128,7 +128,7 @@ Use the `AskUserQuestion` tool for this choice.
 If yes, invoke:
 
 ```
-Skill(skill: "sigil-profile")
+Skill(skill: "profile")
 ```
 
 ### Step 5.5: MCP Profile Selection (if integrations discovered)
@@ -166,7 +166,7 @@ This ensures the project has:
 
 ### Step 6.5: Scaffold Project Context
 
-Create `.sigil/project-context.md` from the template so that workflow state tracking works from the first `/sigil` invocation:
+Create `.sigil/project-context.md` from the template so that workflow state tracking works from the first `/sigil:draw` invocation:
 
 1. Read `templates/project-context-template.md`
 2. Write it to `.sigil/project-context.md` with these initial values:
@@ -223,19 +223,19 @@ Setup Complete!
 
 ✅ Directory structure created (.sigil/)
 ✅ Role selected ([Product / Business | Engineering / Technical])
-✅ Shared context [Connected to org/repo | ⬚ Skipped — run /sigil-connect later]
+✅ Shared context [Connected to org/repo | ⬚ Skipped — run /sigil:connect later]
 ✅ Integrations [N adapters configured (e.g., Jira) | ⬚ None available | ⬚ Skipped]
 ✅ Constitution created (7 articles [, N from shared standards])
-✅ Profile generated (or "⬚ Profile — skipped, run /sigil-profile later")
+✅ Profile generated (or "⬚ Profile — skipped, run /sigil:profile later")
 ✅ Enforcement rules installed (SIGIL.md)
 ✅ Project context initialized (.sigil/project-context.md)
 ✅ Gitignore configured
 
 You're ready to go! Try:
-  /sigil "describe your first feature"
+  /sigil:draw "describe your first feature"
 
-Or run /sigil help to see all commands.
-To change your role later: /sigil-config set user_track [non-technical|technical]
+Or run /sigil:draw help to see all commands.
+To change your role later: /sigil:config set user_track [non-technical|technical]
 ```
 
 ## Pre-Checks
@@ -245,19 +245,19 @@ If `.sigil/constitution.md` already exists, warn:
 ```
 This project already has Sigil OS set up.
 
-- Run /sigil to see your current status
-- Run /sigil-constitution to update your constitution
-- Run /sigil-profile to update your profile
+- Run /sigil:draw to see your current status
+- Run /sigil:constitution to update your constitution
+- Run /sigil:profile to update your profile
 ```
 
 ## Error Handling
 
 - If directory creation fails: "Couldn't create .sigil/ directory. Check file permissions."
-- If constitution writer is cancelled: Still complete remaining steps. Show constitution as "⬚ Constitution — skipped, run /sigil-constitution later."
+- If constitution writer is cancelled: Still complete remaining steps. Show constitution as "⬚ Constitution — skipped, run /sigil:constitution later."
 - If gitignore write fails: "Couldn't update .gitignore — you may need to add these entries manually: [list entries]"
 
 ## Related Commands
 
-- `/sigil` — Show project status (after setup)
-- `/sigil-constitution` — Edit project constitution
-- `/sigil-profile` — Generate/update project profile
+- `/sigil:draw` — Show project status (after setup)
+- `/sigil:constitution` — Edit project constitution
+- `/sigil:profile` — Generate/update project profile

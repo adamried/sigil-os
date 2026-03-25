@@ -53,8 +53,8 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Personal Config** | Your personal settings stored in `.sigil/config.yaml`. This file is gitignored — each team member has their own. Contains user track, execution mode, and audit mode. |
 | **User Track** | A personal setting that controls how Sigil communicates with you: `non-technical` (plain English, auto-decides technical details) or `technical` (shows implementation details, trade-offs, and specialist names) |
 | **Execution Mode** | A personal setting that controls how specialists are selected: `automatic` (Sigil chooses) or `directed` (you choose, requires technical track) |
-| **Audit Mode** | An optional setting that logs every workflow step to `.sigil/audit-log.md`. Useful for reviewing what happened after a workflow completes. Enable with `/sigil-config set audit_mode true`. |
-| **Audit Log** | The file (`.sigil/audit-log.md`) that records workflow events when audit mode is enabled. View with `/sigil-audit`. |
+| **Audit Mode** | An optional setting that logs every workflow step to `.sigil/audit-log.md`. Useful for reviewing what happened after a workflow completes. Enable with `/sigil:config set audit_mode true`. |
+| **Audit Log** | The file (`.sigil/audit-log.md`) that records workflow events when audit mode is enabled. View with `/sigil:audit`. |
 | **Specialist** | A domain-specific overlay that customizes a base agent's behavior for a particular type of work (e.g., an API Developer specialist makes the Developer agent focus on API contracts and backwards compatibility) |
 | **Base Agent** | One of the 9 core agents (like Developer or QA Engineer) that a specialist extends with domain-specific behavior |
 | **Specialist Selection** | The process of matching a task to the most appropriate specialist based on what files it touches and what it's about |
@@ -89,7 +89,7 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **Recommended Standard** | A shared standard with enforcement level "recommended" — suggested but optional. Applied by default but you can opt out. Conflicts show warnings, not blocks |
 | **Informational Standard** | A shared standard with enforcement level "informational" — available for reference in the shared repo but not added to your constitution. No warnings or blocks |
 | **Integration Adapter** | A configuration that connects Sigil to an external tool (like Jira or Linear). Stored in the shared repo's `integrations/` directory and imported to your project during setup or connection |
-| **Ticket-Driven Entry** | Starting a Sigil workflow from an external ticket (e.g., `/sigil PROJ-123` instead of describing a feature in plain text). Sigil fetches the ticket details, categorizes the work type, and routes it through the appropriate workflow |
+| **Ticket-Driven Entry** | Starting a Sigil workflow from an external ticket (e.g., `/sigil:draw PROJ-123` instead of describing a feature in plain text). Sigil fetches the ticket details, categorizes the work type, and routes it through the appropriate workflow |
 | **Ticket Loader** | The skill that fetches ticket data from an external tool, enriches it with parent/epic context, categorizes the work type, and hands the enriched context to the main workflow |
 | **Ticket Key** | The identifier for a ticket in an external tool (e.g., `PROJ-123` for Jira). Follows the pattern of uppercase letters followed by a dash and numbers |
 | **Override** | A temporary exception to a constitution rule, recorded in `/.sigil/waivers.md`. Overrides have an expiration date (or are permanent) and affect how QA validation and code review handle findings for the overridden article. Expired overrides revert to the original rule automatically |

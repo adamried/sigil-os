@@ -152,7 +152,7 @@ Compare the highest completed phase (from artifacts) against the **Current Phase
 
 ### Step 2: Route Based on Arguments
 
-**No arguments (`/sigil`):**
+**No arguments (`/sigil:draw`):**
 → Show visual status dashboard
 → Suggest next logical action based on state
 
@@ -280,7 +280,7 @@ After each phase completes successfully:
 
 ### Step 4b: Implementation Loop
 
-Runs after task-decomposer completes OR when `/sigil continue` resumes an implement phase.
+Runs after task-decomposer completes OR when `/sigil:draw continue` resumes an implement phase.
 
 #### Entry: Show Tasks and Begin
 
@@ -425,7 +425,7 @@ No coding knowledge required — just describe what you want to build.
 
 This project doesn't have Sigil OS set up yet.
 
-Run /sigil-setup to get started.
+Run /sigil:setup to get started.
 ```
 
 ### Status Dashboard
@@ -458,23 +458,23 @@ Sigil OS Commands
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Primary Command:
-  /sigil                    Show status and next steps
-  /sigil "description"      Start building a new feature
-  /sigil PROJ-123           Start from a Jira/issue tracker ticket
-  /sigil continue           Resume where you left off
-  /sigil status             Detailed workflow status
-  /sigil help               Show this help
+  /sigil:draw                    Show status and next steps
+  /sigil:draw "description"      Start building a new feature
+  /sigil:draw PROJ-123           Start from a Jira/issue tracker ticket
+  /sigil:draw continue           Resume where you left off
+  /sigil:draw status             Detailed workflow status
+  /sigil:draw help               Show this help
 
 Additional Commands:
-  /sigil-setup              Set up Sigil OS in this project
-  /sigil-config             View/change configuration (track, mode)
-  /sigil-audit              View workflow audit log (when enabled)
-  /sigil-handoff            Generate engineer review package
-  /sigil-constitution       View/edit project principles
-  /sigil-learn              View, search, or review learnings
-  /sigil-connect            Connect to shared context repo
-  /sigil-profile            Generate or view project profile
-  /sigil-update             Check for Sigil updates
+  /sigil:setup              Set up Sigil OS in this project
+  /sigil:config             View/change configuration (track, mode)
+  /sigil:audit              View workflow audit log (when enabled)
+  /sigil:handoff            Generate engineer review package
+  /sigil:constitution       View/edit project principles
+  /sigil:learn              View, search, or review learnings
+  /sigil:connect            Connect to shared context repo
+  /sigil:profile            Generate or view project profile
+  /sigil:update             Check for Sigil updates
 
 Natural Language:
   Just describe what you want! Sigil understands:
@@ -529,16 +529,16 @@ Would you like to set up the constitution now? (Y/n)
 
 ## Natural Language Triggers
 
-When the user's message doesn't start with `/sigil`, the orchestrator should recognize these patterns and route appropriately:
+When the user's message doesn't start with `/sigil:draw`, the orchestrator should recognize these patterns and route appropriately:
 
 | Pattern | Route To |
 |---------|----------|
-| "I want to build...", "Let's create...", "Build me..." | → `/sigil "description"` |
-| "Add...", "Implement...", "Create feature..." | → `/sigil "description"` |
-| "What's the status", "Where are we", "Show progress" | → `/sigil status` |
-| "Continue", "Keep going", "Next step", "What's next" | → `/sigil continue` |
-| "Help", "What can you do", "How does this work" | → `/sigil help` |
-| "Work on PROJ-123", "Pick up PROJ-123", "Start PROJ-123" | → `/sigil PROJ-123` (ticket-key routing) |
+| "I want to build...", "Let's create...", "Build me..." | → `/sigil:draw "description"` |
+| "Add...", "Implement...", "Create feature..." | → `/sigil:draw "description"` |
+| "What's the status", "Where are we", "Show progress" | → `/sigil:draw status` |
+| "Continue", "Keep going", "Next step", "What's next" | → `/sigil:draw continue` |
+| "Help", "What can you do", "How does this work" | → `/sigil:draw help` |
+| "Work on PROJ-123", "Pick up PROJ-123", "Start PROJ-123" | → `/sigil:draw PROJ-123` (ticket-key routing) |
 
 ## Guidelines
 
@@ -587,7 +587,7 @@ When this command runs, silently check if an update check should be performed:
    - Check plugin update status via Claude Code's plugin system
    - If an update is available, show hint at end of output:
      ```
-     💡 Sigil OS update available. Run `/sigil-update` to see details.
+     💡 Sigil OS update available. Run `/sigil:update` to see details.
      ```
    - Create marker file: `touch /tmp/.sigil-update-checked-$(date +%Y%m%d)`
 

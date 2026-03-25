@@ -23,8 +23,8 @@
 | `constitution.md` | constitution-writer | Project setup |
 | `project-context.md` | (auto-updated) | Session start, phase changes |
 | `project-foundation.md` | foundation-writer | Discovery track |
-| `project-profile.yaml` | profile-generator | `/sigil-profile` |
-| `config.yaml` | `/sigil-setup` | Project setup (gitignored) |
+| `project-profile.yaml` | profile-generator | `/sigil:profile` |
+| `config.yaml` | `/sigil:setup` | Project setup (gitignored) |
 | `tech-debt.md` | code-reviewer | After code review (suggestions) |
 | `waivers.md` | (manual) | Constitution waivers |
 

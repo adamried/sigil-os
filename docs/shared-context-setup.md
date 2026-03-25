@@ -7,7 +7,7 @@ Share learnings and standards across your code projects through a shared GitHub 
 Before you start, make sure you have:
 
 1. **A GitHub account** with access to create repositories.
-2. **GitHub MCP** connected to Claude Code. If you are not sure, `/sigil-connect` will check for you and guide you through setup.
+2. **GitHub MCP** connected to Claude Code. If you are not sure, `/sigil:connect` will check for you and guide you through setup.
 3. **A git repository** with a remote set for each project you want to connect.
 
 ## Step 1: Create a Shared Repository
@@ -29,7 +29,7 @@ You should now see an empty repository on GitHub.
 Open your project in Claude Code and run:
 
 ```
-/sigil-connect your-username/platform-context
+/sigil:connect your-username/platform-context
 ```
 
 Replace `your-username/platform-context` with the path to your shared repo.
@@ -42,11 +42,11 @@ Sigil will:
 
 You should now see a confirmation message with your shared repo and project details.
 
-> **Note:** If GitHub MCP is not configured, Sigil will walk you through setting it up. Follow the on-screen instructions, then restart Claude Code and run `/sigil-connect` again.
+> **Note:** If GitHub MCP is not configured, Sigil will walk you through setting it up. Follow the on-screen instructions, then restart Claude Code and run `/sigil:connect` again.
 
 ## Step 3: Verify the Connection
 
-Run `/sigil` to see the status dashboard. It should show:
+Run `/sigil:draw` to see the status dashboard. It should show:
 
 ```
 Shared Context: Connected
@@ -63,7 +63,7 @@ You should now see shared context status in your session output.
 Repeat Step 2 for each project you want to share context between.
 
 1. Open the next project in Claude Code.
-2. Run `/sigil-connect your-username/platform-context`.
+2. Run `/sigil:connect your-username/platform-context`.
 
 Each project gets its own entry in `~/.sigil/registry.json`. All projects connected to the same shared repo share learnings.
 
@@ -71,19 +71,19 @@ Each project gets its own entry in `~/.sigil/registry.json`. All projects connec
 
 ### Learnings sync automatically
 
-- When you capture a learning (via `/sigil-learn` or during task completion), it writes locally **and** pushes to the shared repo.
+- When you capture a learning (via `/sigil:learn` or during task completion), it writes locally **and** pushes to the shared repo.
 - When you start a session, the latest shared learnings load automatically.
 - A "what's new" summary shows any new entries since your last session.
 
 ### Project profiles sync too
 
-Run `/sigil-profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects. Optional sections cover databases, API surface, auth model, domain glossary, and project structure.
+Run `/sigil:profile` to create a project profile. It describes your tech stack, what your project exposes (APIs, events, packages), and what it consumes from other projects. Optional sections cover databases, API surface, auth model, domain glossary, and project structure.
 
 - When you create or update a profile, it publishes to the shared repo's `profiles/` directory.
 - When you start a session, profiles from connected projects load automatically.
 - If your plan changes something another project depends on, Sigil warns you during planning.
 
-> **Tip:** Profiles work even without shared context. In solo mode, `/sigil-profile` still generates a local profile that gives Sigil better understanding of your project.
+> **Tip:** Profiles work even without shared context. In solo mode, `/sigil:profile` still generates a local profile that gives Sigil better understanding of your project.
 
 ### Offline support
 
@@ -114,9 +114,9 @@ Each file should contain the rules in plain language. Sigil agents read and foll
 
 Standards flow into your project's constitution automatically at three points:
 
-1. **During `/sigil-setup`:** If you connect to shared context during setup, Sigil discovers available standards and writes them directly into your constitution using `@inherit` markers.
-2. **During `/sigil-connect`:** If your project already has a constitution, Sigil offers to apply available standards to the matching articles.
-3. **At every session start (`/sigil`):** Sigil pulls the latest version of each standard from the shared repo and refreshes the content in your constitution. If a standard changed upstream, your project picks it up automatically.
+1. **During `/sigil:setup`:** If you connect to shared context during setup, Sigil discovers available standards and writes them directly into your constitution using `@inherit` markers.
+2. **During `/sigil:connect`:** If your project already has a constitution, Sigil offers to apply available standards to the matching articles.
+3. **At every session start (`/sigil:draw`):** Sigil pulls the latest version of each standard from the shared repo and refreshes the content in your constitution. If a standard changed upstream, your project picks it up automatically.
 
 **What it looks like in your constitution:**
 
@@ -168,7 +168,7 @@ If your local rules conflict with a shared standard (for example, the standard r
 
 **External tool integrations:**
 
-If your shared repo has an `integrations/` directory with adapter configs (e.g., `jira.yaml`), Sigil discovers them during setup or connection. These adapters let you start features from tickets in external tools like Jira — just run `/sigil PROJ-123` with a ticket key instead of typing a feature description.
+If your shared repo has an `integrations/` directory with adapter configs (e.g., `jira.yaml`), Sigil discovers them during setup or connection. These adapters let you start features from tickets in external tools like Jira — just run `/sigil:draw PROJ-123` with a ticket key instead of typing a feature description.
 
 **Why this matters:**
 
@@ -218,7 +218,7 @@ You have read access but not write access.
 
 Learnings may not have synced yet.
 
-**Fix:** Start a new session in the other project to pull the latest shared learnings. Check `/sigil-learn` to see if any items are queued.
+**Fix:** Start a new session in the other project to pull the latest shared learnings. Check `/sigil:learn` to see if any items are queued.
 
 ### "Shared context unavailable, using cached data"
 

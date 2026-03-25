@@ -25,7 +25,7 @@ On the **first audit entry** of a workflow run, write a session header before th
 ## Session: {ISO-8601 timestamp} | Feature: {feature name or "New Feature"}
 ```
 
-The session header is written once per `/sigil "description"` or `/sigil continue` invocation. Subsequent entries in the same workflow run append under this header without repeating it.
+The session header is written once per `/sigil:draw "description"` or `/sigil:draw continue` invocation. Subsequent entries in the same workflow run append under this header without repeating it.
 
 ## Entry Format
 

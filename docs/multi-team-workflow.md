@@ -102,7 +102,7 @@ Each person's learnings sync through a shared GitHub repository accessed via Git
 ```mermaid
 flowchart LR
     subgraph SessionA["Engineer A's session"]
-        CAPTURE["`Runs **/sigil-learn**`"]
+        CAPTURE["`Runs **/sigil:learn**`"]
     end
 
     CAPTURE -->|"push via MCP"| REPO[("Shared Repo")]
@@ -113,11 +113,11 @@ flowchart LR
     SessionB --> READY["Sees 'what's new' summary"]
 ```
 
-<!-- Alt text: Engineer A runs /sigil-learn, which pushes to the shared repo via MCP and writes locally. The shared repo delivers the learning when Engineer B starts a session, showing a what's new summary. -->
+<!-- Alt text: Engineer A runs /sigil:learn, which pushes to the shared repo via MCP and writes locally. The shared repo delivers the learning when Engineer B starts a session, showing a what's new summary. -->
 
 Key details:
 
-- Learnings push to the shared repo the moment they are captured via `/sigil-learn`. No waiting.
+- Learnings push to the shared repo the moment they are captured via `/sigil:learn`. No waiting.
 - When anyone starts a new session, shared learnings load automatically.
 - A "what's new" summary shows what was added since your last session.
 - If GitHub MCP is unreachable, Sigil works normally with local memory and a cached copy of shared learnings. It syncs when the connection returns.
@@ -125,7 +125,7 @@ Key details:
 
 ### Project profiles
 
-Each project can publish a profile describing its tech stack, exposed APIs, consumed dependencies, and optional sections for databases, auth model, domain glossary, and project structure. Run `/sigil-profile` to create one.
+Each project can publish a profile describing its tech stack, exposed APIs, consumed dependencies, and optional sections for databases, auth model, domain glossary, and project structure. Run `/sigil:profile` to create one.
 
 - Profiles publish to the shared repo's `profiles/` directory automatically.
 - When you start a session, sibling profiles load so Sigil knows what other projects expose.
@@ -170,7 +170,7 @@ When a shared standard applies to an article in your constitution, Sigil writes 
 ### How it works
 
 - Shared standards live in the `shared-standards/` directory of the shared repo.
-- During `/sigil-setup` and `/sigil-connect`, Sigil discovers available standards and writes `@inherit` markers into the constitution automatically.
+- During `/sigil:setup` and `/sigil:connect`, Sigil discovers available standards and writes `@inherit` markers into the constitution automatically.
 - At every session start, Sigil pulls the latest version of each referenced standard and replaces the content between `@inherit-start` and `@inherit-end` markers. This keeps your constitution current with upstream changes.
 - The `@inherit` directive line is always preserved. Content outside the start/end markers — including the article heading and `### Local Additions` section — is never modified.
 - If the shared repo is unreachable, Sigil keeps the previously expanded content and logs a warning. Your session continues normally.
@@ -241,24 +241,24 @@ Here is how a typical week looks for a team using Sigil with shared context:
 
 **Monday:** Sara (PM) describes a new feature in the web app repo. Sigil writes the spec, asks questions, and Sara answers them. Sara builds a working prototype.
 
-**Tuesday:** Sara validates the prototype and creates a handoff package. Alex (engineer) opens the same repo. `/sigil` loads the latest shared learnings. Alex reviews the handoff and starts connecting to real services.
+**Tuesday:** Sara validates the prototype and creates a handoff package. Alex (engineer) opens the same repo. `/sigil:draw` loads the latest shared learnings. Alex reviews the handoff and starts connecting to real services.
 
-**Wednesday:** Jordan (engineer) opens the API server repo to build a related endpoint. `/sigil` loads Alex's learnings from yesterday. Sigil warns: "Alex discovered that the DataGrid component slows above 10,000 rows. Consider virtualization." Jordan avoids the issue entirely.
+**Wednesday:** Jordan (engineer) opens the API server repo to build a related endpoint. `/sigil:draw` loads Alex's learnings from yesterday. Sigil warns: "Alex discovered that the DataGrid component slows above 10,000 rows. Consider virtualization." Jordan avoids the issue entirely.
 
-**Thursday:** The team updates shared security standards in the shared repo. Every project picks up the new rules on next `/sigil`.
+**Thursday:** The team updates shared security standards in the shared repo. Every project picks up the new rules on next `/sigil:draw`.
 
-**Friday:** A new engineer joins. They clone a repo, run `sigil connect my-org/platform-context`, then `/sigil`. They immediately have access to every shared learning. No onboarding doc needed.
+**Friday:** A new engineer joins. They clone a repo, run `sigil connect my-org/platform-context`, then `/sigil:draw`. They immediately have access to every shared learning. No onboarding doc needed.
 
 ## Getting Started
 
-1. Run `/sigil-connect` to set up shared context for your project.
+1. Run `/sigil:connect` to set up shared context for your project.
 2. See the [Shared Context Setup Guide](shared-context-setup.md) for detailed instructions.
 
 ## Troubleshooting
 
 | Problem | Likely Cause | Fix |
 |---------|-------------|-----|
-| Shared learnings not loading | Shared context not set up | Run `/sigil-connect` to activate shared context |
-| Constitution missing inherited standards | @inherit markers not expanded | Run `/sigil` to pull and expand shared standards |
-| Learnings not syncing | GitHub MCP unreachable | Check MCP connection. Learnings queue locally and sync on next `/sigil` |
-| New project missing shared learnings | Not connected to shared repo | Run `/sigil-connect my-org/platform-context` |
+| Shared learnings not loading | Shared context not set up | Run `/sigil:connect` to activate shared context |
+| Constitution missing inherited standards | @inherit markers not expanded | Run `/sigil:draw` to pull and expand shared standards |
+| Learnings not syncing | GitHub MCP unreachable | Check MCP connection. Learnings queue locally and sync on next `/sigil:draw` |
+| New project missing shared learnings | Not connected to shared repo | Run `/sigil:connect my-org/platform-context` |

@@ -15,10 +15,10 @@ Find your symptom in the table below and jump to the matching section.
 | Unexpected output format | Context mix-up | Start fresh | [Unexpected Output](#unexpected-output) |
 | Missing context from a previous session | Session state issue | Check context files | [Session Recovery](#session-recovery) |
 | Feature takes wrong direction | Unclear first description | Rewrite your description | [Wrong Direction](#wrong-direction) |
-| "No config file found" | Config not yet created | Run `/sigil-config set` to create it | [Configuration Issues](#configuration-issues) |
+| "No config file found" | Config not yet created | Run `/sigil:config set` to create it | [Configuration Issues](#configuration-issues) |
 | "Directed mode requires technical track" | Incompatible settings | Set user_track to technical first | [Configuration Issues](#configuration-issues) |
 | "Specialist file not found" | Missing specialist file | Automatic fallback to base agent | [Specialist Issues](#specialist-issues) |
-| Standards not in constitution | Not connected or empty standards | Run `/sigil-connect` | [Shared Standards Issues](#shared-standards-issues) |
+| Standards not in constitution | Not connected or empty standards | Run `/sigil:connect` | [Shared Standards Issues](#shared-standards-issues) |
 | "@inherit-pending" in constitution | Standard file missing from shared repo | Create the file in shared-standards/ | [Shared Standards Issues](#shared-standards-issues) |
 | Standards conflict warning | Local rule contradicts shared standard | Resolve, waive, or skip | [Shared Standards Issues](#shared-standards-issues) |
 
@@ -67,7 +67,7 @@ Try:
 
 ### Fix 3 -- Start Over with More Detail
 
-Run `/sigil "description"` again with a richer description. Try to answer common questions before they come up.
+Run `/sigil:draw "description"` again with a richer description. Try to answer common questions before they come up.
 
 Instead of:
 > "Add a contact form"
@@ -75,7 +75,7 @@ Instead of:
 Try:
 > "Add a contact form with name, email, and message fields. Show a success notice on submit. Send an email copy to the user. Use honeypot spam protection. The form must work on mobile and meet accessibility standards."
 
-> **Tip:** Before you type `/sigil "description"`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
+> **Tip:** Before you type `/sigil:draw "description"`, write down three things: who uses the feature, what they do, and what they see when it works. That alone prevents most clarification loops.
 
 ---
 
@@ -102,7 +102,7 @@ This usually points to a deeper problem, not a simple bug.
 
 ### How to Fix
 
-1. Run `/sigil` and look at which check keeps failing.
+1. Run `/sigil:draw` and look at which check keeps failing.
 2. Share the output with your tech lead.
 3. Pick the right action from the table below.
 
@@ -113,11 +113,11 @@ This usually points to a deeper problem, not a simple bug.
 | Technical limit | Adjust the feature to fit what is possible |
 | Missing information | Add the missing details to your specification |
 
-4. Run `/sigil continue` to regenerate the plan and tasks with the corrected information.
+4. Run `/sigil:draw continue` to regenerate the plan and tasks with the corrected information.
 
 You should now see the quality check pass on the next run.
 
-> **Note:** If you are unsure which problem type applies, share the full `/sigil` output with your tech lead. They can pinpoint the root cause.
+> **Note:** If you are unsure which problem type applies, share the full `/sigil:draw` output with your tech lead. They can pinpoint the root cause.
 
 ---
 
@@ -140,17 +140,17 @@ You should now see the quality check pass on the next run.
 Run the command below and type out your full feature description. Do not assume Sigil remembers anything from before.
 
 ```
-/sigil "description" [your complete feature description]
+/sigil:draw "description" [your complete feature description]
 ```
 
 You should now see a new specification that matches your description.
 
 ### Fix 2 -- Check Your Constitution
 
-Run `/sigil-constitution` and review the technology choices and standards listed. If they do not match your project, update them.
+Run `/sigil:constitution` and review the technology choices and standards listed. If they do not match your project, update them.
 
 ```
-/sigil-constitution
+/sigil:constitution
 ```
 
 You should now see a constitution that reflects your real project rules.
@@ -174,7 +174,7 @@ Try:
 ### What You See
 
 - Sigil does not remember your previous work.
-- `/sigil` shows no active features.
+- `/sigil:draw` shows no active features.
 - You are asked to set up a constitution again.
 
 ### Why This Happens
@@ -186,8 +186,8 @@ Sigil stores its state in a `.sigil/` folder inside your project. If that folder
 1. Make sure you opened your terminal in the same project folder you used before.
 2. Check that a `.sigil/` folder exists inside your project.
 3. Open the `.sigil/` folder and confirm it contains files.
-4. If the files are gone, run `/sigil-constitution` to recreate your project principles.
-5. Run `/sigil "description"` to restart your feature.
+4. If the files are gone, run `/sigil:constitution` to recreate your project principles.
+5. Run `/sigil:draw "description"` to restart your feature.
 
 ```
 $ ls .sigil/
@@ -214,12 +214,12 @@ Sigil fills in gaps when your description leaves room for guesses. Rushed answer
 
 ### Caught Early (Before Tasks Start)
 
-1. Run `/sigil` and read the specification carefully.
-2. Run `/sigil continue` to correct the parts that are wrong.
-3. Run `/sigil continue` to generate a new plan.
+1. Run `/sigil:draw` and read the specification carefully.
+2. Run `/sigil:draw continue` to correct the parts that are wrong.
+3. Run `/sigil:draw continue` to generate a new plan.
 
 ```
-$ /sigil continue
+$ /sigil:draw continue
 Plan generated: 4 tasks across 2 phases.
 Ready for review.
 ```
@@ -231,10 +231,10 @@ You should now see a plan that matches your intent.
 1. Stop the current implementation.
 2. Open the specification and find what went wrong.
 3. Update the specification with corrected requirements.
-4. Run `/sigil continue` to regenerate work items.
+4. Run `/sigil:draw continue` to regenerate work items.
 
 ```
-$ /sigil continue
+$ /sigil:draw continue
 Tasks regenerated: 3 tasks.
 Ready for implementation.
 ```
@@ -286,28 +286,28 @@ Add a section to your specification like the example below.
 Your personal configuration file (`.sigil/config.yaml`) hasn't been created yet. Sigil uses defaults (`non-technical` track, `automatic` mode, `audit_mode: false`) when the file is missing. To create it explicitly:
 
 ```
-/sigil-config set user_track non-technical
+/sigil:config set user_track non-technical
 ```
 
 ### Migrating from older versions
 
-If you upgraded from Sigil 0.23.0 or earlier, your configuration may still be in the `## Configuration` section of `SIGIL.md`. The next time you run `/sigil`, the preflight check automatically migrates your settings to `.sigil/config.yaml` and removes the old section from SIGIL.md. No action needed.
+If you upgraded from Sigil 0.23.0 or earlier, your configuration may still be in the `## Configuration` section of `SIGIL.md`. The next time you run `/sigil:draw`, the preflight check automatically migrates your settings to `.sigil/config.yaml` and removes the old section from SIGIL.md. No action needed.
 
 ### "Directed mode requires the technical track"
 
 You tried to set `execution_mode: directed` while your `user_track` is `non-technical`. Directed mode is for engineers who want to manually control specialist selection. Switch to the technical track first:
 
 ```
-/sigil-config set user_track technical
-/sigil-config set execution_mode directed
+/sigil:config set user_track technical
+/sigil:config set execution_mode directed
 ```
 
 ### Configuration YAML Parse Error
 
-If `/sigil-config` reports formatting issues, reset to defaults:
+If `/sigil:config` reports formatting issues, reset to defaults:
 
 ```
-/sigil-config reset
+/sigil:config reset
 ```
 
 This restores the default configuration in `.sigil/config.yaml`.
@@ -337,9 +337,9 @@ Specialists only add overrides to their base agent. If a task is very generic (l
 Your constitution does not show any `@inherit` markers or shared standard content.
 
 **Likely causes:**
-- Shared context is not active. Run `/sigil-connect` to connect to a shared repo.
+- Shared context is not active. Run `/sigil:connect` to connect to a shared repo.
 - The shared repo's `shared-standards/` directory is empty. Add standards files there first.
-- You set up your constitution before connecting. Run `/sigil-connect` again — it will offer to apply available standards to your existing constitution.
+- You set up your constitution before connecting. Run `/sigil:connect` again — it will offer to apply available standards to your existing constitution.
 
 ### "@inherit-pending" marker in constitution
 
@@ -349,7 +349,7 @@ Your constitution does not show any `@inherit` markers or shared standard conten
 
 The constitution references a shared standard file that does not exist in the shared repo yet.
 
-**Fix:** Create the referenced file in `shared-standards/` in your shared repo on GitHub. The marker will be replaced with actual content on your next `/sigil` session start.
+**Fix:** Create the referenced file in `shared-standards/` in your shared repo on GitHub. The marker will be replaced with actual content on your next `/sigil:draw` session start.
 
 ### Standards conflict warning at session start
 
@@ -388,10 +388,10 @@ A shared standard with enforcement level "required" is not applied to your const
 No integration configured for project "PROJ".
 ```
 
-You tried `/sigil PROJ-123` but Sigil doesn't have an adapter configured for that project prefix.
+You tried `/sigil:draw PROJ-123` but Sigil doesn't have an adapter configured for that project prefix.
 
 **Likely causes:**
-- No shared context connection. Run `/sigil-connect` first.
+- No shared context connection. Run `/sigil:connect` first.
 - The shared repo doesn't have an `integrations/` directory with adapter configs.
 - The project prefix doesn't match any `project_keys` in the adapter config.
 
@@ -416,7 +416,7 @@ The `@inherit` markers exist but the content between start/end markers is not up
 - The shared repo is unreachable. Sigil keeps the previously expanded content until the connection returns.
 - The constitution file is not at the expected path (`/.sigil/constitution.md`).
 
-**Fix:** Run `/sigil` and check the status output. If it shows "Shared context unavailable," your MCP connection needs attention.
+**Fix:** Run `/sigil:draw` and check the status output. If it shows "Shared context unavailable," your MCP connection needs attention.
 
 ### Override expired warning
 
@@ -490,11 +490,11 @@ These are serious issues like missing required files, critical security problems
 1. What command did you run? Copy the full input.
 2. What output did you get? Copy the full response.
 3. What did you expect to happen?
-4. Run `/sigil-constitution` and copy the output.
-5. Run `/sigil` and copy the output.
+4. Run `/sigil:constitution` and copy the output.
+5. Run `/sigil:draw` and copy the output.
 
 ```
-$ /sigil
+$ /sigil:draw
 Phase: planning
 Track: standard
 Active Feature: user-auth
@@ -506,10 +506,10 @@ Having all five items ready makes it much easier for someone to help you.
 ### Common Questions
 
 **Q: How do I see what Sigil did during a workflow?**
-A: Enable audit mode, then use `/sigil-audit` to review a step-by-step record of what happened. To enable: `/sigil-config set audit_mode true`. Once on, every workflow logs events automatically to `.sigil/audit-log.md`. Run `/sigil-audit` after a workflow completes to see a plain-language summary, or `/sigil-audit full` for the complete log.
+A: Enable audit mode, then use `/sigil:audit` to review a step-by-step record of what happened. To enable: `/sigil:config set audit_mode true`. Once on, every workflow logs events automatically to `.sigil/audit-log.md`. Run `/sigil:audit` after a workflow completes to see a plain-language summary, or `/sigil:audit full` for the complete log.
 
 **Q: Can I undo a clarification answer?**
-A: Not directly. Run `/sigil "description"` again to start fresh if you need to change a key decision.
+A: Not directly. Run `/sigil:draw "description"` again to start fresh if you need to change a key decision.
 
 **Q: How do I change the track (the complexity level -- Quick, Standard, or Enterprise)?**
 A: The track is chosen based on feature size. Describe a smaller feature to get a simpler track.
@@ -535,7 +535,7 @@ Most issues fall into one of four buckets.
 
 When in doubt, start here:
 
-1. Run `/sigil` to see where things stand.
+1. Run `/sigil:draw` to see where things stand.
 2. Review the specification for accuracy.
 3. Ask your tech lead if the issue is technical.
 4. Start fresh if context seems corrupted.

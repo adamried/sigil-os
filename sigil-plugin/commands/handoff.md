@@ -19,7 +19,7 @@ $ARGUMENTS
 
 1. Read `.sigil/project-context.md` to identify the active feature and spec path
 2. If a feature name or spec path was provided, use that instead
-3. If no active feature is found, report: "No active feature found. Run `/sigil` to check your workflow state."
+3. If no active feature is found, report: "No active feature found. Run `/sigil:draw` to check your workflow state."
 
 ### Step 2: Generate the Review Package
 

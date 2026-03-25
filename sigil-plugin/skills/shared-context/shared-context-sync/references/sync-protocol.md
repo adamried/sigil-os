@@ -122,7 +122,7 @@ File: `~/.sigil/cache/shared/queue/{timestamp_ms}.json`
 
 **Queue Status:**
 
-Return count of pending and failed items for display in `/sigil-learn` and `/sigil` status.
+Return count of pending and failed items for display in `/sigil:learn` and `/sigil:draw` status.
 
 ---
 
@@ -145,7 +145,7 @@ Before appending a learning to the shared repo (step 7 of Push Protocol), check 
 
 - Do NOT push to shared repo
 - Do NOT queue locally
-- Log: "Duplicate learning detected -- skipping shared sync. Run `/sigil-learn --review` to manage."
+- Log: "Duplicate learning detected -- skipping shared sync. Run `/sigil:learn --review` to manage."
 - Still write locally (local capture is unaffected)
 
 **Limitations (V1):**
@@ -254,7 +254,7 @@ Called by `prime` to determine if the local profile needs republishing.
 
 ## Standards Pull Protocol
 
-Called by `/sigil` at session start and by `constitution-writer` during setup.
+Called by `/sigil:draw` at session start and by `constitution-writer` during setup.
 
 **Procedure:**
 

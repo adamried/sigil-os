@@ -85,7 +85,7 @@ Also update `status_mapping` if your statuses don't match the defaults, and add 
 ### Step 4: Push and Test
 
 1. Commit and push `integrations/jira.yaml` to your shared context repo
-2. Run `/sigil PROJ-123` with a real ticket key
+2. Run `/sigil:draw PROJ-123` with a real ticket key
 3. Sigil will show which workflow it selected:
    - Maintenance ticket → Quick Flow
    - Story with AC → Implement-Ready chain
@@ -93,7 +93,7 @@ Also update `status_mapping` if your statuses don't match the defaults, and add 
 
 ### Understanding Ticket Routing
 
-When you run `/sigil PROJ-123`, Sigil categorizes the ticket:
+When you run `/sigil:draw PROJ-123`, Sigil categorizes the ticket:
 
 | Category | When | Workflow |
 |----------|------|----------|

@@ -18,7 +18,7 @@ Guide users through creating their project constitution—the immutable principl
 ## When to Invoke
 
 - New project setup
-- User requests `/sigil-constitution`
+- User requests `/sigil:constitution`
 - User asks about "project principles" or "project rules"
 - No constitution exists in `/.sigil/constitution.md`
 - After Discovery chain completes (invoked by foundation-writer)
@@ -410,7 +410,7 @@ Here's what I set up:
 This is saved at /.sigil/constitution.md. All AI agents will follow
 these rules automatically.
 
-To change it later, run /sigil-constitution edit.
+To change it later, run /sigil:constitution edit.
 ```
 
 ## Outputs

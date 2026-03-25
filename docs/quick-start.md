@@ -56,7 +56,7 @@ claude auth login
 
 ### Starting from Zero?
 
-If you have an idea but no code yet — that's perfect. Sigil is designed for exactly this. After installing Sigil, run `/sigil`. It will detect you're starting fresh and guide you through **Discovery** — a conversation that helps you choose a tech stack. You don't need to know what framework or database to use.
+If you have an idea but no code yet — that's perfect. Sigil is designed for exactly this. After installing Sigil, run `/sigil:draw`. It will detect you're starting fresh and guide you through **Discovery** — a conversation that helps you choose a tech stack. You don't need to know what framework or database to use.
 
 ---
 
@@ -81,14 +81,14 @@ claude plugin install sigil@sigil-os
 Start Claude Code and run:
 
 ```
-/sigil status
+/sigil:draw status
 ```
 
 You should see the Sigil status dashboard. That's it — Sigil is ready.
 
 ### What Sigil Adds to Your Project
 
-When you run `/sigil` for the first time, it creates these project files:
+When you run `/sigil:draw` for the first time, it creates these project files:
 
 | Folder | What It Contains |
 |--------|------------------|
@@ -118,7 +118,7 @@ This opens an interactive session with Claude Code. You'll see a prompt where yo
 
 Type:
 ```
-/sigil-setup
+/sigil:setup
 ```
 
 Sigil first asks about your role:
@@ -182,16 +182,16 @@ Standards (auto-configured)
 
 Now the fun part — building something!
 
-### What `/sigil` Does Automatically
+### What `/sigil:draw` Does Automatically
 
-Every time you run `/sigil`, Sigil runs a quick health check in the background. It makes sure your setup is correct and your project files are up to date. You don't need to do anything. If something needs your attention, Sigil tells you.
+Every time you run `/sigil:draw`, Sigil runs a quick health check in the background. It makes sure your setup is correct and your project files are up to date. You don't need to do anything. If something needs your attention, Sigil tells you.
 
 ### Step 1: Describe What You Want
 
 In your Claude Code session, just describe the feature in plain English:
 
 ```
-/sigil "Add a contact form where visitors can send messages to our support team"
+/sigil:draw "Add a contact form where visitors can send messages to our support team"
 ```
 
 Or simply type naturally:
@@ -336,7 +336,7 @@ Current: Building form validation logic
 
 If you want a detailed status update:
 ```
-/sigil status
+/sigil:draw status
 ```
 
 Or just ask:
@@ -353,7 +353,7 @@ claude
 
 Then:
 ```
-/sigil continue
+/sigil:draw continue
 ```
 
 Sigil picks up exactly where it left off.
@@ -410,7 +410,7 @@ During implementation, Sigil automatically captured lessons for future features:
 - **Gotchas** — Traps it encountered and how to avoid them
 - **Decisions** — Why certain choices were made
 
-Run `/sigil-learn` to see what was captured. These learnings help future features go smoother — Sigil remembers what worked and avoids past mistakes.
+Run `/sigil:learn` to see what was captured. These learnings help future features go smoother — Sigil remembers what worked and avoids past mistakes.
 
 ### Commit Your Changes
 
@@ -445,7 +445,7 @@ Don't worry — things don't always go perfectly. Here's how to handle common si
 If Sigil seems frozen or you're not sure what's happening:
 
 ```
-/sigil status
+/sigil:draw status
 ```
 
 This shows exactly where things stand. You might see:
@@ -495,7 +495,7 @@ Choose option 1 to let Sigil try again, or option 3 if you want to involve a dev
 You can always start over:
 
 ```
-/sigil "Add a contact form"
+/sigil:draw "Add a contact form"
 ```
 
 This creates a new specification from scratch.
@@ -508,7 +508,7 @@ When new versions are released, update with a single command.
 
 From within Claude Code:
 ```
-/sigil-update
+/sigil:update
 ```
 
 Or from your terminal:
@@ -518,7 +518,7 @@ claude plugin update sigil@sigil-os
 
 Your project files (`.sigil/`, `.sigil/specs/`) are not affected by updates. Only the plugin components are updated.
 
-After updating, start a new Claude Code session and run `/sigil` to verify.
+After updating, start a new Claude Code session and run `/sigil:draw` to verify.
 
 ---
 
@@ -528,13 +528,13 @@ These four commands cover most use cases:
 
 | Command | What It Does |
 |---------|--------------|
-| `/sigil` | Show status and what to do next |
-| `/sigil "..."` | Start building a feature from your description |
-| `/sigil continue` | Resume work on an in-progress feature |
-| `/sigil-constitution` | Set up or update project rules |
-| `/sigil-audit` | View the workflow audit log (requires audit mode enabled) |
+| `/sigil:draw` | Show status and what to do next |
+| `/sigil:draw "..."` | Start building a feature from your description |
+| `/sigil:draw continue` | Resume work on an in-progress feature |
+| `/sigil:constitution` | Set up or update project rules |
+| `/sigil:audit` | View the workflow audit log (requires audit mode enabled) |
 
-You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/sigil "Add login"`.
+You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/sigil:draw "Add login"`.
 
 For the full list of commands, see the [Command Reference](command-reference.md).
 

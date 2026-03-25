@@ -27,7 +27,7 @@ ENFORCEMENT_VERSION: 2.4.0
 
 ## When to Invoke
 
-- Automatically via SessionStart hook at the start of every `/sigil` command
+- Automatically via SessionStart hook at the start of every `/sigil:draw` command
 - When the hook output indicates SIGIL.md needs to be created or updated
 
 ## Process
@@ -38,9 +38,9 @@ The SessionStart hook (`hooks/preflight-check.sh`) handles installation verifica
 
 ### Part A2: Directory Check
 
-If `.sigil/` directory does not exist, this project has not been set up with Sigil OS yet. Recommend `/sigil-setup` to the user instead of attempting to create files inline:
+If `.sigil/` directory does not exist, this project has not been set up with Sigil OS yet. Recommend `/sigil:setup` to the user instead of attempting to create files inline:
 
-> Sigil OS is not set up in this project. Run `/sigil-setup` to get started.
+> Sigil OS is not set up in this project. Run `/sigil:setup` to get started.
 
 ### Part B: Create/Update SIGIL.md and Add Pointer to CLAUDE.md
 
@@ -104,12 +104,12 @@ When performing workflow actions, you MUST use the Skill tool with the exact ski
 
 | Action | MUST do | NEVER do instead |
 |--------|--------|------------------|
-| Start a feature workflow | Use `/sigil "description"` | Write a spec.md file yourself |
-| View/edit constitution | `Skill(skill: "sigil-constitution")` | Edit constitution.md directly |
-| Capture learnings | `Skill(skill: "sigil-learn")` | Write to learnings files directly |
-| Show workflow status | Use `/sigil` or `/sigil status` | Summarize status yourself |
+| Start a feature workflow | Use `/sigil:draw "description"` | Write a spec.md file yourself |
+| View/edit constitution | `Skill(skill: "constitution")` | Edit constitution.md directly |
+| Capture learnings | `Skill(skill: "learn")` | Write to learnings files directly |
+| Show workflow status | Use `/sigil:draw` or `/sigil:draw status` | Summarize status yourself |
 
-The following actions are handled automatically by the `/sigil` orchestrator and should not be invoked manually:
+The following actions are handled automatically by the `/sigil:draw` orchestrator and should not be invoked manually:
 - Specification writing (auto-invoked when you describe a feature)
 - Clarification (auto-invoked after spec if ambiguities exist)
 - Planning (auto-invoked after clarification)
@@ -155,7 +155,7 @@ After each phase transition (e.g., spec complete -> planning), you MUST update `
 
 ## Automatic Workflow Handoffs
 
-When these artifacts are created during a /sigil workflow, the next phase begins automatically:
+When these artifacts are created during a /sigil:draw workflow, the next phase begins automatically:
 
 | After Creating | Next Phase | How |
 |----------------|-----------|-----|
@@ -168,14 +168,14 @@ When these artifacts are created during a /sigil workflow, the next phase begins
 
 ## External Context Integration
 
-When MCP tools (Atlassian, Figma, Jira, GitHub Issues, Linear, etc.) are used to fetch work items, designs, or requirements in the same session as a `/sigil` workflow invocation:
+When MCP tools (Atlassian, Figma, Jira, GitHub Issues, Linear, etc.) are used to fetch work items, designs, or requirements in the same session as a `/sigil:draw` workflow invocation:
 
 1. Treat the fetched content as **input context** for the spec-writer, not as standalone completed actions
-2. When the user invokes `/sigil "description"` after fetching external context, pass all relevant fetched content (ticket descriptions, acceptance criteria, design references, linked requirements) as part of the feature description to the spec-writer
-3. Do NOT generate specs, tasks, or implementation plans outside of the `/sigil` workflow. All specification work MUST flow through the orchestrator's pipeline
-4. If external context was fetched but `/sigil` has not been invoked, prompt the user: "I've gathered context from [source]. Would you like to start a Sigil workflow with this? Run `/sigil` with a feature description to begin."
+2. When the user invokes `/sigil:draw "description"` after fetching external context, pass all relevant fetched content (ticket descriptions, acceptance criteria, design references, linked requirements) as part of the feature description to the spec-writer
+3. Do NOT generate specs, tasks, or implementation plans outside of the `/sigil:draw` workflow. All specification work MUST flow through the orchestrator's pipeline
+4. If external context was fetched but `/sigil:draw` has not been invoked, prompt the user: "I've gathered context from [source]. Would you like to start a Sigil workflow with this? Run `/sigil:draw` with a feature description to begin."
 
-CORRECT: Fetch Jira ticket → User runs `/sigil "implement JIRA-123 login feature"` → Spec-writer receives ticket context + description
+CORRECT: Fetch Jira ticket → User runs `/sigil:draw "implement JIRA-123 login feature"` → Spec-writer receives ticket context + description
 INCORRECT: Fetch Jira ticket → Generate spec.md directly from ticket → Start coding
 INCORRECT: Fetch Jira ticket → Create project-context.md stub → Stop
 
@@ -197,7 +197,7 @@ Read `.sigil/config.yaml` at session start. If the file does not exist, use defa
 
 ## Correct vs Incorrect Examples
 
-CORRECT: Use `/sigil "description"` to start a feature workflow.
+CORRECT: Use `/sigil:draw "description"` to start a feature workflow.
 INCORRECT: Write a `spec.md` file directly without the workflow.
 
 CORRECT: Read the chain definition then follow each phase in order.

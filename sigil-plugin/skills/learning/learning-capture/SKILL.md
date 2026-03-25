@@ -225,15 +225,15 @@ Enforce these limits when writing:
 
 | File | Max Items | Action on Exceed |
 |------|-----------|------------------|
-| patterns.md | 30 | Warn user, suggest `/sigil-learn --review` |
-| gotchas.md | 30 | Warn user, suggest `/sigil-learn --review` |
+| patterns.md | 30 | Warn user, suggest `/sigil:learn --review` |
+| gotchas.md | 30 | Warn user, suggest `/sigil:learn --review` |
 | decisions.md | 20 | Warn user, allow overflow |
 | Feature notes | 20 per feature | Summarize older entries |
 
 If a file exceeds its limit:
 ```
 Note: [file] has reached its limit (X items).
-Run `/sigil-learn --review` to prune and promote learnings.
+Run `/sigil:learn --review` to prune and promote learnings.
 ```
 
 ## Writing Guidelines

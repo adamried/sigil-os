@@ -331,7 +331,7 @@ After Discovery completes:
 2. Constitution exists at `/.sigil/constitution.md`
 3. Project context initialized at `/.sigil/project-context.md`
 4. User can now use standard workflow:
-   - `/sigil "description"` to create features
+   - `/sigil:draw "description"` to create features
    - Full pipeline chain for implementation
 
 ## Version History

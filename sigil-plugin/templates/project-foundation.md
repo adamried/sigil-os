@@ -142,7 +142,7 @@ To avoid redundant questions, these topics were not re-asked because they were c
 
 ### Immediate Actions
 
-1. [ ] Run `/sigil-constitution` to generate project constitution from this foundation
+1. [ ] Run `/sigil:constitution` to generate project constitution from this foundation
 2. [ ] Create initial project structure
 3. [ ] Set up development environment
 

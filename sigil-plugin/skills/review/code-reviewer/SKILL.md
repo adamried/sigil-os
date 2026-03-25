@@ -316,7 +316,7 @@ Before starting, update `.sigil/project-context.md`:
 - Set **Spec Path** to the active spec directory
 - Set **Last Updated** to the current timestamp
 
-If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil` command.
+If `.sigil/project-context.md` does not exist, create it using the State Tracking format from the `/sigil:draw` command.
 
 ## Workflow
 

@@ -102,9 +102,9 @@ Get familiar with these terms before you begin.
 
 ### What Happens Behind the Scenes
 
-When you run `/sigil`, several things happen in the background to keep your project healthy.
+When you run `/sigil:draw`, several things happen in the background to keep your project healthy.
 
-- **Preflight check** -- Each `/sigil` run checks that Sigil is set up correctly. If anything is missing or outdated, it tells you what needs attention.
+- **Preflight check** -- Each `/sigil:draw` run checks that Sigil is set up correctly. If anything is missing or outdated, it tells you what needs attention.
 - **Enforcement rules** -- Sigil adds operating rules to your project's `CLAUDE.md` file. These keep agents on the right workflow and respect your rulebook. You do not need to manage this.
 - **Context freshness check** -- Sigil confirms that the recorded project state matches your actual files. If your project says "Specify" but a plan already exists, Sigil corrects the recorded stage to match reality.
 - **Pre-run updates** -- Before each skill runs, it updates your project state file so records stay current.
@@ -115,25 +115,25 @@ Follow these steps when you start Sigil for the first time.
 
 ```mermaid
 flowchart LR
-    A["1. /sigil-setup"] --> B["2. /sigil"]
-    B --> C["3. /sigil 'description'"]
+    A["1. /sigil:setup"] --> B["2. /sigil:draw"]
+    B --> C["3. /sigil:draw 'description'"]
 ```
 
 1. **Set up your project.**
    ```
-   /sigil-setup
+   /sigil:setup
    ```
    Creates the project structure, walks you through your project rulebook, and configures enforcement. If you work across multiple projects, setup also asks whether to connect to a shared context repository. Connecting during setup means your organization's shared standards (security policies, coding conventions, etc.) are written into your rulebook automatically.
 
 2. **Check the current status.**
    ```
-   /sigil
+   /sigil:draw
    ```
    See what is in progress and which stage you are in. If shared context is active, Sigil pulls the latest standards and refreshes your rulebook automatically.
 
 3. **Create your first feature.**
    ```
-   /sigil "your feature description"
+   /sigil:draw "your feature description"
    ```
    Describe what you want to build in plain words. All workflow phases run automatically.
 
@@ -155,13 +155,13 @@ When you first set up Sigil, it asks about your role. This sets your **user trac
 You can change your track at any time:
 
 ```
-/sigil-config set user_track technical
+/sigil:config set user_track technical
 ```
 
 Or switch back:
 
 ```
-/sigil-config set user_track non-technical
+/sigil:config set user_track non-technical
 ```
 
 ### Execution Mode
@@ -175,7 +175,7 @@ The execution mode controls how Sigil selects specialists for tasks:
 
 ### Viewing Your Configuration
 
-Run `/sigil-config` with no arguments to see your current settings and get an offer to change them.
+Run `/sigil:config` with no arguments to see your current settings and get an offer to change them.
 
 ### Audit Mode
 
@@ -190,33 +190,33 @@ Audit mode records every step Sigil takes during a workflow. When enabled, Sigil
 **Enabling audit mode:**
 
 ```
-/sigil-config set audit_mode true
+/sigil:config set audit_mode true
 ```
 
-Once enabled, every `/sigil` workflow logs events automatically. When audit mode is on, the status dashboard shows `Audit Mode: Active | Entries: N` as a reminder.
+Once enabled, every `/sigil:draw` workflow logs events automatically. When audit mode is on, the status dashboard shows `Audit Mode: Active | Entries: N` as a reminder.
 
 **Viewing the log:**
 
 ```
-/sigil-audit
+/sigil:audit
 ```
 
-This shows a plain-language summary of what happened in the most recent workflow. Run `/sigil-audit full` to see the entire log across all sessions.
+This shows a plain-language summary of what happened in the most recent workflow. Run `/sigil:audit full` to see the entire log across all sessions.
 
 **Disabling audit mode:**
 
 ```
-/sigil-config set audit_mode false
+/sigil:config set audit_mode false
 ```
 
-Audit mode is off by default. The log file stays on disk after you disable it, so you can still review past sessions with `/sigil-audit`.
+Audit mode is off by default. The log file stays on disk after you disable it, so you can still review past sessions with `/sigil:audit`.
 
 ### Resetting to Defaults
 
 If you want to start over with default settings:
 
 ```
-/sigil-config reset
+/sigil:config reset
 ```
 
 This sets user track back to "non-technical" and execution mode back to "automatic."
@@ -317,7 +317,7 @@ At the complexity assessment checkpoint, Sigil shows its recommendation and scor
 - "Use the enterprise workflow" -- upgrades to Enterprise
 - "This is simpler than that, use standard" -- downgrades
 
-You can also set Enterprise as the default for your project during `/sigil-setup` (Round 2: "Enterprise -- Maximum rigor").
+You can also set Enterprise as the default for your project during `/sigil:setup` (Round 2: "Enterprise -- Maximum rigor").
 
 ### Writing Good Feature Descriptions
 
@@ -342,7 +342,7 @@ The vague example will need many rounds of follow-up questions. The detailed exa
 
 ### Understanding the Feature Document
 
-When you run `/sigil "description"`, Sigil creates a document with these sections.
+When you run `/sigil:draw "description"`, Sigil creates a document with these sections.
 
 **Summary:** One paragraph that describes the feature and its purpose.
 
@@ -493,7 +493,7 @@ Sigil balances speed with control using three levels. Here is when it pauses for
 
 When a feature completes (code review passes), Sigil automatically asks what you want to do next. One of the options is **"Hand off to an engineer"**, which generates the review package right there — no extra command needed.
 
-You can also run `/sigil-handoff` independently at any time to create a package on demand.
+You can also run `/sigil:handoff` independently at any time to create a package on demand.
 
 **What engineers get:**
 
@@ -506,7 +506,7 @@ You can also run `/sigil-handoff` independently at any time to create a package 
 
 ```mermaid
 flowchart LR
-    A["/sigil-handoff"] --> B["Feature Doc"]
+    A["/sigil:handoff"] --> B["Feature Doc"]
     A --> C["Follow-Up Answers"]
     A --> D["Build Plan"]
     A --> E["Task Breakdown"]
@@ -546,7 +546,7 @@ You will make decisions throughout the workflow. Here is a simple framework.
 
 ### Checking Progress
 
-Run `/sigil` at any time to see where things stand.
+Run `/sigil:draw` at any time to see where things stand.
 
 **Example output:**
 
@@ -593,7 +593,7 @@ When blockers appear, they need action.
 
 | Blocker | What to Do |
 |---------|------------|
-| Follow-up question needed | Answer via `/sigil continue` |
+| Follow-up question needed | Answer via `/sigil:draw continue` |
 | Rulebook conflict | Review with tech lead; update the rulebook if needed |
 | Outside dependency | Talk to the team that owns that piece |
 | Resource not available | Escalate to project leadership |
@@ -605,7 +605,7 @@ If you work on more than one project, Sigil can create a **project profile** for
 **Creating a profile:**
 
 ```
-/sigil-profile
+/sigil:profile
 ```
 
 Sigil scans your project files and detects your tech stack automatically. It then asks a few questions about what your project does and what it shares.
@@ -645,11 +645,11 @@ flowchart LR
 
 1. **Capture** -- Lessons are recorded after each task.
 2. **Reference** -- Relevant lessons load before each task starts.
-3. **Review** -- Run `/sigil-learn --review` to clean up.
+3. **Review** -- Run `/sigil:learn --review` to clean up.
 4. **Promote** -- Proven patterns move to the permanent file.
 5. **Archive** -- Finished feature notes move to storage.
 
-**Using `/sigil-learn --review`:**
+**Using `/sigil:learn --review`:**
 
 Run this from time to time to tidy up lessons. You will be asked to:
 
@@ -661,12 +661,12 @@ Run this from time to time to tidy up lessons. You will be asked to:
 
 ### Working Across Multiple Projects
 
-If your team works on several projects that share patterns or standards, Sigil can sync learnings between them. Run `/sigil-connect` to link projects to a shared GitHub repository.
+If your team works on several projects that share patterns or standards, Sigil can sync learnings between them. Run `/sigil:connect` to link projects to a shared GitHub repository.
 
 Once connected:
 - Learnings sync automatically between projects.
 - Project profiles let Sigil warn you when a change affects another project.
-- Organization-level standards (security policies, accessibility requirements, coding conventions) live in the shared repo's `shared-standards/` folder and flow into your project's constitution automatically. Sigil applies them during setup or connection, and refreshes them every session start. If a shared standard changes upstream, your project picks it up on the next `/sigil`.
+- Organization-level standards (security policies, accessibility requirements, coding conventions) live in the shared repo's `shared-standards/` folder and flow into your project's constitution automatically. Sigil applies them during setup or connection, and refreshes them every session start. If a shared standard changes upstream, your project picks it up on the next `/sigil:draw`.
 - External tool integrations (like Jira) can be shared across teams through the shared repo's `integrations/` directory.
 
 **Enforcement levels for shared standards:**
@@ -684,7 +684,7 @@ If your local rules conflict with a shared standard, Sigil flags the discrepancy
 If your team uses Jira (or another supported issue tracker) and you've connected to a shared repo with adapter configs, you can start features directly from tickets:
 
 ```
-/sigil PROJ-123
+/sigil:draw PROJ-123
 ```
 
 Sigil fetches the ticket details, figures out what kind of work it is (bug fix, new feature, maintenance task, enhancement), and routes it through the appropriate workflow:
@@ -789,7 +789,7 @@ You don't need to do anything. Specialist selection is automatic.
 |--------------|--------------|-----------|
 | "Maximum clarification rounds reached" | Requirements too vague or conflicting | Shrink scope and give direct answers |
 | "QA validation failed" | A deep design issue | Review with your tech lead |
-| Unexpected output | Context mix-up | Start fresh with `/sigil "description"` |
+| Unexpected output | Context mix-up | Start fresh with `/sigil:draw "description"` |
 
 ### Getting Help
 

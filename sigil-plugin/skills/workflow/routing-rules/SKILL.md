@@ -21,7 +21,7 @@ Centralize all routing logic in one place so the orchestrator (`sigil.md`) has a
 
 When multiple routing rules could match, apply in this order:
 
-1. **Explicit command** — `/sigil continue`, `/sigil status`, `/sigil help`
+1. **Explicit command** — `/sigil:draw continue`, `/sigil:draw status`, `/sigil:draw help`
 2. **Ticket key** — Matches `[A-Z][A-Z0-9]+-\d+` pattern (e.g., `PROJ-123`)
 3. **Resume intent** — "continue", "keep going", "next step", "what's next"
 4. **Status intent** — "status", "where are we", "show progress", "what's done"
@@ -58,31 +58,31 @@ When multiple routing rules could match, apply in this order:
 
 ### Resume Patterns
 ```
-"Continue"                  → /sigil continue
-"Keep going"                → /sigil continue
-"Next step"                 → /sigil continue
-"What's next"               → /sigil continue
-"Where were we"             → /sigil continue
-"Pick up where we left off" → /sigil continue
-"Let's keep working"        → /sigil continue
+"Continue"                  → /sigil:draw continue
+"Keep going"                → /sigil:draw continue
+"Next step"                 → /sigil:draw continue
+"What's next"               → /sigil:draw continue
+"Where were we"             → /sigil:draw continue
+"Pick up where we left off" → /sigil:draw continue
+"Let's keep working"        → /sigil:draw continue
 ```
 
 ### Status Patterns
 ```
-"What's the status"         → /sigil status
-"Where are we"              → /sigil status
-"Show progress"             → /sigil status
-"What's done"               → /sigil status
-"How far along"             → /sigil status
-"Progress update"           → /sigil status
+"What's the status"         → /sigil:draw status
+"Where are we"              → /sigil:draw status
+"Show progress"             → /sigil:draw status
+"What's done"               → /sigil:draw status
+"How far along"             → /sigil:draw status
+"Progress update"           → /sigil:draw status
 ```
 
 ### Ticket Patterns
 ```
-"Work on PROJ-123"          → /sigil PROJ-123
-"Pick up PROJ-123"          → /sigil PROJ-123
-"Start PROJ-123"            → /sigil PROJ-123
-"PROJ-123"                  → /sigil PROJ-123
+"Work on PROJ-123"          → /sigil:draw PROJ-123
+"Pick up PROJ-123"          → /sigil:draw PROJ-123
+"Start PROJ-123"            → /sigil:draw PROJ-123
+"PROJ-123"                  → /sigil:draw PROJ-123
 ```
 
 ## Context-Aware Routing

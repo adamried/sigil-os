@@ -22,7 +22,7 @@ Guide users through connecting their project to a shared context repository. Han
 
 ## When to Invoke
 
-When the user runs `/sigil-connect` or says "connect to shared context", "set up shared context", "share learnings across projects", etc.
+When the user runs `/sigil:connect` or says "connect to shared context", "set up shared context", "share learnings across projects", etc.
 
 ## Inputs
 
@@ -48,7 +48,7 @@ mobile and web apps.
 Do you work across multiple code projects? [Y/n]:
 ```
 
-If user says no → exit with: "No problem. You can run `/sigil-connect` anytime if you change your mind."
+If user says no → exit with: "No problem. You can run `/sigil:connect` anytime if you change your mind."
 
 ### Step 2: GitHub MCP Check
 
@@ -73,9 +73,9 @@ Sharing context requires a GitHub connection (MCP).
 Want me to help you set that up? [Y/n]:
 ```
 
-If yes, display the setup guidance from `shared-context-sync` MCP Detection, then ask user to restart their session and run `/sigil-connect` again.
+If yes, display the setup guidance from `shared-context-sync` MCP Detection, then ask user to restart their session and run `/sigil:connect` again.
 
-If no → exit with: "You'll need GitHub MCP to use shared context. Run `/sigil-connect` when you're ready."
+If no → exit with: "You'll need GitHub MCP to use shared context. Run `/sigil:connect` when you're ready."
 
 ### Step 3: Repository Selection
 
@@ -142,7 +142,7 @@ standards for use across code projects via [Sigil OS](https://github.com/arasere
 ## How it works
 
 Projects connect to this repo using `sigil connect`. After connecting:
-- Learnings sync automatically when you use `/sigil-learn`
+- Learnings sync automatically when you use `/sigil:learn`
 - Latest shared context loads automatically at session start
 
 Each project's learnings are stored in a subdirectory named after the project.
@@ -193,7 +193,7 @@ After connecting, invoke the Standards Discover protocol from `shared-context-sy
       Apply recommended standards to your constitution? [Y/n]:
       ```
       - If yes: apply same process as required standards above
-      - If no: skip, show: "You can apply these later with /sigil-connect."
+      - If no: skip, show: "You can apply these later with /sigil:connect."
 
    c. **Informational** (`enforcement: informational`) — mention only, do not apply:
       ```
@@ -209,7 +209,7 @@ After connecting, invoke the Standards Discover protocol from `shared-context-sy
 
 ```
 Your team has shared standards available. They will be
-applied automatically when you run /sigil-setup to create
+applied automatically when you run /sigil:setup to create
 your project constitution.
 ```
 
@@ -258,7 +258,7 @@ Step 3 of 3: Confirm
 
 Shared context is now active:
   - Repository: {owner/repo}
-  - Learnings sync when you use /sigil-learn
+  - Learnings sync when you use /sigil:learn
   - Latest context loads automatically at session start
   - Integrations: {N configured, M available}
   - This project: {current-project-identity}
@@ -289,9 +289,9 @@ When invoked with a repo path (e.g., `sigil connect my-org/platform-context`):
 | Invalid repo path format | "Repo path should be `owner/repo` (e.g., `my-org/platform-context`)." Allow retry. |
 | Repo not accessible via MCP | "Could not reach `{repo}`. Check that the repository exists and you have access." Allow retry. |
 | MCP write fails during scaffold | "Could not set up the repo structure. Check your write access to `{repo}`." |
-| Git not initialized | Caught by `/sigil-connect` pre-checks, not this skill. |
-| No git remote | Caught by `/sigil-connect` pre-checks, not this skill. |
-| Already connected | Caught by `/sigil-connect`, shows current config and asks to update. |
+| Git not initialized | Caught by `/sigil:connect` pre-checks, not this skill. |
+| No git remote | Caught by `/sigil:connect` pre-checks, not this skill. |
+| Already connected | Caught by `/sigil:connect`, shows current config and asks to update. |
 | MCP permission denied | "Could not write to shared repo. Ask your admin for write access to `{repo}`." |
 
 ---

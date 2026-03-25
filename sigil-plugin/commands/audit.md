@@ -21,7 +21,7 @@ $ARGUMENTS
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
    To start logging workflow events:
-     /sigil-config set audit_mode true
+     /sigil:config set audit_mode true
 
    Once enabled, every workflow step will be recorded
    in .sigil/audit-log.md for later review.
@@ -34,14 +34,14 @@ $ARGUMENTS
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
    No workflow events have been recorded yet.
-   Run /sigil "description" to start a feature — events
+   Run /sigil:draw "description" to start a feature — events
    will be logged automatically.
    ```
    Stop here.
 
 ## Modes
 
-### Summary Mode (no arguments — `/sigil-audit`)
+### Summary Mode (no arguments — `/sigil:audit`)
 
 Show a summary of the most recent session's activity:
 
@@ -64,9 +64,9 @@ Phases completed:
 Duration: ~{duration}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-/sigil-audit full     — show complete log
-/sigil-audit session  — current session details
-/sigil-audit clear    — archive and reset
+/sigil:audit full     — show complete log
+/sigil:audit session  — current session details
+/sigil:audit clear    — archive and reset
 ```
 
 **Non-technical track:** Use plain language for phases (e.g., "Writing the specification" instead of "spec-writer"). Do not show skill or agent names.
@@ -81,7 +81,7 @@ If the file is very long (>200 lines), show the most recent 3 sessions and note 
 
 ```
 Showing 3 most recent sessions ({N} total in log).
-Use /sigil-audit clear to archive older entries.
+Use /sigil:audit clear to archive older entries.
 ```
 
 ### Session Mode (`session`)
@@ -122,8 +122,8 @@ All output follows `templates/output-formats.md`:
 
 | Situation | Response |
 |-----------|----------|
-| No `.sigil/` directory | "Sigil OS is not set up in this project. Run `/sigil-setup` to get started." |
-| Audit log file corrupted/unparseable | Show raw file contents and suggest `/sigil-audit clear` to start fresh |
+| No `.sigil/` directory | "Sigil OS is not set up in this project. Run `/sigil:setup` to get started." |
+| Audit log file corrupted/unparseable | Show raw file contents and suggest `/sigil:audit clear` to start fresh |
 | Permission error on clear | "Couldn't archive the audit log. Check file permissions." |
 
 ## Guidelines
@@ -134,5 +134,5 @@ All output follows `templates/output-formats.md`:
 
 ## Related Commands
 
-- `/sigil-config` — Enable/disable audit mode
-- `/sigil` — Run workflows that generate audit entries
+- `/sigil:config` — Enable/disable audit mode
+- `/sigil:draw` — Run workflows that generate audit entries

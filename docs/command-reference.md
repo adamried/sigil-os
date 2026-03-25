@@ -8,64 +8,64 @@
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
-| `/sigil` | **Unified entry point** — status, start, resume | Starting any workflow |
-| `/sigil-setup` | Initialize Sigil OS in a new project | First-time project setup |
-| `/sigil-handoff` | Generate engineer review package | Ready for technical review |
-| `/sigil-constitution` | View or edit project rules | First-time setup or updates |
-| `/sigil-learn` | View, search, or review learnings | Reviewing institutional memory |
-| `/sigil-connect` | Connect project to shared context repo | Multi-project sharing setup |
-| `/sigil-profile` | Generate or view project profile | Describing your tech stack and APIs |
-| `/sigil-config` | View or change configuration (user track, execution mode, audit mode) | Adjusting Sigil's behavior |
-| `/sigil-audit` | View or manage the workflow audit log | Reviewing what happened in a workflow |
-| `/sigil-update` | Check for and install Sigil updates | Keeping Sigil current |
+| `/sigil:draw` | **Unified entry point** — status, start, resume | Starting any workflow |
+| `/sigil:setup` | Initialize Sigil OS in a new project | First-time project setup |
+| `/sigil:handoff` | Generate engineer review package | Ready for technical review |
+| `/sigil:constitution` | View or edit project rules | First-time setup or updates |
+| `/sigil:learn` | View, search, or review learnings | Reviewing institutional memory |
+| `/sigil:connect` | Connect project to shared context repo | Multi-project sharing setup |
+| `/sigil:profile` | Generate or view project profile | Describing your tech stack and APIs |
+| `/sigil:config` | View or change configuration (user track, execution mode, audit mode) | Adjusting Sigil's behavior |
+| `/sigil:audit` | View or manage the workflow audit log | Reviewing what happened in a workflow |
+| `/sigil:update` | Check for and install Sigil updates | Keeping Sigil current |
 
 ---
 
 ## Command Flow
 
-`/sigil` is the recommended entry point. It detects your project state and routes to the right phase automatically. All workflow phases (specification, clarification, planning, tasks, validation, review) are handled automatically by the orchestrator.
+`/sigil:draw` is the recommended entry point. It detects your project state and routes to the right phase automatically. All workflow phases (specification, clarification, planning, tasks, validation, review) are handled automatically by the orchestrator.
 
 ```
-/sigil-setup (one-time project setup)
+/sigil:setup (one-time project setup)
         ↓
-/sigil "description" (start a feature — all phases run automatically)
+/sigil:draw "description" (start a feature — all phases run automatically)
         ↓
     Specify → Clarify → Plan → Tasks → Implement → Validate → Review
         ↓
     Next-action prompt: build another feature, hand off, or wrap up
 ```
 
-After code review passes, Sigil offers your next step inline — including engineer handoff. You can also run `/sigil-handoff` independently at any time.
+After code review passes, Sigil offers your next step inline — including engineer handoff. You can also run `/sigil:handoff` independently at any time.
 
-You can use `/sigil` or `/sigil status` at any point to see where you are.
+You can use `/sigil:draw` or `/sigil:draw status` at any point to see where you are.
 
 ---
 
-## /sigil
+## /sigil:draw
 
 The unified entry point for all Sigil workflows. This is the recommended way to interact with Sigil.
 
 ### Syntax
 
 ```
-/sigil
-/sigil "feature description"
-/sigil PROJ-123
-/sigil continue
-/sigil status
-/sigil help
+/sigil:draw
+/sigil:draw "feature description"
+/sigil:draw PROJ-123
+/sigil:draw continue
+/sigil:draw status
+/sigil:draw help
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil` | Show status dashboard and suggest next action |
-| `/sigil "description"` | Start building a new feature from your description |
-| `/sigil PROJ-123` | Start from an external ticket (Jira, etc.) — fetches ticket details and routes by work type |
-| `/sigil continue` | Resume where you left off |
-| `/sigil status` | Show detailed workflow status |
-| `/sigil help` | Show all available commands |
+| `/sigil:draw` | Show status dashboard and suggest next action |
+| `/sigil:draw "description"` | Start building a new feature from your description |
+| `/sigil:draw PROJ-123` | Start from an external ticket (Jira, etc.) — fetches ticket details and routes by work type |
+| `/sigil:draw continue` | Resume where you left off |
+| `/sigil:draw status` | Show detailed workflow status |
+| `/sigil:draw help` | Show all available commands |
 
 ### What It Does
 
@@ -87,7 +87,7 @@ The unified entry point for all Sigil workflows. This is the recommended way to 
    - If the feature came from a ticket, **automatically updates the ticket** with a summary and status transition
    - Presents a **next-action prompt**:
      - **Build another feature** — start a new spec immediately
-     - **Hand off to an engineer** — generate a review package inline (same as `/sigil-handoff`)
+     - **Hand off to an engineer** — generate a review package inline (same as `/sigil:handoff`)
      - **Update ticket and close** — (if ticket-driven) update the originating ticket
      - **Done for now** — wrap up the session
 
@@ -97,28 +97,28 @@ You don't need to remember the exact syntax. These all work:
 
 | Instead of... | You can say... |
 |---------------|----------------|
-| `/sigil "Add login"` | "I want to add user login" |
-| `/sigil PROJ-123` | "Work on PROJ-123" or "Pick up PROJ-123" |
-| `/sigil status` | "What's the progress?" |
-| `/sigil continue` | "Keep going" or "Next step" |
-| `/sigil help` | "What can you do?" |
+| `/sigil:draw "Add login"` | "I want to add user login" |
+| `/sigil:draw PROJ-123` | "Work on PROJ-123" or "Pick up PROJ-123" |
+| `/sigil:draw status` | "What's the progress?" |
+| `/sigil:draw continue` | "Keep going" or "Next step" |
+| `/sigil:draw help` | "What can you do?" |
 
 ### When to Use
 
-- **Every time you start a session** — `/sigil` orients you
-- **Starting a new feature** — `/sigil "your description"`
-- **Returning after a break** — `/sigil continue`
+- **Every time you start a session** — `/sigil:draw` orients you
+- **Starting a new feature** — `/sigil:draw "your description"`
+- **Returning after a break** — `/sigil:draw continue`
 
 ---
 
-## /sigil-constitution
+## /sigil:constitution
 
 View or edit your project's rules and standards.
 
 ### Syntax
 
 ```
-/sigil-constitution
+/sigil:constitution
 ```
 
 ### What It Does
@@ -128,7 +128,7 @@ View or edit your project's rules and standards.
 
 ### First-Time Setup
 
-When you run `/sigil-constitution` for the first time, Sigil asks about:
+When you run `/sigil:constitution` for the first time, Sigil asks about:
 
 1. **Technology Stack** — What languages and frameworks to use
 2. **Code Standards** — Naming conventions and style rules
@@ -191,14 +191,14 @@ The constitution ensures:
 
 ---
 
-## /sigil-handoff
+## /sigil:handoff
 
 Generate a package for engineer review.
 
 ### Syntax
 
 ```
-/sigil-handoff
+/sigil:handoff
 ```
 
 ### What It Does
@@ -262,25 +262,25 @@ Sigil provides a summary you can copy:
 
 ---
 
-## /sigil-learn
+## /sigil:learn
 
 View, search, or review project learnings.
 
 ### Syntax
 
 ```
-/sigil-learn
-/sigil-learn --review
-/sigil-learn --search "query"
+/sigil:learn
+/sigil:learn --review
+/sigil:learn --search "query"
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil-learn` | Show current learnings summary |
-| `/sigil-learn --review` | Start interactive review and cleanup session |
-| `/sigil-learn --search "query"` | Search learnings for specific topics |
+| `/sigil:learn` | Show current learnings summary |
+| `/sigil:learn --review` | Start interactive review and cleanup session |
+| `/sigil:learn --search "query"` | Search learnings for specific topics |
 
 ### What It Does
 
@@ -315,23 +315,23 @@ View, search, or review project learnings.
 
 ---
 
-## /sigil-connect
+## /sigil:connect
 
 Connect your project to a shared context repository for cross-project learnings.
 
 ### Syntax
 
 ```
-/sigil-connect
-/sigil-connect org/repo
+/sigil:connect
+/sigil:connect org/repo
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil-connect` | Start the guided setup wizard (3 steps) |
-| `/sigil-connect org/repo` | Connect directly to a specific shared repo |
+| `/sigil:connect` | Start the guided setup wizard (3 steps) |
+| `/sigil:connect org/repo` | Connect directly to a specific shared repo |
 
 ### What It Does
 
@@ -344,11 +344,11 @@ Connect your project to a shared context repository for cross-project learnings.
 
 ### After Connecting
 
-- Learnings sync automatically when you use `/sigil-learn`
+- Learnings sync automatically when you use `/sigil:learn`
 - Latest shared context loads automatically at session start
 - A "what's new" summary shows entries added since your last session
 - Shared standards refresh automatically at each session start
-- External tool adapters are available for ticket-driven workflows (e.g., `/sigil PROJ-123`)
+- External tool adapters are available for ticket-driven workflows (e.g., `/sigil:draw PROJ-123`)
 
 ### When to Use
 
@@ -367,23 +367,23 @@ Remove the project's entry from `~/.sigil/registry.json` or delete the file. No 
 
 ---
 
-## /sigil-profile
+## /sigil:profile
 
 Generate or view your project's profile — a description of your tech stack, exposed APIs, and consumed dependencies.
 
 ### Syntax
 
 ```
-/sigil-profile
-/sigil-profile --view
+/sigil:profile
+/sigil:profile --view
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil-profile` | Interactive profile generation (or update if one exists) |
-| `/sigil-profile --view` | Display the current project profile |
+| `/sigil:profile` | Interactive profile generation (or update if one exists) |
+| `/sigil:profile --view` | Display the current project profile |
 
 ### What It Does
 
@@ -421,7 +421,7 @@ Generate or view your project's profile — a description of your tech stack, ex
 ### Example
 
 ```
-/sigil-profile
+/sigil:profile
 ```
 
 **Sigil responds:**
@@ -453,18 +453,18 @@ Published to shared repo: profiles/web-app.yaml
 
 ### Related
 
-- `/sigil-connect` — Connect to a shared repo to share profiles across projects
+- `/sigil:connect` — Connect to a shared repo to share profiles across projects
 
 ---
 
-## /sigil-setup
+## /sigil:setup
 
 Initialize Sigil OS in a new project.
 
 ### Syntax
 
 ```
-/sigil-setup
+/sigil:setup
 ```
 
 ### What It Does
@@ -480,7 +480,7 @@ Initialize Sigil OS in a new project.
 ### When to Use
 
 - First time using Sigil in a project
-- When `/sigil` detects no `.sigil/` directory and recommends setup
+- When `/sigil:draw` detects no `.sigil/` directory and recommends setup
 
 ### What You Get
 
@@ -498,29 +498,29 @@ CLAUDE.md              ← Updated with pointer
 
 ---
 
-## /sigil-config
+## /sigil:config
 
 View or change your project's Sigil configuration.
 
 ### Syntax
 
 ```
-/sigil-config
-/sigil-config set <key> <value>
-/sigil-config reset
+/sigil:config
+/sigil:config set <key> <value>
+/sigil:config reset
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil-config` | Show current settings and offer to change them |
-| `/sigil-config set user_track technical` | Switch to technical mode |
-| `/sigil-config set user_track non-technical` | Switch to non-technical mode |
-| `/sigil-config set execution_mode directed` | Enable directed execution (technical track only) |
-| `/sigil-config set audit_mode true` | Enable workflow audit logging |
-| `/sigil-config set audit_mode false` | Disable workflow audit logging |
-| `/sigil-config reset` | Reset all settings to defaults |
+| `/sigil:config` | Show current settings and offer to change them |
+| `/sigil:config set user_track technical` | Switch to technical mode |
+| `/sigil:config set user_track non-technical` | Switch to non-technical mode |
+| `/sigil:config set execution_mode directed` | Enable directed execution (technical track only) |
+| `/sigil:config set audit_mode true` | Enable workflow audit logging |
+| `/sigil:config set audit_mode false` | Disable workflow audit logging |
+| `/sigil:config reset` | Reset all settings to defaults |
 
 ### Settings
 
@@ -552,27 +552,27 @@ View or change your project's Sigil configuration.
 
 ---
 
-## /sigil-audit
+## /sigil:audit
 
 View or manage the workflow audit log.
 
 ### Syntax
 
 ```
-/sigil-audit
-/sigil-audit full
-/sigil-audit session
-/sigil-audit clear
+/sigil:audit
+/sigil:audit full
+/sigil:audit session
+/sigil:audit clear
 ```
 
 ### Variants
 
 | Usage | What It Does |
 |-------|-------------|
-| `/sigil-audit` | Show summary of the most recent workflow session |
-| `/sigil-audit full` | Show the complete audit log (all sessions) |
-| `/sigil-audit session` | Show details for the current/most recent session only |
-| `/sigil-audit clear` | Archive the current log and start fresh |
+| `/sigil:audit` | Show summary of the most recent workflow session |
+| `/sigil:audit full` | Show the complete audit log (all sessions) |
+| `/sigil:audit session` | Show details for the current/most recent session only |
+| `/sigil:audit clear` | Archive the current log and start fresh |
 
 ### What It Does
 
@@ -585,10 +585,10 @@ View or manage the workflow audit log.
 Audit mode must be enabled first:
 
 ```
-/sigil-config set audit_mode true
+/sigil:config set audit_mode true
 ```
 
-Once enabled, every `/sigil` workflow automatically logs events. Disable with `/sigil-config set audit_mode false`.
+Once enabled, every `/sigil:draw` workflow automatically logs events. Disable with `/sigil:config set audit_mode false`.
 
 ### When to Use
 
@@ -598,18 +598,18 @@ Once enabled, every `/sigil` workflow automatically logs events. Disable with `/
 
 ### Related
 
-- `/sigil-config` — Enable/disable audit mode
+- `/sigil:config` — Enable/disable audit mode
 
 ---
 
-## /sigil-update
+## /sigil:update
 
 Check for and install Sigil OS updates.
 
 ### Syntax
 
 ```
-/sigil-update
+/sigil:update
 ```
 
 ### What It Does
@@ -644,40 +644,40 @@ Run the update? (Y/n)
 
 | Command | Purpose | Example |
 |---------|---------|---------|
-| `/sigil` | Entry point — status + routing | `/sigil "Add user login"` |
-| `/sigil-setup` | Initialize project | `/sigil-setup` |
-| `/sigil-handoff` | Engineer review | `/sigil-handoff` |
-| `/sigil-constitution` | Set project rules | `/sigil-constitution` |
-| `/sigil-learn` | View/review learnings | `/sigil-learn --review` |
-| `/sigil-connect` | Shared context setup | `/sigil-connect org/repo` |
-| `/sigil-profile` | Project profile | `/sigil-profile --view` |
-| `/sigil-config` | Configure Sigil | `/sigil-config set user_track technical` |
-| `/sigil-audit` | View audit log | `/sigil-audit` |
-| `/sigil-update` | Check for updates | `/sigil-update` |
+| `/sigil:draw` | Entry point — status + routing | `/sigil:draw "Add user login"` |
+| `/sigil:setup` | Initialize project | `/sigil:setup` |
+| `/sigil:handoff` | Engineer review | `/sigil:handoff` |
+| `/sigil:constitution` | Set project rules | `/sigil:constitution` |
+| `/sigil:learn` | View/review learnings | `/sigil:learn --review` |
+| `/sigil:connect` | Shared context setup | `/sigil:connect org/repo` |
+| `/sigil:profile` | Project profile | `/sigil:profile --view` |
+| `/sigil:config` | Configure Sigil | `/sigil:config set user_track technical` |
+| `/sigil:audit` | View audit log | `/sigil:audit` |
+| `/sigil:update` | Check for updates | `/sigil:update` |
 
 ### Typical Workflow
 
 ```
-1. /sigil-setup (one-time project setup)
-2. /sigil "feature description" (all phases run automatically)
-3. /sigil (check progress anytime)
-4. /sigil continue (resume after a break)
-5. /sigil-handoff (before deployment)
+1. /sigil:setup (one-time project setup)
+2. /sigil:draw "feature description" (all phases run automatically)
+3. /sigil:draw (check progress anytime)
+4. /sigil:draw continue (resume after a break)
+5. /sigil:handoff (before deployment)
 ```
 
 ### Retired Commands
 
-These commands have been removed. Use `/sigil` instead — it handles all workflow phases automatically.
+These commands have been removed. Use `/sigil:draw` instead — it handles all workflow phases automatically.
 
 | Old Command | What to Use Instead |
 |-------------|-------------------|
-| `sigil-spec` | `/sigil "description"` |
-| `sigil-clarify` | `/sigil continue` (auto-invoked) |
-| `sigil-plan` | `/sigil continue` (auto-invoked) |
-| `sigil-tasks` | `/sigil continue` (auto-invoked) |
+| `sigil-spec` | `/sigil:draw "description"` |
+| `sigil-clarify` | `/sigil:draw continue` (auto-invoked) |
+| `sigil-plan` | `/sigil:draw continue` (auto-invoked) |
+| `sigil-tasks` | `/sigil:draw continue` (auto-invoked) |
 | `sigil-validate` | Runs automatically after each task |
 | `sigil-review` | Runs automatically after all tasks pass |
-| `sigil-status` | `/sigil` or `/sigil status` |
+| `sigil-status` | `/sigil:draw` or `/sigil:draw status` |
 | `sigil-prime` | Context loads automatically at session start |
 
 ---

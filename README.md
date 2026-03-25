@@ -6,7 +6,7 @@
 
 Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v0.31.0** · Active development — expect breaking changes between minor versions.
+> **v0.32.0** · Active development — expect breaking changes between minor versions.
 
 ---
 
@@ -37,7 +37,7 @@ Sigil adapts to how you think. During setup, you pick a track that shapes the en
 | **Progress** | "3 of 8 steps done" | "T003/T008 implementing (api-developer)" |
 | **Specialists** | Work silently in the background | Named in output so you can see who's doing what |
 
-Switch anytime with `/sigil-config set user_track technical` (or `non-technical`). Your track is a personal setting — it won't affect your teammates.
+Switch anytime with `/sigil:config set user_track technical` (or `non-technical`). Your track is a personal setting — it won't affect your teammates.
 
 ---
 
@@ -69,7 +69,7 @@ Something not working? See the [Troubleshooting Guide](docs/troubleshooting.md).
 
 - [ ] `claude --version` shows a version number
 - [ ] `claude plugin list` shows `sigil`
-- [ ] `/sigil status` shows the Sigil dashboard
+- [ ] `/sigil:draw status` shows the Sigil dashboard
 
 ---
 
@@ -80,13 +80,13 @@ After installing the plugin, set up your first project in four commands:
 ```
 cd your-project
 claude
-/sigil-setup
-/sigil "Add a contact form with email validation"
+/sigil:setup
+/sigil:draw "Add a contact form with email validation"
 ```
 
-`/sigil-setup` creates your project's constitution (rules that guide Sigil), optionally generates a project profile, and configures enforcement. You only run it once per project.
+`/sigil:setup` creates your project's constitution (rules that guide Sigil), optionally generates a project profile, and configures enforcement. You only run it once per project.
 
-`/sigil "..."` starts building. Sigil assesses complexity, selects the right workflow track, and assigns specialized agents to handle specification, planning, implementation, and review.
+`/sigil:draw "..."` starts building. Sigil assesses complexity, selects the right workflow track, and assigns specialized agents to handle specification, planning, implementation, and review.
 
 See the [Quick Start Guide](docs/quick-start.md) for a detailed walkthrough.
 
@@ -122,28 +122,28 @@ sequenceDiagram
 
 | Command | Purpose |
 |---------|---------|
-| `/sigil` | Show status and menu |
-| `/sigil "description"` | Start building a feature |
-| `/sigil continue` | Resume where you left off |
-| `/sigil help` | Show all commands |
+| `/sigil:draw` | Show status and menu |
+| `/sigil:draw "description"` | Start building a feature |
+| `/sigil:draw continue` | Resume where you left off |
+| `/sigil:draw help` | Show all commands |
 
 ### Setup & Configuration
 
 | Command | Purpose |
 |---------|---------|
-| `/sigil-setup` | Initialize Sigil in a new project |
-| `/sigil-config` | View or change configuration (track, mode) |
-| `/sigil-constitution` | View or edit project rules |
-| `/sigil-profile` | Generate or view project profile |
-| `/sigil-connect` | Link project to shared context repo |
+| `/sigil:setup` | Initialize Sigil in a new project |
+| `/sigil:config` | View or change configuration (track, mode) |
+| `/sigil:constitution` | View or edit project rules |
+| `/sigil:profile` | Generate or view project profile |
+| `/sigil:connect` | Link project to shared context repo |
 
 ### Utilities
 
 | Command | Purpose |
 |---------|---------|
-| `/sigil-handoff` | Generate engineer review package |
-| `/sigil-learn` | View, search, or review learnings |
-| `/sigil-update` | Check for plugin updates |
+| `/sigil:handoff` | Generate engineer review package |
+| `/sigil:learn` | View, search, or review learnings |
+| `/sigil:update` | Check for plugin updates |
 
 See the [Command Reference](docs/command-reference.md) for detailed usage.
 

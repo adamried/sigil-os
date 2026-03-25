@@ -50,6 +50,6 @@ cat << EOF
     "last_updated": "${LAST_UPDATED:-unknown}"
   },
   "reminder": "If you made workflow progress this session, update .sigil/project-context.md with the new state.",
-  "next_session_hint": "Run /sigil continue to resume from the current phase."
+  "next_session_hint": "Run /sigil:draw continue to resume from the current phase."
 }
 EOF

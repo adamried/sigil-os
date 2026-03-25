@@ -11,7 +11,7 @@ Standardize how skills update `.sigil/project-context.md` at the start of execut
 Before starting any process steps, the invoking skill MUST:
 
 1. **Read** `.sigil/project-context.md`
-   - If the file does not exist, create it using the State Tracking format from the `/sigil` command
+   - If the file does not exist, create it using the State Tracking format from the `/sigil:draw` command
 
 2. **Update** the following fields:
    - **Current Phase** → Set to the phase this skill represents (e.g., `specify`, `clarify`, `plan`, `tasks`, `implement`, `validate`, `review`)
@@ -43,6 +43,6 @@ Any skill that:
 
 - This protocol replaces inline Pre-Execution Check sections in individual skills
 - Skills should reference this file rather than duplicating the instructions
-- The `/sigil continue` command relies on accurate phase tracking to resume correctly
+- The `/sigil:draw continue` command relies on accurate phase tracking to resume correctly
 - Step 4 (audit log) is opt-in via config and adds no overhead when audit mode is disabled
 - See `audit-log-protocol.md` in this directory for the full logging specification

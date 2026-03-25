@@ -1,7 +1,7 @@
 # Project Context
 
 > Auto-updated file tracking current project state across sessions.
-> Used by `/sigil` command for workflow detection and resume capability.
+> Used by `/sigil:draw` command for workflow detection and resume capability.
 >
 > **Last Updated:** [TIMESTAMP]
 
@@ -9,7 +9,7 @@
 
 ## Active Workflow
 
-> This section is read by `/sigil continue` to resume work. Keep it current.
+> This section is read by `/sigil:draw continue` to resume work. Keep it current.
 
 - **Current Phase:** none
 - **Feature:** null

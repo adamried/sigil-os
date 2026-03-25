@@ -19,7 +19,7 @@ $ARGUMENTS
 
 Sigil OS is installed as a Claude Code plugin. Check the current state:
 
-1. Verify the plugin is installed by checking if `/sigil` command is available
+1. Verify the plugin is installed by checking if `/sigil:draw` command is available
 2. If installed, read the current version from the plugin manifest (`plugin.json` → `version` field)
 
 ### Step 2: Route Based on Arguments
@@ -57,7 +57,7 @@ To see plugin details:
 
 ### Update Now
 
-When user runs `/sigil-update now`:
+When user runs `/sigil:update now`:
 
 ```
 Sigil OS Update
@@ -69,7 +69,7 @@ Run this command to update:
   /plugin update sigil@sigil-os
 
 After updating, verify with:
-  /sigil status
+  /sigil:draw status
 ```
 
 ### Not Installed (Plugin Missing)
@@ -91,7 +91,7 @@ To install Sigil OS:
    /plugin install sigil@sigil-os
 
 3. Verify installation:
-   /sigil status
+   /sigil:draw status
 ```
 
 ### Legacy Installation Detected
@@ -126,4 +126,4 @@ See: docs/migration-from-global.md
 - Always show clear status information
 - Direct users to `/plugin update` for actual updates
 - Detect and help migrate legacy installations
-- Keep the familiar `/sigil-update` interface for discoverability
+- Keep the familiar `/sigil:update` interface for discoverability

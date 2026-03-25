@@ -15,7 +15,7 @@ $ARGUMENTS
 
 ## Route by Arguments
 
-### No arguments: `/sigil-learn`
+### No arguments: `/sigil:learn`
 
 Display current learnings summary.
 
@@ -50,8 +50,8 @@ Active Features: N
   • 001-user-auth (5 notes)
   • 002-product-catalog (3 notes)
 
-Run '/sigil-learn --review' to prune and promote.
-Run '/sigil-learn --search <query>' to search.
+Run '/sigil:learn --review' to prune and promote.
+Run '/sigil:learn --search <query>' to search.
 ```
 
 **Shared context section** (only when `~/.sigil/registry.json` exists and current project is connected):
@@ -70,7 +70,7 @@ Shared Context
 
 If shared context is not active (no sentinel or project not in registry), do NOT show this section.
 
-### `--review`: `/sigil-learn --review`
+### `--review`: `/sigil:learn --review`
 
 Invoke the `learning-review` skill for interactive review.
 
@@ -79,7 +79,7 @@ Invoke the `learning-review` skill for interactive review.
 2. Follow its interactive prompts
 3. Report summary when complete
 
-### `--search <query>`: `/sigil-learn --search auth`
+### `--search <query>`: `/sigil:learn --search auth`
 
 Search across all learnings (local and shared).
 
@@ -136,7 +136,7 @@ Token Budget:
 
 If any category exceeds 80% of limit:
 ```
-⚠️  Gotchas at 85% capacity. Consider running /sigil-learn --review
+⚠️  Gotchas at 85% capacity. Consider running /sigil:learn --review
 ```
 
 ## Empty State
@@ -154,14 +154,14 @@ Learnings are automatically recorded as you complete tasks:
   • Gotchas — Traps and pitfalls to avoid
   • Decisions — Architectural choices and their rationale
 
-Start building features with /sigil to begin capturing learnings.
+Start building features with /sigil:draw to begin capturing learnings.
 ```
 
 ## Related Commands
 
-- `/sigil` — Main entry point, uses learnings automatically
-- `/sigil status` — Shows workflow status
-- `/sigil-constitution` — Project principles (different from learnings)
+- `/sigil:draw` — Main entry point, uses learnings automatically
+- `/sigil:draw status` — Shows workflow status
+- `/sigil:constitution` — Project principles (different from learnings)
 
 ## Skills Invoked
 

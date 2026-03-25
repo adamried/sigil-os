@@ -25,7 +25,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                           /sigil [args]                                     │
+│                           /sigil:draw [args]                                     │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                     ┌───────────────┼───────────────┐
@@ -45,26 +45,26 @@
 ### Command Reference Table
 
 Individual workflow phases are accessed via standalone slash commands, not as
-`/sigil` subcommands. The `/sigil` command itself handles entry, status,
+`/sigil:draw` subcommands. The `/sigil:draw` command itself handles entry, status,
 resume, and help.
 
 | Command | Function | Primary Agent/Skill |
 |---------|----------|---------------------|
-| `/sigil` | Show status, offer menu | Orchestrator |
-| `/sigil "feature"` | Start feature workflow | Orchestrator → Track routing |
-| `/sigil continue` | Resume current workflow | Orchestrator → Phase resume |
-| `/sigil status` | Display progress | Orchestrator → Status Reporter |
-| `/sigil help` | Show available commands | Orchestrator |
-| `/sigil-setup` | Initialize Sigil OS in a project | Setup Wizard |
-| `/sigil-handoff` | Generate engineer review package | handoff-packager |
-| `/sigil-constitution` | Create/view constitution | constitution-writer |
-| `/sigil-learn` | View/search project learnings | Learning Reader |
-| `/sigil-connect` | Connect project to shared context repo | Connect Wizard |
-| `/sigil-profile` | Generate or view project profile | Profile Generator |
-| `/sigil-update` | Check for & install updates | Global update script |
+| `/sigil:draw` | Show status, offer menu | Orchestrator |
+| `/sigil:draw "feature"` | Start feature workflow | Orchestrator → Track routing |
+| `/sigil:draw continue` | Resume current workflow | Orchestrator → Phase resume |
+| `/sigil:draw status` | Display progress | Orchestrator → Status Reporter |
+| `/sigil:draw help` | Show available commands | Orchestrator |
+| `/sigil:setup` | Initialize Sigil OS in a project | Setup Wizard |
+| `/sigil:handoff` | Generate engineer review package | handoff-packager |
+| `/sigil:constitution` | Create/view constitution | constitution-writer |
+| `/sigil:learn` | View/search project learnings | Learning Reader |
+| `/sigil:connect` | Connect project to shared context repo | Connect Wizard |
+| `/sigil:profile` | Generate or view project profile | Profile Generator |
+| `/sigil:update` | Check for & install updates | Global update script |
 
 **Note:** Workflow phases (specify, clarify, plan, tasks, validate, review) and
-context loading are handled automatically by the `/sigil` orchestrator and do
+context loading are handled automatically by the `/sigil:draw` orchestrator and do
 not have standalone commands.
 
 ---
@@ -78,7 +78,7 @@ signals). Only if the codebase is mature does the request proceed to
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                    /sigil "Add user authentication"                         │
+│                    /sigil:draw "Add user authentication"                         │
 └─────────────────────────────────────────────────────────────────────────────┘
                                     │
                                     ▼
@@ -764,7 +764,7 @@ STAGE 5: CONSTITUTION (Pre-Populated)
 ## 7. Constitution Creation Flow
 
 ```
-/sigil-constitution
+/sigil:constitution
 ══════════════════════════════════════════════════════════════════════════════
 
                     ┌────────────────────┐
@@ -1019,10 +1019,10 @@ AFTER TASK COMPLETION
 |-------|---------|------------|
 | `learning-reader` | Load shared + local learnings before tasks | Orchestrator, Developer |
 | `learning-capture` | Record learnings after task completion + shared push (silent, non-blocking) | Developer |
-| `learning-review` | Prune, promote, archive learnings | Manual via `/sigil-learn` |
+| `learning-review` | Prune, promote, archive learnings | Manual via `/sigil:learn` |
 | `shared-context-sync` | Push/pull learnings and profiles to/from shared GitHub repo via MCP | learning-capture, profile-generator, session start |
-| `connect-wizard` | Interactive setup for shared context connection | `/sigil-connect` |
-| `profile-generator` | Auto-detect tech stack and generate project profile | `/sigil-profile` |
+| `connect-wizard` | Interactive setup for shared context connection | `/sigil:connect` |
+| `profile-generator` | Auto-detect tech stack and generate project profile | `/sigil:profile` |
 
 ---
 
@@ -1320,11 +1320,11 @@ and human checkpoints for a track.
 
 ### Chain Execution Notes
 
-- The `/sigil` command reads chain definitions and executes them step by step.
-- `/sigil continue` resumes a chain at the current phase by reading
+- The `/sigil:draw` command reads chain definitions and executes them step by step.
+- `/sigil:draw continue` resumes a chain at the current phase by reading
   `project-context.md` for workflow state.
 - The per-task implementation loop (Developer → qa-validator → qa-fixer) is
-  orchestrated by the `/sigil` command's Step 4b, not by a separate chain file.
+  orchestrated by the `/sigil:draw` command's Step 4b, not by a separate chain file.
 - Enterprise track uses the same `full-pipeline` chain as Standard, with
   additional steps activated by the track designation (researcher skill,
   mandatory ADRs, required security review).
@@ -1453,16 +1453,16 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 
 | Command | Purpose |
 |---------|---------|
-| `/sigil` | Status + menu |
-| `/sigil "desc"` | Start feature |
-| `/sigil continue` | Resume work |
-| `/sigil-setup` | Project setup |
-| `/sigil-handoff` | Engineer review package |
-| `/sigil-constitution` | Project principles |
-| `/sigil-learn` | View learnings |
-| `/sigil-connect` | Shared context setup |
-| `/sigil-profile` | Project profile |
-| `/sigil-update` | Check for updates |
+| `/sigil:draw` | Status + menu |
+| `/sigil:draw "desc"` | Start feature |
+| `/sigil:draw continue` | Resume work |
+| `/sigil:setup` | Project setup |
+| `/sigil:handoff` | Engineer review package |
+| `/sigil:constitution` | Project principles |
+| `/sigil:learn` | View learnings |
+| `/sigil:connect` | Shared context setup |
+| `/sigil:profile` | Project profile |
+| `/sigil:update` | Check for updates |
 
 ### Key Skill Invocations
 
@@ -1476,8 +1476,8 @@ Specify → Clarify → Plan → Tasks → Implement → Validate → Review
 | Task creation | task-decomposer |
 | Before any implementation task | learning-reader |
 | After any implementation task | learning-capture (→ shared-context-sync push if connected) |
-| `/sigil-connect` invoked | connect-wizard |
-| `/sigil-profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
+| `/sigil:connect` invoked | connect-wizard |
+| `/sigil:profile` invoked | profile-generator (→ shared-context-sync profile push if connected) |
 | Session start with shared context | shared-context-sync pull (learnings + profiles) + @inherit expansion |
 | Quality check | qa-validator (→ qa-fixer if issues) |
 | After all tasks complete | code-reviewer |

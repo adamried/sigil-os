@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Define how shared team standards from a shared context repository are applied to project constitutions during the `/sigil-connect` setup flow.
+Define how shared team standards from a shared context repository are applied to project constitutions during the `/sigil:connect` setup flow.
 
 ## Enforcement Levels
 
@@ -117,7 +117,7 @@ Standards applied:
 Integrations configured:
   ✅ Jira — org defaults imported
 
-Next: Run /sigil to start building with your team's standards.
+Next: Run /sigil:draw to start building with your team's standards.
 ```
 
 ## Creating New Shared Standards
@@ -126,7 +126,7 @@ To add a new standard to a shared context repo, use `templates/shared-standard-t
 - **YAML frontmatter** with `enforcement`, `article`, `description`, `version`, `maintained_by`, and `last_updated` fields — required by the Standards Discover Protocol
 - **Section structure** for purpose, scope, rules, exceptions, a constitution article snippet, and a verification checklist
 
-Commit the completed file to `shared-standards/{standard-name}.md` in the shared repo. It will be discovered automatically on the next `/sigil-connect` or session start.
+Commit the completed file to `shared-standards/{standard-name}.md` in the shared repo. It will be discovered automatically on the next `/sigil:connect` or session start.
 
 ## Error Handling
 

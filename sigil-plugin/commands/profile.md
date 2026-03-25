@@ -15,7 +15,7 @@ $ARGUMENTS
 
 ## Route by Arguments
 
-### No arguments: `/sigil-profile`
+### No arguments: `/sigil:profile`
 
 Interactive profile generation (or update if profile exists).
 
@@ -24,7 +24,7 @@ Interactive profile generation (or update if profile exists).
 2. Follow the interactive flow (scan, confirm, prompt, generate)
 3. Report result
 
-### With `--view`: `/sigil-profile --view`
+### With `--view`: `/sigil:profile --view`
 
 Display the current project profile.
 
@@ -34,7 +34,7 @@ Display the current project profile.
    ```
    No project profile found.
 
-   Run /sigil-profile to create one.
+   Run /sigil:profile to create one.
    ```
 3. If exists, display formatted:
    ```
@@ -90,7 +90,7 @@ Before displaying profile output, verify format matches `templates/output-format
 
 ## Pre-Checks
 
-None required. `/sigil-profile` works in all states:
+None required. `/sigil:profile` works in all states:
 - Solo mode (no shared context) — generates local profile
 - Connected mode — generates local profile and publishes to shared repo
 
@@ -100,6 +100,6 @@ None required. `/sigil-profile` works in all states:
 
 ## Related Commands
 
-- `/sigil` — Your project profile loads automatically at session start
-- `/sigil-connect` — Connect to a shared repo so sibling projects can see your profile
-- `/sigil status` — Shows project status including tech stack
+- `/sigil:draw` — Your project profile loads automatically at session start
+- `/sigil:connect` — Connect to a shared repo so sibling projects can see your profile
+- `/sigil:draw status` — Shows project status including tech stack

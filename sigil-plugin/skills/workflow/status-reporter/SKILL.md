@@ -1,6 +1,6 @@
 ---
 name: status-reporter
-description: Shows current workflow status. Invoke when user says "where are we", "show progress", "what's done", "what's the status", "what's happening", "/sigil status", or asks about current state of work. Presents progress in plain language.
+description: Shows current workflow status. Invoke when user says "where are we", "show progress", "what's done", "what's the status", "what's happening", "/sigil:draw status", or asks about current state of work. Presents progress in plain language.
 version: 1.1.0
 category: workflow
 chainable: false
@@ -22,7 +22,7 @@ Generate a clear, human-readable status report of the current workflow state. Th
 
 **Trigger phrases:**
 - "status"
-- `/sigil` or `/sigil status`
+- `/sigil:draw` or `/sigil:draw status`
 - "Where are we?"
 - "What's the current state?"
 - "Show me progress"

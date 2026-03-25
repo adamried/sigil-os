@@ -8,7 +8,7 @@
       "name": "sigil",
       "source": "./sigil-plugin",
       "description": "Non-technical user focused spec-driven development framework for Claude Code",
-      "version": "0.31.0"
+      "version": "0.32.0"
     }
   ]
 }

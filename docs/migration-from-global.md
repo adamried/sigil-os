@@ -58,7 +58,7 @@ claude
 
 Then run:
 ```
-/sigil status
+/sigil:draw status
 ```
 
 You should see the Sigil OS status dashboard.
@@ -126,7 +126,7 @@ claude --version
 
 ### Old enforcement rules still appearing
 
-If `SIGIL.md` shows v1.x rules, run `/sigil` to trigger the automatic update, or manually delete `SIGIL.md` to regenerate it.
+If `SIGIL.md` shows v1.x rules, run `/sigil:draw` to trigger the automatic update, or manually delete `SIGIL.md` to regenerate it.
 
 ### Skills not invoking correctly
 
@@ -143,6 +143,6 @@ Check that hooks are enabled in your Claude Code settings and that the hook scri
 
 ## Getting Help
 
-- **Documentation:** `/sigil help`
+- **Documentation:** `/sigil:draw help`
 - **Issues:** https://github.com/araserel/sigil-os/issues
-- **Updates:** `/sigil-update`
+- **Updates:** `/sigil:update`

@@ -18,7 +18,7 @@ Bridge external issue trackers into the Sigil workflow. When a user provides a t
 
 ## When to Invoke
 
-- User provides a ticket key matching `[A-Z][A-Z0-9]+-\d+` pattern as input to `/sigil`
+- User provides a ticket key matching `[A-Z][A-Z0-9]+-\d+` pattern as input to `/sigil:draw`
 - Orchestrator detects ticket-key format in Step 2
 
 ## Inputs

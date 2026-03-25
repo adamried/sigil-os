@@ -126,4 +126,4 @@ Each task gets a fresh merge. Specialist state does not carry between tasks.
 
 - [Agents README](../../agents/README.md) — Specialist catalog and inheritance model
 - [specialist-selection SKILL.md](../../skills/workflow/specialist-selection/SKILL.md) — Assignment rules
-- [`/sigil` command](../../commands/sigil.md) — Implementation loop that executes the merge
+- [`/sigil:draw` command](../../commands/sigil:draw.md) — Implementation loop that executes the merge

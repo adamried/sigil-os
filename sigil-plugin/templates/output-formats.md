@@ -45,7 +45,7 @@ No coding knowledge required — just describe what you want to build.
 
 This project doesn't have Sigil OS set up yet.
 
-Run /sigil-setup to get started.
+Run /sigil:setup to get started.
 ```
 
 ## Status Dashboard (Configured Project)
@@ -85,7 +85,7 @@ Audit Mode: Active | Entries: {n}
 
 No active feature.
 
-Describe what you want to build, or run /sigil help for options.
+Describe what you want to build, or run /sigil:draw help for options.
 ```
 
 The `Audit Mode` line is shown only when `audit_mode: true`. The entry count `{n}` is the number of `### [` markers in `.sigil/audit-log.md` (each represents one logged event). If the log is empty or missing, show `Entries: 0`.
@@ -154,7 +154,7 @@ Here's what I set up:
 This is saved at /.sigil/constitution.md. All AI agents will follow
 these rules automatically.
 
-To change it later, run /sigil-constitution edit.
+To change it later, run /sigil:constitution edit.
 ```
 
 ## Learnings Summary
@@ -186,23 +186,23 @@ Sigil OS Commands
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Primary Command:
-  /sigil                    Show status and next steps
-  /sigil "description"      Start building a new feature
-  /sigil PROJ-123           Start from a Jira/issue tracker ticket
-  /sigil continue           Resume where you left off
-  /sigil status             Detailed workflow status
-  /sigil help               Show this help
+  /sigil:draw                    Show status and next steps
+  /sigil:draw "description"      Start building a new feature
+  /sigil:draw PROJ-123           Start from a Jira/issue tracker ticket
+  /sigil:draw continue           Resume where you left off
+  /sigil:draw status             Detailed workflow status
+  /sigil:draw help               Show this help
 
 Additional Commands:
-  /sigil-setup              Set up Sigil OS in this project
-  /sigil-config             View/change configuration (track, mode)
-  /sigil-audit              View workflow audit log (when enabled)
-  /sigil-handoff            Generate engineer review package
-  /sigil-constitution       View/edit project principles
-  /sigil-learn              View, search, or review learnings
-  /sigil-connect            Connect to shared context repo
-  /sigil-profile            Generate or view project profile
-  /sigil-update             Check for Sigil updates
+  /sigil:setup              Set up Sigil OS in this project
+  /sigil:config             View/change configuration (track, mode)
+  /sigil:audit              View workflow audit log (when enabled)
+  /sigil:handoff            Generate engineer review package
+  /sigil:constitution       View/edit project principles
+  /sigil:learn              View, search, or review learnings
+  /sigil:connect            Connect to shared context repo
+  /sigil:profile            Generate or view project profile
+  /sigil:update             Check for Sigil updates
 
 Natural Language:
   Just describe what you want! Sigil understands:
@@ -245,9 +245,9 @@ Phases completed:
 Duration: ~{duration}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-/sigil-audit full     — show complete log
-/sigil-audit session  — current session details
-/sigil-audit clear    — archive and reset
+/sigil:audit full     — show complete log
+/sigil:audit session  — current session details
+/sigil:audit clear    — archive and reset
 ```
 
 ---

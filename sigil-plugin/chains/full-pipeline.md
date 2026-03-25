@@ -173,9 +173,9 @@ When the user provides a ticket key (e.g., `PROJ-123`) instead of a text descrip
 ## Implementation Note
 
 The per-task loop (Developer -> QA Engineer [qa-validator -> qa-fixer] -> next task) is
-orchestrated by the `/sigil` command's Step 4b (Implementation Loop). Code review
+orchestrated by the `/sigil:draw` command's Step 4b (Implementation Loop). Code review
 runs once after all tasks complete, not per-task. This chain
-file documents the sequence and state transitions; the `/sigil` command executes them.
+file documents the sequence and state transitions; the `/sigil:draw` command executes them.
 
 ### Agents vs Skills in This Chain
 
@@ -185,7 +185,7 @@ Most boxes in the diagram are **skills** (invoked by agents). The key exceptions
 - **specialist-selection** — This is a **skill** (defined in `skills/workflow/specialist-selection/SKILL.md`) invoked twice per task: once to select the developer specialist, once to select validation specialists.
 - All other boxes (complexity-assessor, spec-writer, clarifier, technical-planner, etc.) are **skills** invoked by the Orchestrator or their parent agent.
 
-When `/sigil continue` is invoked with `Current Phase: implement`, the sigil command
+When `/sigil:draw continue` is invoked with `Current Phase: implement`, the sigil command
 reads the task list and resumes the implementation loop at the current task.
 
 ## State Transitions

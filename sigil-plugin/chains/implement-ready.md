@@ -163,7 +163,7 @@ If acceptance_criteria is empty after extraction:
 ### Constitution Check Fails
 ```
 If no constitution exists:
-  1. Prompt user to run /sigil-setup
+  1. Prompt user to run /sigil:setup
   2. Do not proceed without constitution
 ```
 

@@ -1,11 +1,11 @@
 ---
 name: shared-context-sync
-description: Infrastructure skill for shared context sync. Called by learning-capture, learning-reader, sigil, connect-wizard, profile-generator, and constitution-writer — not invoked directly by users. Handles sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
+description: Infrastructure skill for shared context sync. Called by learning-capture, learning-reader, draw, connect-wizard, profile-generator, and constitution-writer — not invoked directly by users. Handles sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
 version: 1.6.0
 category: shared-context
 chainable: false
 invokes: []
-invoked_by: [learning-capture, learning-reader, sigil, connect-wizard, profile-generator, constitution-writer]
+invoked_by: [learning-capture, learning-reader, draw, connect-wizard, profile-generator, constitution-writer]
 tools: Read, Write, Edit, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
 model: haiku
 ---

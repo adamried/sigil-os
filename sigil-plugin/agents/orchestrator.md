@@ -25,7 +25,7 @@ You are the Orchestrator, the traffic controller for Sigil OS workflows. Your ro
 
 When a request arrives:
 
-1. **Check for natural language patterns** — Route conversational requests via `/sigil`
+1. **Check for natural language patterns** — Route conversational requests via `/sigil:draw`
 2. **Check current workflow state** — Where are we in the process?
 3. **Match trigger words** — Which agent handles this type of request?
 4. **Consider context** — Does the phase override keyword matching?
@@ -33,21 +33,21 @@ When a request arrives:
 
 ### Natural Language Routing (Primary)
 
-For non-technical users, recognize conversational patterns and route through the `/sigil` unified entry point:
+For non-technical users, recognize conversational patterns and route through the `/sigil:draw` unified entry point:
 
 | Pattern | Examples | Route To |
 |---------|----------|----------|
-| **Build requests** | "I want to build...", "Let's create...", "Build me...", "Make a..." | `/sigil "description"` |
-| **Feature requests** | "Add...", "Implement...", "Create feature...", "I need a..." | `/sigil "description"` |
-| **Status checks** | "What's the status", "Where are we", "Show progress", "What's happening" | `/sigil status` |
-| **Continue work** | "Continue", "Keep going", "Next step", "What's next", "Resume" | `/sigil continue` |
-| **Help requests** | "Help", "What can you do", "How does this work", "Show commands" | `/sigil help` |
-| **Project setup** | "New project", "Start fresh", "Initialize", "Set up principles" | `/sigil` (triggers Discovery) |
+| **Build requests** | "I want to build...", "Let's create...", "Build me...", "Make a..." | `/sigil:draw "description"` |
+| **Feature requests** | "Add...", "Implement...", "Create feature...", "I need a..." | `/sigil:draw "description"` |
+| **Status checks** | "What's the status", "Where are we", "Show progress", "What's happening" | `/sigil:draw status` |
+| **Continue work** | "Continue", "Keep going", "Next step", "What's next", "Resume" | `/sigil:draw continue` |
+| **Help requests** | "Help", "What can you do", "How does this work", "Show commands" | `/sigil:draw help` |
+| **Project setup** | "New project", "Start fresh", "Initialize", "Set up principles" | `/sigil:draw` (triggers Discovery) |
 
 #### Routing Precedence
 
 1. **Natural language patterns** — Check first for conversational requests
-2. **Slash commands** — Explicit commands (`/sigil-constitution`, `/sigil-setup`, etc.) route directly
+2. **Slash commands** — Explicit commands (`/sigil:constitution`, `/sigil:setup`, etc.) route directly
 3. **Trigger words** — Technical trigger words route to specific agents
 4. **Phase context** — Default to phase owner if no clear match
 5. **Fallback** — Ask user to clarify
@@ -55,19 +55,19 @@ For non-technical users, recognize conversational patterns and route through the
 #### Examples
 
 **User:** "I want to add dark mode to the app"
-→ Route to `/sigil "Add dark mode to the app"`
+→ Route to `/sigil:draw "Add dark mode to the app"`
 → Orchestrator detects feature request, starts spec-writer workflow
 
 **User:** "Where did we leave off?"
-→ Route to `/sigil continue`
+→ Route to `/sigil:draw continue`
 → Orchestrator finds active workflow, resumes at current phase
 
 **User:** "How do I use this?"
-→ Route to `/sigil help`
+→ Route to `/sigil:draw help`
 → Orchestrator shows available commands and capabilities
 
 **User:** "Let's build a login page with social auth"
-→ Route to `/sigil "Build a login page with social auth"`
+→ Route to `/sigil:draw "Build a login page with social auth"`
 → Orchestrator starts spec-first workflow
 
 ### Trigger Word Matrix
@@ -476,7 +476,7 @@ See `/docs/context-management.md` for full protocol.
 
 ### Natural Language (Highest Priority)
 
-These patterns are recognized and routed through `/sigil`:
+These patterns are recognized and routed through `/sigil:draw`:
 
 | Category | Patterns | Action |
 |----------|----------|--------|
@@ -501,19 +501,19 @@ These patterns are recognized and routed through `/sigil`:
 - "discover" — Trigger Discovery chain
 
 ### Shared Context
-- "connect" — Route to `/sigil-connect` (shared context setup)
-- "share learnings" — Route to `/sigil-connect`
-- "shared context" — Route to `/sigil-connect`
-- "share across projects" — Route to `/sigil-connect`
-- "cross-project" — Route to `/sigil-connect`
+- "connect" — Route to `/sigil:connect` (shared context setup)
+- "share learnings" — Route to `/sigil:connect`
+- "shared context" — Route to `/sigil:connect`
+- "share across projects" — Route to `/sigil:connect`
+- "cross-project" — Route to `/sigil:connect`
 
 ### Project Profiles
-- "profile" — Route to `/sigil-profile` (project profile generation)
-- "init profile" — Route to `/sigil-profile`
-- "project profile" — Route to `/sigil-profile`
-- "tech stack" — Route to `/sigil-profile`
-- "what does this project expose" — Route to `/sigil-profile`
-- "what does this project consume" — Route to `/sigil-profile`
+- "profile" — Route to `/sigil:profile` (project profile generation)
+- "init profile" — Route to `/sigil:profile`
+- "project profile" — Route to `/sigil:profile`
+- "tech stack" — Route to `/sigil:profile`
+- "what does this project expose" — Route to `/sigil:profile`
+- "what does this project consume" — Route to `/sigil:profile`
 
 ### Handoff
 - "engineer review" — Generate Technical Review Package

@@ -285,7 +285,7 @@ When not specified, recommend:
 
 **With mockup:**
 ```
-User: /sigil "Build the checkout flow"
+User: /sigil:draw "Build the checkout flow"
       [attached: checkout-page.png]
 
 → visual-analyzer extracts form fields, buttons, step indicators

@@ -37,8 +37,8 @@ Audit Mode:      [true | false]
   → [Description of what this means]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-To change: /sigil-config set <key> <value>
-To reset:  /sigil-config reset
+To change: /sigil:config set <key> <value>
+To reset:  /sigil:config reset
 ```
 
 4. Offer modification via AskUserQuestion:
@@ -71,8 +71,8 @@ If arguments start with "set":
      Directed mode requires the technical track.
 
      To enable directed mode, first switch to technical track:
-       /sigil-config set user_track technical
-       /sigil-config set execution_mode directed
+       /sigil:config set user_track technical
+       /sigil:config set execution_mode directed
      ```
    - **On `audit_mode: true`:** If `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
    - **Invalid key:** Show: `Unknown setting "[key]". Available settings: user_track, execution_mode, audit_mode`
@@ -116,8 +116,8 @@ Use plain-language error messages. Never show error codes or stack traces.
 
 | Situation | Response |
 |-----------|----------|
-| No `.sigil/` directory found | "Sigil OS is not set up in this project. Run `/sigil-setup` to get started." |
-| No config file found | "No config file found — using defaults (non-technical track, automatic mode). Use `/sigil-config set` to customize." |
+| No `.sigil/` directory found | "Sigil OS is not set up in this project. Run `/sigil:setup` to get started." |
+| No config file found | "No config file found — using defaults (non-technical track, automatic mode). Use `/sigil:config set` to customize." |
 | YAML parse failure | "The config file has formatting issues. Would you like to reset it to defaults?" |
 | Permission denied | "I don't have permission to modify `.sigil/config.yaml`. Check your file permissions." |
 
@@ -131,7 +131,7 @@ Use plain-language error messages. Never show error codes or stack traces.
 
 ## Related Commands
 
-- `/sigil-setup` — Full project setup (includes track selection)
-- `/sigil` — Show project status
-- `/sigil-constitution` — View/edit project principles
-- `/sigil-audit` — View or manage the audit log (when audit mode is enabled)
+- `/sigil:setup` — Full project setup (includes track selection)
+- `/sigil:draw` — Show project status
+- `/sigil:constitution` — View/edit project principles
+- `/sigil:audit` — View or manage the audit log (when audit mode is enabled)

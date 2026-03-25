@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.32.0] - 2026-03-20
+
+### Changed
+
+#### Breaking: Command Rename — `/sigil-*` → `/sigil:*`
+
+All commands renamed to remove the redundant `sigil-` prefix. The plugin namespace (`sigil:`) already provides collision avoidance with Claude Code built-ins, making the prefix unnecessary. The main entry point gets a new name: `/sigil:draw` — thematic with the "Inscribe it. Ship it." tagline.
+
+| Old | New |
+|-----|-----|
+| `/sigil` | `/sigil:draw` |
+| `/sigil-setup` | `/sigil:setup` |
+| `/sigil-audit` | `/sigil:audit` |
+| `/sigil-config` | `/sigil:config` |
+| `/sigil-constitution` | `/sigil:constitution` |
+| `/sigil-connect` | `/sigil:connect` |
+| `/sigil-handoff` | `/sigil:handoff` |
+| `/sigil-learn` | `/sigil:learn` |
+| `/sigil-profile` | `/sigil:profile` |
+| `/sigil-update` | `/sigil:update` |
+
+All cross-references in skills, chains, agents, templates, hooks, and docs updated.
+
+#### Version
+
+- Plugin version bumped from 0.31.0 to 0.32.0 (plugin.json, marketplace.json, README.md).
+
+---
+
 ## [0.31.0] - 2026-03-18
 
 ### Added

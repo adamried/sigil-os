@@ -139,7 +139,7 @@ Current Constitution: /.sigil/constitution.md
 [Display constitution content]
 
 ---
-To update: Run /sigil-constitution edit
+To update: Run /sigil:constitution edit
 ```
 
 After creating/editing:
@@ -147,8 +147,8 @@ After creating/editing:
 Constitution saved: /.sigil/constitution.md
 
 All future work will follow these rules automatically.
-To view: /sigil-constitution
-To update: /sigil-constitution edit
+To view: /sigil:constitution
+To update: /sigil:constitution edit
 ```
 
 ## Error Handling

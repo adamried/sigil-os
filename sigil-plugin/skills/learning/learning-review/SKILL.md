@@ -18,7 +18,7 @@ Maintain learning quality through periodic review. Promote validated pattern can
 
 ## When to Invoke
 
-- User runs `/sigil-learn --review`
+- User runs `/sigil:learn --review`
 - A feature is marked complete in project-context.md
 - User asks to "clean up learnings" or "review what we learned"
 - Any learning file exceeds its item limit
