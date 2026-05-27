@@ -1,10 +1,39 @@
 # Shared Protocol: Audit Log
 
-> **Referenced by:** The orchestrator (`sigil.md`) and skills using the `pre-execution-check` protocol.
+> **Referenced by:** The orchestrator (`commands/draw.md`) and skills using the `pre-execution-check` protocol.
 
 ## Purpose
 
-Standardize how workflow events are appended to `.sigil/audit-log.md` when audit mode is enabled. This protocol ensures a consistent, append-only execution trace across all workflow phases.
+Standardize how workflow events are recorded when audit mode is enabled. This protocol ensures a consistent, append-only execution trace across all workflow phases.
+
+## Storage Model (S4-001 FR-B03 — Directory-Based)
+
+**Canonical model (new):** Per-session files in `.sigil/audit/`:
+
+```
+.sigil/audit/
+├── 2026-05-27T14-32-15_user-authentication.md
+├── 2026-05-27T16-08-44_add-dark-mode.md
+├── 2026-05-28T09-15-02_export-csv.md
+└── ...
+```
+
+Each file represents one workflow run (one `/sigil:draw` invocation or `/sigil:continue` resume). Filename pattern: `<ISO-8601-no-colons>_<feature-slug>.md`.
+
+**Legacy model (deprecated, auto-migrated on first run):** Single append-only file at `.sigil/audit-log.md`.
+
+### Migration
+
+On any first audit interaction (write or read) when audit mode is enabled:
+
+1. If `.sigil/audit-log.md` exists AND `.sigil/audit/` does not exist:
+   - Create `.sigil/audit/`
+   - For each `## Session:` block in `.sigil/audit-log.md`, write a separate per-session file under `.sigil/audit/` using the timestamp + feature slug as the filename
+   - Rename the legacy file to `.sigil/audit-log.md.migrated` (preserved, not deleted, in case the user wants to verify)
+   - Log a one-time notice: "Migrated audit log from single-file to directory model. Original preserved at .sigil/audit-log.md.migrated."
+2. After migration, all reads and writes go to `.sigil/audit/<file>.md` only.
+
+The orchestrator and skills can continue calling this protocol without knowing which model is active — the protocol handles dispatch.
 
 ## When to Log
 

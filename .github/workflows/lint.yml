@@ -1,0 +1,27 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  workflow-linter:
+    name: Workflow linter (sigil-plugin + multi-plugin)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run workflow linter
+        run: python3 tools/workflow-linter.py --verbose
+
+  shared-references-sync-check:
+    name: shared-references / plugin references sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify shared-references are in sync with plugin copies
+        run: scripts/sync-references.sh --check

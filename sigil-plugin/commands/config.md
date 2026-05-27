@@ -80,8 +80,10 @@ To reset:                 /sigil:config reset  (or  reset --global)
 | `execution_mode` | `automatic` | "Sigil automatically selects the best approach for each task, asking you at standard checkpoints." |
 | `execution_mode` | `directed` | "You control which specialists and approaches are used. Requires technical track." |
 | `execution_mode` | `autonomous` | "Sigil runs the entire pipeline without per-step prompts. You review the cumulative diff at the end. Safety gates (security blockers, constitutional violations, fatal errors) still pause. Requires technical track." |
+| `parallel_execution` | `false` (default) | "Tasks within an implementation phase run sequentially." |
+| `parallel_execution` | `true` | "Tasks with no inter-dependencies can run concurrently in isolated git worktrees, merged by a team lead at end of phase. **Status: framework reserved (FR-A06); full implementation deferred to a future spec.** Setting `true` currently behaves the same as `false` with a one-time notice that the feature is reserved." |
 | `audit_mode` | `false` | "Workflow events are not logged. Use this for normal day-to-day work." |
-| `audit_mode` | `true` | "Every workflow step is logged to `.sigil/audit-log.md` — useful for reviewing what happened after the fact." |
+| `audit_mode` | `true` | "Every workflow step is logged to `.sigil/audit/<session>.md` — useful for reviewing what happened after the fact." |
 
 ### Set Mode (`set [--global] <key> <value>`)
 
@@ -96,6 +98,7 @@ If arguments start with `set`:
    - **Valid keys:** `user_track`, `execution_mode`, `audit_mode`
    - **Valid values for `user_track`:** `non-technical`, `technical`
    - **Valid values for `execution_mode`:** `automatic`, `directed`, `autonomous`
+   - **Valid values for `parallel_execution`:** `true`, `false`. Setting `true` enables the **reserved** parallel execution flag (FR-A06). The flag is recognized and persisted; the underlying worktree-based parallel runner is deferred to a future spec. Setting `true` today surfaces a one-time notice acknowledging the reservation.
    - **Valid values for `audit_mode`:** `true`, `false`
    - **Constraint:** `execution_mode: directed` and `execution_mode: autonomous` both require `user_track: technical`. If user tries to set either with `non-technical` track, show:
      ```

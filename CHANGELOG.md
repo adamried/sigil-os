@@ -4,6 +4,31 @@
 
 ### Added
 
+#### S4-001 Phase 5: Reconciliation wrap-up (NFR-005, FR-B02, FR-B03, FR-D05) + reserved flag (FR-A06)
+
+**Linter multi-plugin support (NFR-005):**
+- `tools/workflow-linter.py` gains two new checks: `check_companion_plugins` (lightweight structural validation for pm-copilot and po-buddy — plugin.json, commands/, skills/, frontmatter presence) and `check_shared_references_sync` (invokes `scripts/sync-references.sh --check` and surfaces out-of-sync files as errors).
+- Linter now covers 110 files (was 107).
+- Companion plugins that don't exist yet are skipped silently — supports incremental rollout.
+
+**Routing extraction (FR-B02):**
+- `commands/draw.md` no longer inlines a Natural Language Triggers table. All routing logic (trigger words, NL patterns, ticket detection, precedence) lives in `skills/workflow/routing-rules/SKILL.md` as the single source of truth.
+- Orchestrator references `routing-rules` instead of duplicating it. Future routing changes require only one edit.
+
+**Audit directory model (FR-B03 — full):**
+- `skills/shared-protocols/audit-log-protocol.md` documents the new canonical storage: per-session files at `.sigil/audit/<ISO-timestamp>_<feature-slug>.md`. Legacy single-file `.sigil/audit-log.md` is auto-migrated on first audit interaction; the original is renamed to `.sigil/audit-log.md.migrated` (preserved, not deleted).
+- `commands/audit.md` adds six subcommands: `latest` (default), `list`, `trace <session>`, `agent <name>`, `events <type>`, `clear`. Legacy `full` and `session` subcommands remain for pre-migration backward compat.
+
+**CI workflow (FR-D05):**
+- `.github/workflows/lint.yml` runs the workflow linter and the shared-references sync check on every PR and main push. Either failure blocks merge.
+
+**Parallel execution config flag reserved (FR-A06, partial):**
+- `parallel_execution: true|false` recognized by `/sigil:config` and persisted in config files. Setting `true` surfaces a one-time "reserved" notice — the underlying worktree-based parallel runner is deferred to a future spec. The config schema is forward-compatible so users can opt in once the runner ships.
+
+**Deferred:**
+- **FR-A06 (worktree-based parallel runner).** The full implementation requires significant orchestrator and developer-agent changes to support team-lead merge resolution. The config flag is reserved (above) but the runner is not yet implemented.
+- **FR-C06 (design review command for Figma friction log).** P3 priority; designed for a Figma-only PM workflow that's better served by a focused future spec.
+
 #### S4-001 Phase 4: PO Buddy plugin (po-buddy@0.1.0)
 
 New plugin `po-buddy/` runs in Claude.ai Cowork — receives validated specs from PM Copilot, decomposes into stories, refines existing stories, prepares sprint-ready work. Generalized from gb-code-buddy's PO Buddy with all GasBuddy-specific content stripped (FR-C08).

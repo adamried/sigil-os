@@ -501,18 +501,13 @@ Before creating features, Sigil needs:
 Would you like to set up the constitution now? (Y/n)
 ```
 
-## Natural Language Triggers
+## Natural Language Triggers and Routing
 
-When the user's message doesn't start with `/sigil:draw`, the orchestrator should recognize these patterns and route appropriately:
+All routing logic — trigger word matrices, natural language patterns, ticket-key detection, routing precedence — lives in `skills/workflow/routing-rules/SKILL.md` (S4-001 FR-B02). The orchestrator does NOT inline these tables.
 
-| Pattern | Route To |
-|---------|----------|
-| "I want to build...", "Let's create...", "Build me..." | → `/sigil:draw "description"` |
-| "Add...", "Implement...", "Create feature..." | → `/sigil:draw "description"` |
-| "What's the status", "Where are we", "Show progress" | → `/sigil:draw status` |
-| "Continue", "Keep going", "Next step", "What's next" | → `/sigil:draw continue` |
-| "Help", "What can you do", "How does this work" | → `/sigil:draw help` |
-| "Work on PROJ-123", "Pick up PROJ-123", "Start PROJ-123" | → `/sigil:draw PROJ-123` (ticket-key routing) |
+When the user's message doesn't start with `/sigil:draw`, read `routing-rules` to determine how to interpret and route the input.
+
+Do not duplicate routing rules in this file. If a routing rule needs to change, update `routing-rules` and let this orchestrator pick up the change automatically.
 
 ## Guidelines
 
