@@ -32,6 +32,24 @@
 
 ---
 
+## Feature-Level Status
+
+Tracks gates that apply to the feature as a whole, not to individual tasks. The orchestrator updates this table at each phase transition.
+
+| Gate | Status | Notes |
+|------|--------|-------|
+| QA validation | [ ] Not started / [~] In progress / [x] Pass / [!] Failing | [Latest QA report path or attempt N/5] |
+| Code review | [ ] Not started / [~] In progress / [x] Approved / [!] Changes requested | [Path to code-review report] |
+| Security review | [ ] Not started / [~] In progress / [x] Pass / [!] Findings outstanding / [—] N/A (Quick Flow) | [Path to `.sigil/specs/<feature>/security.md`] |
+| Verification commit | [ ] Not yet / [x] Committed `<short-sha>` / [—] N/A (Quick Flow) | `verified: <feature> security pass` |
+
+**Notes:**
+- Quick Flow features skip Security review and Verification commit. Mark both as `[—] N/A (Quick Flow)`.
+- Verification commit is only emitted after Security review passes. If security fails, leave the verification gate unchecked.
+- This table is feature-level. Per-task status remains in the Task Legend below.
+
+---
+
 ## Phase 1: Setup
 
 <!-- Infrastructure, configuration, and scaffolding -->

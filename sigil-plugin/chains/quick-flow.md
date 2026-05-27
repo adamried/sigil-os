@@ -1,7 +1,7 @@
 ---
 name: quick-flow
 description: Streamlined workflow for simple changes—bug fixes, small features, well-understood work.
-version: 1.3.0
+version: 1.4.0
 track: quick
 entry_skill: complexity-assessor
 ---
@@ -29,6 +29,19 @@ When the orchestrator routes a maintenance ticket to Quick Flow (category `maint
 - Use a lighter quick-spec: pre-populate Type as "Maintenance" and include ticket metadata
 - Constitution constraints still apply but the spec can be minimal
 - `ticket_metadata` is preserved in context for handoff-back
+
+### Security and Verification (S4-001 FR-A04)
+
+Quick Flow **explicitly opts out** of the full-pipeline security phase. Specifically:
+- No security review runs (no security agent invocation, no specialist overlay selection for appsec/data-privacy)
+- No per-feature `.sigil/specs/<feature>/security.md` is written
+- No `verified:` commit is emitted
+
+The Feature-Level Status table in `tasks.md` should mark Security review and Verification commit as `[—] N/A (Quick Flow)`.
+
+If a feature appears to need security review (e.g., it touches auth, session, input handling, PII, or payment files) but the user invoked Quick Flow, the orchestrator must escalate before continuing — Quick Flow is for genuinely simple work, not for skipping security on sensitive changes.
+
+Per-task commits via `commit-conventions` still apply (same as full pipeline).
 
 ## Chain Sequence
 
@@ -374,6 +387,7 @@ Between skills, preserve:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4.0 | 2026-05-27 | S4-001 FR-A03/A04: Per-task commits via commit-conventions apply here too (same as full-pipeline). Quick Flow **explicitly opts out** of security review, per-feature `security.md`, and the `verified:` commit — these are full-pipeline-only artifacts. |
 | 1.3.0 | 2026-03-05 | Added conditional handoff-back step after qa-fixer/learning-capture — writes results back to originating ticket when ticket_key exists in context. |
 | 1.2.0 | 2026-02-20 | S4-104: Maintenance flag handling — maintenance tickets skip complexity assessor, use lighter quick-spec with ticket metadata. |
 | 1.1.0 | 2026-02-10 | Audit: Added constitution existence check, task count escalation (>5 tasks) |

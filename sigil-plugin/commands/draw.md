@@ -250,7 +250,9 @@ When complexity-assessor returns Quick Flow:
    - QA validation: max 1 fix attempt (not 5)
    - Skip formal code review after all tasks
    - Skip security review (unless override trigger fired)
-4. If QA fix resolves a Major/Critical issue, still invoke learning-capture
+   - **Skip verification commit** (S4-001 FR-A04): no per-feature `security.md`, no `verified:` commit. The Feature-Level Status table marks both gates `[—] N/A (Quick Flow)`.
+4. Per-task commits (FR-A03) still apply — Quick Flow is opted out of security/verification, not commits.
+5. If QA fix resolves a Major/Critical issue, still invoke learning-capture
 
 Constitution is already verified in Step 3.1 (blocking) before reaching this path, so no additional check needed.
 
@@ -285,15 +287,27 @@ Runs after task-decomposer completes OR when `/sigil:draw continue` resumes an i
 #### Entry: Show Tasks and Begin
 
 1. Read tasks file from spec path (`/.sigil/specs/###-feature/tasks.md`)
-2. **Commit spec artifacts** as a restore point before implementation begins:
+2. **Create a feature branch** (S4-001 FR-A02) before committing spec artifacts:
+   - Check the current branch with `git rev-parse --abbrev-ref HEAD`
+   - If already on a non-default branch matching a Sigil feature pattern (e.g., `sigil/###-feature-name`, `feature/###-feature-name`, or a constitution-defined pattern), reuse it
+   - Otherwise, determine the branch name:
+     - If `.sigil/constitution.md` Article 2 defines a branch naming convention, use it (e.g., `feature/<ticket>-<slug>`)
+     - Else, default to `sigil/<spec-dir-name>` (e.g., `sigil/003-user-auth`)
+   - Create and switch: `git switch -c <branch-name>` (fall back to `git checkout -b <branch-name>` if `switch` is unavailable)
+   - If branch creation fails (uncommitted changes on default, git not configured, name conflict), surface the failure to the user with options:
+     - "Stash uncommitted changes and continue"
+     - "Stay on the current branch (skip branch creation)"
+     - "Cancel implementation"
+   - Do NOT push to remote. Branches are local until the push/PR checkpoint at the end.
+3. **Commit spec artifacts** as a restore point before implementation begins:
    - Stage the spec directory: `git add .sigil/specs/###-feature-name/`
    - This stages spec.md, plan.md, tasks.md, and any other artifacts created during specification
    - Commit with message: `sigil: spec artifacts for ###-feature-name`
    - If the commit fails (e.g., nothing to commit, git not configured), log a warning but do NOT block the implementation loop. This is a safety net, not a gate.
    - Do NOT push to remote. The commit is local only.
-3. Display brief task summary (total count, phases, first unblocked task)
-4. Auto-continue to first unblocked task (do NOT wait for user to pick)
-5. Update project-context.md: Current Phase -> implement, add Current Task field
+4. Display brief task summary (total count, phases, first unblocked task)
+5. Auto-continue to first unblocked task (do NOT wait for user to pick)
+6. Update project-context.md: Current Phase -> implement, add Current Task field. Record the branch name.
 
 #### Per-Task Cycle
 
@@ -332,9 +346,20 @@ For each incomplete task (respecting dependency order):
 **C. Task Completion**
 1. Mark task done in tasks.md
 2. Update project-context.md: Tasks Completed count, add to Recent Activity
-3. Emit: `Implementation Loop: [completed]/[total] tasks - Task T### complete`
-4. **Audit:** If `audit_enabled`, update the task's audit entry Outcome to `Complete (attempt N/5)`
-5. Auto-continue to next unblocked task
+3. **Per-task commit** (S4-001 FR-A03):
+   - Run `git status --short` to inspect the working tree
+   - Compare modified files against the task's declared `files:` list. Any modification outside that list is potentially out-of-scope:
+     - Prompt the user via `AskUserQuestion` with options: "Include in this commit" / "Stash for a separate commit" / "Discard"
+     - Never silently include out-of-scope changes
+     - If the user chooses Discard, run `git checkout -- <file>` on each rejected file individually. Never `git checkout .` or `git restore .`.
+   - Invoke the `commit-conventions` skill with `action: format`, passing the task description and the vetted file set. The skill returns a Conventional Commits message including any ticket reference detected from the branch
+   - Stage only vetted files (`git add <file1> <file2>`). Never `git add -A` or `git add .`
+   - Commit with the formatted message
+   - If the commit fails (no changes, pre-commit hook rejection, identity not configured): surface the failure but do NOT block task completion. Log to Recent Activity
+   - Skip this step entirely when `.sigil/config.yaml` sets `git.per_task_commits: false` or when the task produced no changes
+4. Emit: `Implementation Loop: [completed]/[total] tasks - Task T### complete`
+5. **Audit:** If `audit_enabled`, update the task's audit entry Outcome to `Complete (attempt N/5)` and append a `commit` sub-entry with the short SHA
+6. Auto-continue to next unblocked task
 
 **Invocation distinction:**
 - Agents (developer, qa-engineer) -> Read the agent .md file and adopt its behavior
@@ -345,18 +370,27 @@ For each incomplete task (respecting dependency order):
 1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
 2. **Audit:** If `audit_enabled`, append a `phase` entry for code review with outcome (blockers/warnings/suggestions counts)
 3. If blockers found → present to user for decision. Do not proceed until resolved.
-4. **Security review** (conditional): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
+4. **Security review** (conditional, full pipeline only — Quick Flow opts out): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
    a. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks
    b. If `appsec-reviewer` or `data-privacy-reviewer` is assigned, load the specialist and merge with base `security` agent
    c. Read the security-reviewer SKILL.md and run security review with specialist overlay
-   d. If security blockers found → present to user for decision
-   e. **Audit:** If `audit_enabled`, append a `phase` entry for security review with outcome
-4. **Learning capture** (conditional): If code review or security review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list. This is silent and non-blocking.
-5. If approved → show completion summary (use Feature Complete format from output-formats.md)
-6. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill. Automatic and non-blocking.
-7. Update context: Current Phase → none
-8. **Audit:** If `audit_enabled`, append a `completion` entry with task count, code review status, security review status, and approximate duration since session start
-9. Present next-action prompt using AskUserQuestion:
+   d. **Write per-feature security report** (S4-001 FR-A04): The security agent writes `.sigil/specs/<feature-dir>/security.md` per the format in `agents/security.md` Step 3b. This is the source of truth for the subsequent `verified:` commit.
+   e. If security blockers found → present to user for decision. Update the tasks.md Feature-Level Status table: `Security review: [!] Findings outstanding` (do not emit the `verified:` commit).
+   f. If security passes → update Feature-Level Status: `Security review: [x] Pass — .sigil/specs/<feature-dir>/security.md`
+   g. **Audit:** If `audit_enabled`, append a `phase` entry for security review with outcome and the security.md path
+5. **Verification commit** (S4-001 FR-A04, full pipeline only — Quick Flow does NOT emit this commit): If security review verdict is Pass:
+   a. Confirm `.sigil/specs/<feature-dir>/security.md` exists. If missing, surface the gap and skip the verified commit
+   b. Invoke `commit-conventions` skill with `action: format` and `type: verified`, passing the feature slug and the security.md path
+   c. Stage only the security.md file: `git add .sigil/specs/<feature-dir>/security.md`. Do NOT include other changes
+   d. Commit: `verified: <feature-slug> security pass` (with `References: .sigil/specs/<feature-dir>/security.md` body)
+   e. Update tasks.md Feature-Level Status: `Verification commit: [x] Committed <short-sha>`
+   f. If the commit fails, surface but do not block — the user can address manually
+6. **Learning capture** (conditional): If code review or security review produced findings at severity Medium or above that were remediated, invoke `learning-capture` in review findings mode. Pass the resolved findings list. This is silent and non-blocking.
+7. If approved → show completion summary (use Feature Complete format from output-formats.md)
+8. **Handoff-back** (ticket-driven features only): If `ticket_key` is present in the chain context, invoke the `handoff-back` skill. Automatic and non-blocking.
+9. Update context: Current Phase → none
+10. **Audit:** If `audit_enabled`, append a `completion` entry with task count, code review status, security review status, verification commit status, and approximate duration since session start
+11. Present next-action prompt using AskUserQuestion:
    - Option 1: "Build another feature" → prompt for description → route to Step 3
    - Option 2: "Hand off to an engineer" → read handoff-packager SKILL.md and generate package
    - Option 3: "Update ticket and close" → (only if `ticket_key` in context AND handoff-back hasn't run)

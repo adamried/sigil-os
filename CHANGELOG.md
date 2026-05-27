@@ -4,6 +4,19 @@
 
 ### Added
 
+#### S4-001 FR-A02 / FR-A03 / FR-A04: Feature branch + per-task commits + verified commits
+
+The full-pipeline workflow now produces a cleaner git history without manual intervention:
+
+- **Feature branch (FR-A02).** Before committing spec artifacts, the orchestrator creates a feature branch — using the constitution Article 2 naming convention if defined, otherwise `sigil/<spec-dir-name>`. The branch is local until the eventual push/PR checkpoint.
+- **Per-task commits (FR-A03).** After each task's QA validation passes, the orchestrator commits the task's vetted files via the `commit-conventions` skill. Out-of-scope changes are detected (modifications to files not in the task's declared file list) and the user is prompted via `AskUserQuestion` to include / stash / discard. No silent inclusion of out-of-scope changes. No broad `git add -A`. Per-task commits apply to both full pipeline and Quick Flow.
+- **Per-feature security report (FR-A04).** After security review runs, the security agent now writes `.sigil/specs/<feature>/security.md` as the canonical security record for that feature. The file has a fixed structure (Scope, Summary, Findings, Verdict, Sign-off) and is the source of truth for the subsequent verified commit.
+- **Verified commit (FR-A04).** When security review passes on the full pipeline, the orchestrator emits a feature-level `verified: <feature> security pass` commit that references the security.md path. This is the new `verified:` commit type defined in `commit-conventions`. Quick Flow opts out entirely — no security review, no security.md, no verified commit.
+- **Feature-Level Status table.** `templates/tasks-template.md` gains a Feature-Level Status block tracking QA / code review / security review / verification commit gates separately from per-task status. Quick Flow marks security and verification as `[—] N/A (Quick Flow)`.
+- **Chain version bumps.** `chains/full-pipeline.md` → 1.5.0, `chains/quick-flow.md` → 1.4.0 documenting these changes.
+
+Updated agents (`developer`, `security`), the orchestrator (`commands/draw.md`), the `commit-conventions` skill (now 1.1.0), the chains, and `templates/tasks-template.md`.
+
 #### S4-001 FR-A09: Three companion entry commands
 
 Added `/sigil:dashboard`, `/sigil:status`, and `/sigil:continue` as terse companion entry points alongside `/sigil:draw`:

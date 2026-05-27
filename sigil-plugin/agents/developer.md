@@ -107,6 +107,8 @@ Mark task done and hand off to QA Engineer:
 2. Note any concerns
 3. Hand off to QA Engineer for validation (qa-validator runs per-task, not at the end)
 
+> **Note (S4-001 FR-A03):** The per-task git commit is driven by the orchestrator (`commands/draw.md` Step 4b Per-Task Cycle, Step C), not by this agent. The orchestrator runs the commit after QA passes, and invokes the `commit-conventions` skill to format the message and detect out-of-scope changes.
+
 ## Test-First Pattern
 
 ```

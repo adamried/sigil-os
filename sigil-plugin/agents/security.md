@@ -66,6 +66,55 @@ Generate security report:
 - Remediation guidance
 - Compliance status
 
+### Step 3b: Write Per-Feature security.md (S4-001 FR-A04)
+
+In addition to updating `/.sigil/project-context.md`, write a per-feature security report to:
+
+```
+.sigil/specs/<feature-dir>/security.md
+```
+
+This file is the canonical record of the security review for that feature, and is the source of truth that the subsequent `verified:` commit references (see `commit-conventions` skill, FR-A03/A04).
+
+**Required sections in `security.md`:**
+
+```markdown
+# Security Review: <Feature Name>
+
+> **Spec:** /.sigil/specs/<feature-dir>/spec.md
+> **Reviewed:** <YYYY-MM-DD HH:MM>
+> **Reviewer:** Security Agent (+ <specialist overlay>, if any)
+> **Verdict:** Pass | Findings outstanding | Fail
+
+## Scope
+- Files reviewed: <count>
+- Tasks covered: <task IDs>
+- Specialist overlays: appsec-reviewer | data-privacy-reviewer | none
+
+## Summary
+- Critical: <N> | High: <N> | Medium: <N> | Low: <N>
+- OWASP compliance: <status>
+- Dependency audit: <status>
+
+## Findings
+<findings table or "No findings" line>
+
+## Verdict and Justification
+<one paragraph explaining the verdict>
+
+## Sign-off
+- Reviewed by: Security Agent
+- Date: <YYYY-MM-DD>
+- Verdict: <Pass | Findings outstanding | Fail>
+```
+
+**Rules:**
+
+- Write the file **before** the orchestrator emits the `verified:` commit.
+- If the verdict is anything other than `Pass`, the orchestrator will not emit a `verified:` commit — the file documents what blocked it.
+- If a previous `security.md` exists for the same feature (re-review after fixes), overwrite it. Git history preserves the prior version.
+- Quick Flow never invokes the security agent. No `security.md` is produced for Quick Flow features. This is intentional — Quick Flow features do not receive a `verified:` commit.
+
 ### Step 4: Require Approval
 Security findings require human approval — there is no automated fix loop (unlike QA validation):
 - Critical findings block deployment — must be fixed or explicitly accepted
