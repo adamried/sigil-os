@@ -4,6 +4,16 @@
 
 ### Added
 
+#### S4-001 FR-A09: Three companion entry commands
+
+Added `/sigil:dashboard`, `/sigil:status`, and `/sigil:continue` as terse companion entry points alongside `/sigil:draw`:
+
+- **`/sigil:dashboard`** — Read-only project status overview with a single suggested next action. Mirrors the dashboard `/sigil:draw` shows with no arguments, but never prompts the user.
+- **`/sigil:status`** — Read-only detailed mid-workflow status. Delegates to the existing `status-reporter` skill. Adds an active-waivers count, audit-entries count, and (technical track) spec artifact inventory.
+- **`/sigil:continue`** — Resume the current workflow. Delegates to the same logic as `/sigil:draw continue`. Single source of truth remains in `commands/draw.md`.
+
+`/sigil:draw` remains the recommended unified entry point. These commands provide shorter invocations for common operations during long sessions without forking workflow logic.
+
 #### S4-001 FR-A05: Four standalone pipeline commands
 
 Added four new commands so users can run pipeline stages independently of the unified `/sigil:draw` orchestrator:

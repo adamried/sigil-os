@@ -10,6 +10,9 @@
 |---------|---------|-------------|
 | `/sigil:draw` | **Unified entry point** — status, start, resume | Starting any workflow |
 | `/sigil:setup` | Initialize Sigil OS in a new project | First-time project setup |
+| `/sigil:dashboard` | Project status overview + suggested next action (read-only) | Quick check-in, no prompts |
+| `/sigil:status` | Detailed mid-workflow status view (read-only) | Long-running implementations |
+| `/sigil:continue` | Resume the current workflow | Terser alternative to `/sigil:draw continue` |
 | `/sigil:spec` | Write or manage a specification on its own | Spec-only work, no auto-pipeline |
 | `/sigil:tasks` | Decompose an existing plan into tasks | When `plan.md` exists and you want tasks |
 | `/sigil:review` | Run code or security review on demand | Reviewing changes outside the pipeline |
