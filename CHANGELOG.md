@@ -4,6 +4,18 @@
 
 ### Changed
 
+#### S4-001 FR-B07: Preflight skill-resolution hint (enforcement v2.5.0)
+
+`SIGIL.md` now ships with an explicit Skill Resolution section listing the 12 skill categories and the canonical lookup path:
+
+```
+${CLAUDE_PLUGIN_ROOT}/skills/<category>/<skill-name>/SKILL.md
+```
+
+This eliminates the multi-minute Glob fallback that occurred when Claude resolved a skill name without knowing its category. The phase-handoff table also gained `security` and `verified` rows reflecting FR-A02/A03/A04.
+
+Component locations updated to reflect 10 agents (was 9) and the additional commands shipped in FR-A05/A09. Enforcement version bumped from 2.4.0 to 2.5.0 in both `skills/workflow/preflight-check/SKILL.md` and `hooks/preflight-check.sh` (these stay synchronized).
+
 #### S4-001 FR-B01: Code Reviewer is now a canonical agent handoff
 
 Reconciled the code review invocation model. Previously the orchestrator and QA Engineer invoked the `code-reviewer` skill directly, despite a `code-reviewer` agent file already existing. The agent and skill now have a clear, single-source contract:
