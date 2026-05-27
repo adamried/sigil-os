@@ -1,5 +1,22 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+#### S4-001 FR-A05: Four standalone pipeline commands
+
+Added four new commands so users can run pipeline stages independently of the unified `/sigil:draw` orchestrator:
+
+- **`/sigil:spec`** — Write or manage a feature specification on its own. Supports `list`, `quick "description"`, opening an existing spec by path, or starting a full spec from a description. Stops after spec authoring; does not auto-advance through clarifier/planner/decomposer.
+- **`/sigil:review`** — Run code or security review on demand. Scopes: `code` (default), `security`, `full` (both sequentially), or against a specific spec path. Produces reports under `.sigil/specs/<feature>/reviews/` or `.sigil/reviews/`. Does not enter the QA fixer loop.
+- **`/sigil:export`** — Produce a stakeholder-friendly, plain-language summary of a feature for non-engineering audiences. Writes `stakeholder-summary.md` to the feature's spec directory. Distinct from `/sigil:handoff` (engineer-targeted).
+- **`/sigil:tasks`** — Decompose an existing `plan.md` into tasks. Non-destructive by default — if `tasks.md` exists, offers regenerate/append/cancel via `AskUserQuestion`.
+
+`/sigil:draw` remains the recommended unified entry point. These commands give users finer-grained access for spec-only work, on-demand reviews, stakeholder communication, and post-hoc task decomposition.
+
+---
+
 ## [0.32.0] - 2026-03-20
 
 ### Changed

@@ -10,6 +10,10 @@
 |---------|---------|-------------|
 | `/sigil:draw` | **Unified entry point** — status, start, resume | Starting any workflow |
 | `/sigil:setup` | Initialize Sigil OS in a new project | First-time project setup |
+| `/sigil:spec` | Write or manage a specification on its own | Spec-only work, no auto-pipeline |
+| `/sigil:tasks` | Decompose an existing plan into tasks | When `plan.md` exists and you want tasks |
+| `/sigil:review` | Run code or security review on demand | Reviewing changes outside the pipeline |
+| `/sigil:export` | Produce a stakeholder-friendly summary | Sharing progress with non-engineering audiences |
 | `/sigil:handoff` | Generate engineer review package | Ready for technical review |
 | `/sigil:constitution` | View or edit project rules | First-time setup or updates |
 | `/sigil:learn` | View, search, or review learnings | Reviewing institutional memory |
