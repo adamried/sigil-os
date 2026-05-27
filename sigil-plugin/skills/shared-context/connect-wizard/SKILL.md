@@ -1,12 +1,12 @@
 ---
 name: connect-wizard
-description: Interactive setup flow for connecting a project to a shared context repository via GitHub MCP.
-version: 1.4.0
+description: Interactive setup flow for connecting a project to a shared context repository via the gh CLI (S4-001 FR-B06).
+version: 1.5.0
 category: shared-context
 chainable: false
 invokes: [shared-context-sync]
 invoked_by: [connect]
-tools: Read, Write, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
+tools: Read, Write, Bash
 model: sonnet
 ---
 
@@ -14,11 +14,17 @@ model: sonnet
 
 ## Purpose
 
-Guide users through connecting their project to a shared context repository. Handles GitHub MCP detection, repo validation, directory scaffolding, and sentinel file creation.
+Guide users through connecting their project to a shared context repository. Handles `gh` CLI availability detection, repo validation, directory scaffolding (via `gh-sync.sh push-batch`), and sentinel file creation.
 
-## Critical Constraint
+## Critical Constraint (S4-001 FR-B06)
 
-**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config`. ALL remote repository operations — reading files, creating files, scaffolding, validation — MUST go through GitHub MCP tools (`mcp__github__get_file_contents`, `mcp__github__create_or_update_file`, `mcp__github__push_files`). If MCP is unavailable, fail gracefully rather than falling back to git CLI.
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations directly.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config`. ALL remote repository operations — reading files, creating files, scaffolding, validation — MUST go through the `gh-sync.sh` helper:
+
+```
+${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh {read|list|write|push-batch} ...
+```
+
+If `gh` or `jq` is missing or `gh` is unauthenticated, fail gracefully (surface guidance to install/authenticate) rather than falling back to direct `git` CLI.
 
 ## When to Invoke
 
@@ -50,32 +56,32 @@ Do you work across multiple code projects? [Y/n]:
 
 If user says no → exit with: "No problem. You can run `/sigil:connect` anytime if you change your mind."
 
-### Step 2: GitHub MCP Check
+### Step 2: gh CLI Availability Check
 
-Use the `shared-context-sync` skill's GitHub MCP Detection procedure.
+Use the `shared-context-sync` skill's "gh CLI Availability Detection" procedure (checks for `gh`, `jq`, and `gh auth status`).
 
-**If MCP detected:**
+**If all prerequisites present:**
 ```
 Step 1 of 3: GitHub Connection
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Checking... GitHub MCP detected.
+Checking... gh CLI ready (authenticated).
 ```
 
-**If MCP not detected:**
+**If any prerequisite missing:**
 ```
 Step 1 of 3: GitHub Connection
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Checking... GitHub MCP not found.
+Checking... gh CLI [not installed | not authenticated | jq missing].
 
-Sharing context requires a GitHub connection (MCP).
-Want me to help you set that up? [Y/n]:
+Sharing context requires the `gh` CLI and `jq`. Want me to walk
+you through installing/authenticating them? [Y/n]:
 ```
 
-If yes, display the setup guidance from `shared-context-sync` MCP Detection, then ask user to restart their session and run `/sigil:connect` again.
+If yes, display the setup guidance from `shared-context-sync` ("gh CLI Availability Detection"), then ask the user to retry `/sigil:connect` once their environment is ready.
 
-If no → exit with: "You'll need GitHub MCP to use shared context. Run `/sigil:connect` when you're ready."
+If no → exit with: "You'll need the `gh` CLI (and `jq`) to use shared context. Run `/sigil:connect` when you're ready."
 
 ### Step 3: Repository Selection
 
@@ -108,7 +114,7 @@ Enter the repo path (e.g., my-org/platform-context):
 ### Step 4: Validate and Connect
 
 1. Validate repo path format: must be `owner/repo`
-2. Attempt to read from the repo via GitHub MCP to confirm access
+2. Attempt to read from the repo via `gh-sync.sh read` (or `list`) to confirm access
 3. If repo is empty or missing expected structure → offer to scaffold (see Scaffolding below)
 4. If repo is not accessible → show error and allow retry
 
@@ -120,7 +126,7 @@ If the repo is empty or doesn't have the shared context structure:
 This repo is empty. Set up the shared context structure? [Y/n]:
 ```
 
-If yes, use the `shared-context-sync` Scaffolding Protocol, which creates all files in a single commit via `mcp__github__push_files`:
+If yes, use the `shared-context-sync` Scaffolding Protocol, which creates all files in a single commit via `gh-sync.sh push-batch`:
 - `README.md` — auto-generated explanation of the repo's purpose
 - `shared-standards/.gitkeep`
 - `profiles/.gitkeep`

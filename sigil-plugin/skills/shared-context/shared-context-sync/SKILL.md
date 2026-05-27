@@ -1,27 +1,44 @@
 ---
 name: shared-context-sync
-description: Infrastructure skill for shared context sync. Called by learning-capture, learning-reader, draw, connect-wizard, profile-generator, and constitution-writer — not invoked directly by users. Handles sentinel detection, repo identity, push/pull sync, cache management, and offline queue via GitHub MCP.
-version: 1.6.0
+description: Infrastructure skill for shared context sync. Called by learning-capture, learning-reader, draw, connect-wizard, profile-generator, and constitution-writer — not invoked directly by users. Handles sentinel detection, repo identity, push/pull sync, cache management, and offline queue via the gh CLI (S4-001 FR-B06).
+version: 2.0.0
 category: shared-context
 chainable: false
 invokes: []
 invoked_by: [learning-capture, learning-reader, draw, connect-wizard, profile-generator, constitution-writer]
-tools: Read, Write, Edit, Bash, ToolSearch, mcp__github__get_file_contents, mcp__github__create_or_update_file, mcp__github__push_files
+tools: Read, Write, Edit, Bash
 model: haiku
 ---
 
 # Skill: Shared Context Sync
 
-## Critical Constraint
+## Critical Constraint (S4-001 FR-B06)
 
-**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config user.email`. ALL remote repository operations — reading files, creating files, updating files, scaffolding — MUST go through GitHub MCP tools (`mcp__github__get_file_contents`, `mcp__github__create_or_update_file`, `mcp__github__push_files`). If MCP is unavailable, queue the operation locally for later retry rather than falling back to git CLI.
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations directly.** The only permitted git commands are read-only local queries: `git rev-parse`, `git remote get-url`, and `git config user.email`. ALL remote repository operations — reading files, creating files, updating files, scaffolding — MUST go through the `gh-sync.sh` helper script:
+
+```
+${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh <subcommand> <args...>
+```
+
+**Subcommands:**
+
+| Subcommand | Purpose | Replaces |
+|------------|---------|----------|
+| `read <repo> <path> [<branch>]` | Read a single file's contents | `mcp__github__get_file_contents` (file mode) |
+| `list <repo> <path> [<branch>]` | List directory entries (JSON array of `{name, type, path, sha}`) | `mcp__github__get_file_contents` (directory mode) |
+| `write <repo> <path> <local-file> <message> [<branch>]` | SHA-safe create-or-update of a single file | `mcp__github__create_or_update_file` |
+| `push-batch <repo> <branch> <message> <manifest-json>` | Multi-file commit via the Git Data API | `mcp__github__push_files` |
+
+**Prerequisites:** `gh` CLI must be installed and authenticated (`gh auth login`). `jq` must be installed for JSON output handling. If either is missing or unauthenticated, the helper exits with code 2 and a structured JSON error; queue the operation locally for later retry per the offline-queue protocol. **Never fall back to direct `git` CLI.**
+
+**Migration note:** This skill previously used GitHub MCP tools (`mcp__github__*`). Those references have been removed from this skill's frontmatter. The `.mcp.json` GitHub MCP server registration is retained temporarily for backward compatibility with any unmigrated paths; it will be removed in a follow-up once verification completes.
 
 ## Purpose
 
 Provide shared context infrastructure for all Sigil skills. This skill handles:
 - Sentinel file detection and validation
 - Repository identity detection from git remote
-- GitHub MCP availability checking
+- `gh` CLI availability checking
 - Local cache management
 - Offline queue management
 - Push (on learning capture) and pull (on prime) sync operations
@@ -102,40 +119,35 @@ Determine the current project's `owner/repo` identity from git remote.
 
 ---
 
-## GitHub MCP Detection
+## gh CLI Availability Detection
 
-Check whether GitHub MCP tools are available in the current session.
+Check whether the `gh` CLI is installed and authenticated before any remote operation.
 
 **Procedure:**
 
-1. Use `ToolSearch` with query `"+github get file"` to find GitHub MCP file tools
-2. If `mcp__github__get_file_contents` is found → MCP is available
-3. If no tools found → MCP is not available
+1. Run `command -v gh` — if not found, `gh` is not installed
+2. Run `gh auth status` — if non-zero exit, `gh` is not authenticated
+3. Run `command -v jq` — if not found, `jq` is not installed (the helper script needs it)
 
-**Key MCP tools used by shared context:**
+If any check fails, treat the same as the offline case: queue the operation per the offline-queue protocol and surface guidance to the user.
 
-| Tool | Purpose |
-|------|---------|
-| `mcp__github__get_file_contents` | Read files/directories from shared repo |
-| `mcp__github__create_or_update_file` | Create or update a single file (with SHA for safe updates) |
-| `mcp__github__push_files` | Push multiple files in a single commit (used for scaffolding) |
+**When the helper or its prerequisites are unavailable:**
 
-**When MCP is not available:**
-
-Return a structured result indicating MCP is missing, with guidance text:
+Return a structured result indicating the issue with plain-language guidance:
 
 ```
-GitHub MCP is not configured. Shared context requires a GitHub connection.
+Shared context sync requires the `gh` CLI and `jq`. One or both are missing or not authenticated.
 
-To set it up, run this in your terminal:
+To set them up:
 
-  claude mcp add-json -s user github '{"type":"http","url":"https://api.githubcopilot.com/mcp","headers":{"Authorization":"Bearer YOUR_GITHUB_PAT"}}'
+  brew install gh jq        # or your platform's package manager
+  gh auth login             # follow the OAuth prompts
 
-Replace YOUR_GITHUB_PAT with a GitHub personal access token
-(Settings → Developer settings → Personal access tokens → Fine-grained tokens).
-
-Then restart your Claude Code session.
+Once installed and authenticated, retry your last operation. In the meantime,
+shared-context writes have been queued locally and will sync on next attempt.
 ```
+
+The `gh-sync.sh` helper itself runs the equivalent checks (`require_tools()`) and exits with code 2 if any prerequisite is missing. Skills calling the helper should always check the exit code and route failures into the offline queue rather than retrying immediately.
 
 ---
 
@@ -155,27 +167,24 @@ Called by `learning-capture` after writing a learning locally.
 3. Split shared repo into `owner` and `repo` parts
 4. Determine target file path: `learnings/{repo_name}/{category}.md`
 5. Get contributor email via `git config user.email`
-6. **Read existing file via MCP:**
+6. **Read existing file via `gh-sync.sh`:**
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh read "$owner/$repo" "$target_file_path"
    ```
-   mcp__github__get_file_contents(owner, repo, path=target_file_path)
-   ```
-   - If file exists: extract content and SHA from response
-   - If file doesn't exist (404): start with category header (e.g., `# Patterns — {repo_name}\n\n`)
+   - Exit code 0 → file exists; capture stdout as content. SHA is fetched implicitly by `write` (next step) so callers don't need to track it.
+   - Exit code 3 → file doesn't exist; start with category header (e.g., `# Patterns — {repo_name}\n\n`).
+   - Exit code 2 → gh/jq missing or auth failure; enqueue to offline queue, do not retry inline.
 7. **Run duplicate detection** (see Duplicate Detection in `references/sync-protocol.md`)
    - If duplicate found: skip push, return silently
-8. Append new entry to existing content
-9. **Write updated file via MCP:**
+8. Append new entry to existing content; write the updated content to a temporary local file (e.g., `mktemp`).
+9. **Write updated file via `gh-sync.sh`:**
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh write "$owner/$repo" "$target_file_path" "$tmp_file" \
+       "learning: add {category} entry for {repo_name}"
    ```
-   mcp__github__create_or_update_file(
-     owner, repo,
-     path=target_file_path,
-     content=updated_content,
-     message="learning: add {category} entry for {repo_name}",
-     branch="main",
-     sha=existing_file_sha  # Required for updates, omit for new files
-   )
-   ```
-   - **SHA safety (FR-019):** Always pass the SHA from step 6 when updating. If SHA mismatch occurs (concurrent write), re-read the file and retry once.
+   - The helper fetches the current SHA inline and includes it in the PUT payload, so writes are SHA-safe without the caller managing SHAs.
+   - Exit code 3 with "SHA conflict" → another writer landed first; the caller re-runs from step 6 (retry once). After one retry, surface to the user.
+   - Exit code 2 → enqueue to offline queue.
 10. On success: update local cache copy at `~/.sigil/cache/shared/learnings/{repo_name}/{category}.md`
 11. On failure: enqueue to offline queue (see Queue Operations in `references/sync-protocol.md`)
 
@@ -192,7 +201,7 @@ Called by `learning-capture` after writing a learning locally.
 
 The contributor email is obtained from `git config user.email`.
 
-**Graceful failure (FR-011):** If any MCP call fails, log a warning ("Shared sync unavailable, learning saved locally") and enqueue to the offline queue. Never block the user's workflow on sync failure.
+**Graceful failure (FR-011):** If any `gh-sync.sh` call exits non-zero, log a warning ("Shared sync unavailable, learning saved locally") and enqueue to the offline queue. Never block the user's workflow on sync failure.
 
 ---
 
@@ -206,27 +215,27 @@ Called by `prime` at session start.
 2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. Read `~/.sigil/cache/shared/last-sync.json` for previous content hashes
-5. **Read learnings directory via MCP:**
+5. **List the learnings directory via `gh-sync.sh`:**
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh list "$owner/$repo" "learnings/"
    ```
-   mcp__github__get_file_contents(owner, repo, path="learnings/")
+   Parse the JSON array. For each entry with `type == "dir"` (sub-repo), list its contents:
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh list "$owner/$repo" "learnings/{sub_repo}/"
    ```
-   This returns an array of directory entries. For each subdirectory (repo name):
-   ```
-   mcp__github__get_file_contents(owner, repo, path="learnings/{sub_repo}/")
-   ```
-   Then for each file (patterns.md, gotchas.md, decisions.md):
-   ```
-   mcp__github__get_file_contents(owner, repo, path="learnings/{sub_repo}/{file}")
+   For each file (patterns.md, gotchas.md, decisions.md), read it:
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh read "$owner/$repo" "learnings/{sub_repo}/{file}"
    ```
 6. For each file found:
-   a. Compare SHA from response with cached SHA in `last-sync.json`
-   b. If changed: decode content (base64) and update local cache at `~/.sigil/cache/shared/learnings/{sub_repo}/{file}`
+   a. Compare the SHA from the `list` response with the cached SHA in `last-sync.json`
+   b. If changed: capture the `read` stdout and update local cache at `~/.sigil/cache/shared/learnings/{sub_repo}/{file}`
    c. If unchanged: skip (cache is current)
-7. **Read profiles directory via MCP** (for S2-102):
+7. **List the profiles directory via `gh-sync.sh`** (for S2-102):
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/scripts/gh-sync.sh list "$owner/$repo" "profiles/"
    ```
-   mcp__github__get_file_contents(owner, repo, path="profiles/")
-   ```
-   Cache any profile files to `~/.sigil/cache/shared/profiles/`
+   Read each profile file and cache to `~/.sigil/cache/shared/profiles/`
 8. Update `~/.sigil/cache/shared/last-sync.json` with new SHAs and timestamp
 9. **Compute "what's new" diff:**
    - Compare new content with previous cache content

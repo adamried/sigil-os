@@ -6,7 +6,7 @@ category: shared-context
 chainable: false
 invokes: [shared-context-sync]
 invoked_by: [profile, orchestrator]
-tools: Read, Write, Bash, Glob, Grep, mcp__github__get_file_contents, mcp__github__create_or_update_file
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 
@@ -18,7 +18,7 @@ Scan a project's codebase to auto-detect the tech stack, then interactively prom
 
 ## Critical Constraint
 
-**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations for publishing profiles.** The only permitted git commands are read-only local queries: `git remote get-url` (for repo identity) and `git config` (for user info). Profile publishing to the shared repo MUST go through the `shared-context-sync` skill's Profile Push protocol, which uses GitHub MCP tools. If MCP is unavailable, queue the operation locally rather than falling back to git CLI.
+**NEVER use `git clone`, `git commit`, `git push`, `git pull`, `git fetch`, or any git write/remote operations for publishing profiles.** The only permitted git commands are read-only local queries: `git remote get-url` (for repo identity) and `git config` (for user info). Profile publishing to the shared repo MUST go through the `shared-context-sync` skill's Profile Push protocol, which uses the `gh-sync.sh` helper (S4-001 FR-B06). If `gh` is unavailable or unauthenticated, queue the operation locally rather than falling back to direct `git` CLI.
 
 ## When to Invoke
 
@@ -463,7 +463,7 @@ Shared sync failed — queued for next session start.
 | No codebase files found | Skip auto-detection, ask user to describe stack manually |
 | `.sigil/` directory missing | Create it before writing profile |
 | Profile YAML is malformed on update | Back up existing file, generate fresh |
-| MCP publish fails | Queue for retry, save locally, warn user |
+| `gh-sync.sh` publish fails | Queue for retry, save locally, warn user |
 | Git not initialized | Profile generation works (solo mode), skip publish step |
 | No git remote | Profile generation works, skip repo name detection — prompt user for project name |
 

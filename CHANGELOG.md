@@ -38,6 +38,28 @@ Output schema is unchanged — downstream consumers don't care which path filled
 
 ### Changed
 
+#### S4-001 FR-B06: GitHub MCP → `gh` CLI migration
+
+Cross-repo shared-context sync no longer requires GitHub MCP. A new helper script `sigil-plugin/scripts/gh-sync.sh` routes all remote file operations through the `gh` CLI:
+
+| Subcommand | Purpose | Replaces |
+|------------|---------|----------|
+| `read <repo> <path> [<branch>]` | Read a single file | `mcp__github__get_file_contents` (file) |
+| `list <repo> <path> [<branch>]` | List directory entries as JSON | `mcp__github__get_file_contents` (dir) |
+| `write <repo> <path> <local-file> <message> [<branch>]` | SHA-safe create-or-update | `mcp__github__create_or_update_file` |
+| `push-batch <repo> <branch> <message> <manifest-json>` | Multi-file single-commit push via Git Data API | `mcp__github__push_files` |
+
+Prerequisites: `gh` CLI authenticated (`gh auth login`) and `jq` installed. If either is missing, the helper exits with code 2 and a structured JSON error; the calling skill queues the operation locally (no fallback to direct `git` CLI).
+
+**Skills migrated:**
+- `shared-context-sync` → 2.0.0 (Critical Constraint, gh CLI Availability Detection section, Push/Pull procedures all reference `gh-sync.sh`; `mcp__github__*` removed from `tools:`)
+- `connect-wizard` → 1.5.0 (frontmatter, Step 2 availability check, scaffolding all reference `gh-sync.sh`; `mcp__github__*` removed from `tools:`)
+- `profile-generator` → unchanged version (frontmatter cleanup; Critical Constraint references `gh-sync.sh`)
+
+**CLAUDE.md updates:** "Available Integrations" table now lists `gh` CLI as the primary integration with GitHub MCP marked as deprecating. Architecture Principle 7 updated to reflect the migration.
+
+**Backward compatibility:** The `.mcp.json` GitHub MCP server registration is retained temporarily for unmigrated paths. It will be removed in a follow-up after end-to-end verification on a test shared-context repo.
+
 #### S4-001 FR-B05: Output format centralization
 
 `commands/draw.md` no longer duplicates output templates inline. The Welcome screen, Status Dashboard, Help output, Continue/Resume header, and Step 5 Visual Status Format are now defined only in `templates/output-formats.md`. The orchestrator references the canonical sections by name.
