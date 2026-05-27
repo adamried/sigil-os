@@ -4,6 +4,49 @@
 
 ### Added
 
+#### S4-002 Phase 1: Design schema + generator + setup integration (FR-E01–E05, FR-I02–I04)
+
+First layer of the design context system. Ships the schemas, generator, and setup integration; agent integration (Phase 2) and external skills (Phase 3) land separately.
+
+**Templates (FR-E01, NFR-005 — first-class web parity):**
+
+- `sigil-plugin/templates/design-md-mobile.md` — 15-section mobile-first schema with YAML token frontmatter (brand, color, typography, spacing, radii, motion, accessibility tokens). iOS + Android platform notes.
+- `sigil-plugin/templates/design-md-web.md` — 15-section web schema, full parity with mobile (NOT a reduced fallback). Adds web-specific tokens: breakpoints, shadows, mono font family, container queries.
+
+Both templates have identical section count and token completeness — web is first-class.
+
+**Generator skill (FR-E03, FR-E04):**
+
+`sigil-plugin/skills/design/design-md-generator/` — Single skill, two paths:
+
+- **Greenfield interview** when source files < 5 and no theme files / component dirs exist. Six questions: brand voice, target platforms (mobile), color, typography, motion, accessibility baseline. Sensible platform-default fills for the rest.
+- **Explore mode** when source files exist. Extracts tokens from `tailwind.config.*`, CSS custom properties, theme objects, iOS Asset Catalogs, Android resources. Inventories components. **Always confirms extracted values with the user before writing.**
+
+`.sigil/design.md` is committed to git (it's normative project content). `.sigil/design-skills/` is gitignored (synced cache).
+
+**SessionStart hook (FR-I03):**
+
+`sigil-plugin/hooks/load-design-context.sh` registered in `hooks.json`. Fast-paths under 100ms when `design.enabled: false` (NFR-002). When enabled, surfaces only design.md path + skills manifest count — does NOT load design.md content (that's per-UI-task work for the agents in Phase 2).
+
+**Setup integration (FR-I04, FR-E05 — hard-no decline):**
+
+`commands/setup.md` Step 5.6 "Design Skills + design.md (Optional)" adds two independent opt-in prompts:
+
+- **Prompt A:** External design skills (with 4-example curated list + non-endorsement disclaimer, deferred to Phase 3)
+- **Prompt B:** Generate `.sigil/design.md` now / later / skip
+
+Either prompt can be declined independently. Declines persist as `design.enabled: false`. No command may re-prompt — the only re-entry is `/sigil:design enable` (Phase 3).
+
+**Config schema (FR-I02):**
+
+```yaml
+design:
+  enabled: true | false        # explicit user choice — never auto-flipped
+  profile: mobile | web        # set at setup, can change via /sigil:design
+  skills: []                   # populated by /sigil:design add (Phase 3)
+  component_globs: [...]       # optional override for net-new detection (Phase 2)
+```
+
 #### S4-001 Phase 5: Reconciliation wrap-up (NFR-005, FR-B02, FR-B03, FR-D05) + reserved flag (FR-A06)
 
 **Linter multi-plugin support (NFR-005):**

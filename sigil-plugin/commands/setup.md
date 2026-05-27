@@ -156,6 +156,62 @@ This controls which MCP tool warnings skills display during implementation.
 
 If no MCP adapters were discovered in Step 3.5, skip this step silently.
 
+### Step 5.6: Design Skills + design.md (Optional — S4-002 FR-I04, FR-E05)
+
+Two **independent** opt-in prompts. Decline is honored absolutely — once the user says no, no other command may re-prompt them to re-enable. The only re-entry path is the user invoking `/sigil:design enable`.
+
+**Prompt A — External design skills:**
+
+```
+Sigil can consult community design-skill repositories as advisory context
+for UI tasks. They're synced locally and refreshed every 30 days.
+
+Want to register external design skills? (You can add more later via /sigil:design add.)
+
+  1. Yes — show me the 4 example skills (with disclaimer + preview)
+  2. Yes — I'll provide a GitHub URL or local path
+  3. No, skip
+```
+
+If the user picks (1), surface the curated examples WITH the non-endorsement disclaimer (the 4 suggestions are not endorsed by sigil-os, Anthropic, or their authors — see FR-F05).
+
+If the user picks (3), set `design.enabled: false` in `.sigil/config.yaml` AND skip Prompt B. The session is done with design context.
+
+**Prompt B — Generate `.sigil/design.md`:**
+
+(Only shown if Prompt A was not declined.)
+
+```
+Sigil can also generate .sigil/design.md — your project's normative design
+source-of-truth (color, typography, spacing, components, accessibility).
+
+UI tasks load this file in full at the start of every run. Backend tasks
+pay zero overhead.
+
+Generate now?
+
+  1. Yes — interview me (greenfield) or extract from existing code
+  2. Yes — but later via /sigil:design
+  3. No, skip
+```
+
+If (1), invoke `skills/design/design-md-generator/SKILL.md`:
+
+- It detects greenfield vs. existing source files
+- It asks for `profile`: mobile or web (first-class parity per S4-002 NFR-005)
+- It writes `.sigil/design.md` after user confirmation
+
+If (2), set `design.enabled: true` but defer file creation. The user runs `/sigil:design` later.
+
+If (3), set `design.enabled: false`. The SessionStart `load-design-context.sh` hook will fast-path under 100ms.
+
+**Decline absoluteness:** Whichever decline path the user takes, persist it in `.sigil/config.yaml`:
+
+```yaml
+design:
+  enabled: false   # explicit user decline — do not re-prompt
+```
+
 ### Step 6: Run Preflight Check
 
 The preflight check creates `SIGIL.md` with enforcement rules and adds a pointer to `CLAUDE.md`. Read the preflight-check SKILL.md and follow its process to create these files.

@@ -16,6 +16,12 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/load-team-config.sh",
             "timeout": 5000,
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/load-design-context.sh",
+            "timeout": 3000,
+            "async": true
           }
         ]
       }
