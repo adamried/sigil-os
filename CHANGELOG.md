@@ -38,6 +38,17 @@ Output schema is unchanged — downstream consumers don't care which path filled
 
 ### Changed
 
+#### S4-001 FR-B05: Output format centralization
+
+`commands/draw.md` no longer duplicates output templates inline. The Welcome screen, Status Dashboard, Help output, Continue/Resume header, and Step 5 Visual Status Format are now defined only in `templates/output-formats.md`. The orchestrator references the canonical sections by name.
+
+`templates/output-formats.md` Help Output expanded to include the new commands shipped in FR-A05 (standalone pipeline) and FR-A09 (companion entries):
+
+- Companion Commands: `/sigil:dashboard`, `/sigil:status`, `/sigil:continue`
+- Pipeline Stage Commands: `/sigil:spec`, `/sigil:tasks`, `/sigil:review`, `/sigil:export`
+
+The contract is now explicit: if a needed format is missing, add it to `output-formats.md` first; never inline a new format in a command or skill file.
+
 #### S4-001 FR-A08: Dynamic QA fix limits
 
 QA fix-loop iteration limits no longer appear as hardcoded numbers (`5`, `1`) inside chain files. The `qa-engineer` agent (now 1.4.0) is the canonical source: a new **Fix Limits** table specifies max attempts per track (Standard/Enterprise: 5; Quick Flow: 1) and supports per-project overrides via `.sigil/config.yaml`.

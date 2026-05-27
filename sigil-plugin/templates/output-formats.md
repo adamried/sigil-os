@@ -193,7 +193,18 @@ Primary Command:
   /sigil:draw status             Detailed workflow status
   /sigil:draw help               Show this help
 
-Additional Commands:
+Companion Commands (terser invocations):
+  /sigil:dashboard          Project status overview (read-only)
+  /sigil:status             Detailed mid-workflow status (read-only)
+  /sigil:continue           Resume the current workflow
+
+Pipeline Stage Commands (standalone, no auto-pipeline):
+  /sigil:spec               Write or manage a specification on its own
+  /sigil:tasks              Decompose an existing plan into tasks
+  /sigil:review             Run code or security review on demand
+  /sigil:export             Stakeholder-friendly feature summary
+
+Project Commands:
   /sigil:setup              Set up Sigil OS in this project
   /sigil:config             View/change configuration (track, mode)
   /sigil:audit              View workflow audit log (when enabled)

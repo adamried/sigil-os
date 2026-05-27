@@ -451,121 +451,25 @@ Implementation Loop: 3/8 tasks - Task T004 implementing
 
 ### Step 5: Visual Status Format
 
-When showing status (no args or "status"):
+When showing status (no args or `status`), render the **Status Dashboard** section from `templates/output-formats.md`. Substitute project-specific values for the placeholders in that template. Icons (✅, 🔄, ⬚, ⚠️) and the 52-character separator are also defined there.
 
-```
-📋 Project: [name from constitution or "Unnamed Project"]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[Foundation Status]
-✅ Foundation    - [stack summary or "Not configured"]
-✅ Constitution  - [X articles (Y inherited: Z required, W recommended) or "Not set up"] [| N active override(s) (expires MMM DD) — if any]
-
-[Active Feature Status - if any]
-✅ Specification - "[feature name]"
-🔄 Planning      - In progress (60%)
-⬚ Tasks         - Not started
-⬚ Implementation
-
-[Next Action]
-Next: [What should happen next]
-
-[Prompt]
-Continue? (Y/n) or describe a new feature to start
-```
-
-**Status Icons:**
-- ✅ Complete
-- 🔄 In Progress
-- ⬚ Not Started
-- ⚠️ Blocked/Needs Attention
+Do NOT inline a status format in this file. If the canonical template needs a new variant, add it to `output-formats.md` first.
 
 ## Output Formats
 
-Before displaying any output, verify format matches `templates/output-formats.md`.
+All visual formatting in this command MUST match the canonical templates in `templates/output-formats.md`. Do NOT redefine formats inline. The relevant sections of `output-formats.md` for this command:
 
-### Welcome (First Run — no `.sigil/` directory)
+| When | Use the canonical section |
+|------|---------------------------|
+| First run (no `.sigil/` directory) | "Welcome Screen (First Run — no `.sigil/` directory)" |
+| Showing the dashboard with no active feature | "Status Dashboard (Configured Project)" — variant without "Active Feature" block |
+| Showing the dashboard with an active feature | "Status Dashboard (Configured Project)" — full variant |
+| `/sigil:draw help` | "Help Output" |
+| `/sigil:draw continue` resume header | "Status Dashboard" — Continue/Resume variant (see output-formats.md) |
+| Completion summary | "Feature Complete" |
+| Audit summary line | "Audit Log Summary" |
 
-```
-Welcome to Sigil OS! 👋
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Sigil helps you build software through structured specifications.
-No coding knowledge required — just describe what you want to build.
-
-This project doesn't have Sigil OS set up yet.
-
-Run /sigil:setup to get started.
-```
-
-### Status Dashboard
-
-```
-📋 Project: MyApp
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✅ Foundation    - Next.js 14 + Supabase + TypeScript
-✅ Constitution  - 7 articles (3 inherited: 1 required, 2 recommended) | 1 active override (expires Feb 28)
-Audit Mode: Active | Entries: 12   ← shown only when audit_mode: true
-
-Active Feature: "User Authentication"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ Specification - Complete (5 requirements)
-✅ Clarification - 3 questions resolved
-🔄 Planning      - In progress
-⬚ Tasks         - Waiting
-⬚ Implementation
-
-Next: Complete technical planning for authentication feature
-
-Continue with planning? (Y/n)
-```
-
-### Help Output
-
-```
-Sigil OS Commands
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Primary Command:
-  /sigil:draw                    Show status and next steps
-  /sigil:draw "description"      Start building a new feature
-  /sigil:draw PROJ-123           Start from a Jira/issue tracker ticket
-  /sigil:draw continue           Resume where you left off
-  /sigil:draw status             Detailed workflow status
-  /sigil:draw help               Show this help
-
-Additional Commands:
-  /sigil:setup              Set up Sigil OS in this project
-  /sigil:config             View/change configuration (track, mode)
-  /sigil:audit              View workflow audit log (when enabled)
-  /sigil:handoff            Generate engineer review package
-  /sigil:constitution       View/edit project principles
-  /sigil:learn              View, search, or review learnings
-  /sigil:connect            Connect to shared context repo
-  /sigil:profile            Generate or view project profile
-  /sigil:update             Check for Sigil updates
-
-Natural Language:
-  Just describe what you want! Sigil understands:
-  - "I want to add dark mode"
-  - "Build me a dashboard"
-  - "What am I working on?"
-  - "Keep going" / "Continue"
-```
-
-### Continue/Resume
-
-```
-Resuming: "User Authentication"
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Last activity: Planning phase (60% complete)
-Spec: /.sigil/specs/001-user-auth/spec.md
-Plan: /.sigil/specs/001-user-auth/plan.md (in progress)
-
-Continuing technical planning...
-```
+If a needed format is missing from `output-formats.md`, **add it there first** and reference here. Never inline a new format in this file.
 
 ## Error Handling
 
