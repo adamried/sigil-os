@@ -4,6 +4,20 @@
 
 ### Added
 
+#### S4-001 Phase 2: Multi-plugin infrastructure (FR-D01, FR-D02, FR-D03, FR-D04)
+
+Sigil-os is becoming a three-plugin marketplace (sigil-plugin + pm-copilot + po-buddy). Phase 2 adds the cross-plugin scaffolding:
+
+- **`shared-references/`** (FR-D01) — Single source of truth for files shared across plugins:
+  - `validated-spec-template.md` — 10-section PM-to-engineering spec
+  - `communication-style.md` — Tone, challenge model, yielding policy, output modes
+  - `business-case-template.md` — ROI / investment analysis for Complex-track features
+  - `design-ticket-template.md` — UI/UX design request format
+  - `story-decomposition-template.md` — Story Map output format
+- **`scripts/sync-references.sh`** (FR-D02) — Distributes `shared-references/` to each plugin's `references/` directory at build time. Supports `--check` (CI use, exits non-zero if out of sync) and `--list` (shows distribution table). Plugins never read from `shared-references/` at runtime — they read their own copies. Gracefully skips distributions to plugin directories that don't exist yet.
+- **`scripts/bump-version.sh`** (FR-D03) — Atomically bumps a plugin's version in `plugin.json`, `marketplace.json`, and (for sigil-plugin) the README badge. Supports `--show` to list current versions across all three plugins.
+- **`.claude-plugin/marketplace.json`** (FR-D04) updated to list all three plugins: `sigil@0.32.0`, `pm-copilot@0.1.0` (placeholder), `po-buddy@0.1.0` (placeholder). PM and PO plugin directories will land in Phase 3 and Phase 4.
+
 #### S4-001 FR-A07: Three-layer configuration cascade
 
 Configuration now loads from three layers in cascade order:
