@@ -1,4 +1,0 @@
-{
-  "description": "PO Buddy lifecycle hooks. Per S4-001 FR-D06, PO Buddy does NOT use a SessionStart hook — all references load on-demand by the skills that need them. This file is present only to declare the policy explicitly.",
-  "hooks": {}
-}

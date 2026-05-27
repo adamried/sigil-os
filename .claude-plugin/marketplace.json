@@ -9,18 +9,6 @@
       "source": "./sigil-plugin",
       "description": "Non-technical user focused spec-driven development framework for Claude Code",
       "version": "0.32.0"
-    },
-    {
-      "name": "pm-copilot",
-      "source": "./pm-copilot",
-      "description": "Product Manager copilot for problem articulation, spec validation, and engineering handoff — runs in Claude.ai Cowork",
-      "version": "0.1.0"
-    },
-    {
-      "name": "po-buddy",
-      "source": "./po-buddy",
-      "description": "Product Owner toolkit for receiving specs, decomposing into stories, and preparing sprint-ready work — runs in Claude.ai Cowork",
-      "version": "0.1.0"
     }
   ]
 }
