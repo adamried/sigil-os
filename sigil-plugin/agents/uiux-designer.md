@@ -53,7 +53,19 @@ Receive handoff from Business Analyst containing:
 - Track assignment (Quick/Standard/Enterprise)
 - Any visual assets (mockups, wireframes)
 
-### Step 2: Check for Existing Design Context
+### Step 2: Load Design Context (S4-002 FR-G01)
+
+**Unconditional gate** — UI/UX Designer is always UI work, so design context loads every run.
+
+1. Read `.sigil/config.yaml` `design:` block.
+2. If `design.enabled: false` (user declined design context) → skip context loading entirely, continue to Step 2b (legacy design-system-reader path).
+3. If `design.enabled: true` and `.sigil/design.md` exists:
+   - **Load `.sigil/design.md` in full** — YAML frontmatter tokens + the full Markdown body.
+   - **This file is normative (FR-E02).** When external design skills (loaded next) disagree with design.md, design.md WINS. Document any conflicts in the design output so the user can decide whether to update design.md via propose-and-confirm (Step 8.5).
+4. If `.sigil/design.md` is missing but `design.enabled: true` → surface a notice ("design.md missing — running without it; consider /sigil:design to generate") and continue.
+5. If `.sigil/design-skills/.manifest.json` exists (Phase 3 — external skills) → load the manifest summary as advisory context (not normative).
+
+### Step 2b: Check for Existing Design Context
 Before designing:
 1. **Check constitution** for framework mandates
 2. **Invoke design-system-reader** to analyze existing UI patterns
@@ -104,6 +116,33 @@ Present to user for review:
 - Accessibility requirements summary
 - Framework recommendation (if selected this session)
 - Figma alignment notes (if applicable)
+
+### Step 8.5: Propose-and-Confirm — Design Drift Patches (S4-002 FR-H01–H03)
+
+**Before** handing off to Architect, if you observed during this run any of the following relative to `.sigil/design.md`:
+
+- A new component pattern not in the Component Inventory section
+- A new design token (a new spacing value, color, motion duration) that isn't in the YAML frontmatter
+- A naming convention or layout pattern that differs from what design.md describes
+
+Then surface a **propose-and-confirm patch** via `AskUserQuestion` at end-of-task:
+
+```
+While designing this feature, I observed N changes that aren't yet in .sigil/design.md:
+
+  - {Specific drift item}
+  - {Specific drift item}
+
+What should I do?
+
+  1. Accept — append these to design.md (you can edit before I write)
+  2. Reject — drop to .sigil/tech-debt.md as deferred design debt
+  3. Edit the patch first
+```
+
+Per FR-H03: **design.md is never auto-edited**. Even on Accept, render the unified diff for one final confirmation before write. Reject path writes to `.sigil/tech-debt.md` (created lazily on first rejection).
+
+In `execution_mode: autonomous` (S4-001 FR-A01 + S4-002 FR-H04): do NOT prompt here. Queue the patch in workflow state; the orchestrator presents the batch at end-of-run alongside the cumulative diff review.
 
 ### Step 9: Handoff to Architect
 After user approval:

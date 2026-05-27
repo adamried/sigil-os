@@ -49,3 +49,19 @@ Extends the Developer agent with frontend-specific priorities and evaluation cri
 - Consults **api-developer** on data fetching patterns, loading states, and error handling
 - Flags performance concerns to **performance-qa** for load testing and profiling
 - Coordinates with **appsec-reviewer** on client-side security (XSS prevention, CSP compliance)
+
+## Design Context Gates (S4-002 FR-G02, FR-G03, FR-H01–H03)
+
+This specialist **inherits** the base developer agent's Step 0 UI-task gate, Step 0b design-context load, Step 4.5 net-new component detection, and Step 6.5 propose-and-confirm patches.
+
+Because the frontend-developer specialist is selected for UI-heavy tasks, the gate at Step 0 will almost always evaluate to `IS_UI_TASK == true`. That means:
+
+- `.sigil/design.md` loads in full at the start of every task this specialist runs
+- The design-skills manifest (Phase 3) is consulted as advisory context
+- Net-new component creation halts and hands off to UI/UX Designer
+- Design drift triggers propose-and-confirm at task end
+
+Specialist-specific behavior layered on top of the base gates:
+
+- **When using design tokens (Step 4 Implement):** prefer tokens from `.sigil/design.md` frontmatter over inline literals. If a literal value is required, ensure it's on the spacing scale and falls back to a token in a follow-up.
+- **When implementing accessibility (Step 4):** match the contrast minimum and touch-target rules in `.sigil/design.md` section 13. The constitution + design.md jointly govern; design.md is normative for design-token-level rules, constitution for cross-cutting principles.

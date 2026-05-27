@@ -4,6 +4,36 @@
 
 ### Added
 
+#### S4-002 Phase 2: Agent integration — UI-task gate, net-new detection, propose-and-confirm (FR-G01–G04, FR-H01–H03, FR-E02)
+
+Layers the design context system into the existing agent workflow. Backend tasks pay zero overhead via deterministic gates — no LLM calls in the cost-control paths (NFR-004).
+
+**UI/UX Designer agent (FR-G01):**
+
+- New **Step 2: Load Design Context** — unconditional gate (UI/UX Designer is always UI work). Loads `.sigil/design.md` in full plus the design-skills manifest summary.
+- New **Step 8.5: Propose-and-Confirm — Design Drift Patches** — when the agent observes new tokens, components, or patterns that drift from design.md, surface a markdown patch via `AskUserQuestion` with Accept / Reject / Edit options before handoff to Architect.
+- Existing Steps 1, 2b (now 2.5), 3–9 unchanged.
+
+**Developer agent (FR-G02, FR-G03, FR-H01–H03):**
+
+- New **Step 0: UI-Task Gate** — deterministic regex + glob check against task description and target files. Pure pattern matching, no LLM call. Backend tasks complete the gate here with zero further loading.
+- New **Step 0b: Load Design Context** — only when `IS_UI_TASK == true`. Loads design.md in full (normative per FR-E02).
+- New **Step 4.5: Net-New Component Detection** — deterministic check before any file write. When `IS_NET_NEW_COMPONENT == true`, halt and hand off to UI/UX Designer. Developer NEVER silently authors a net-new component.
+- New **Step 6.5: Propose-and-Confirm — Design Drift Patches** — when drift is observed during implementation, surface a patch via `AskUserQuestion` before handing off to QA. Same Accept / Reject / Edit options as UI/UX Designer Step 8.5.
+
+**Frontend-developer specialist (FR-G02–G03, FR-H01–H03):**
+
+- Inherits the base developer agent's Step 0, 0b, 4.5, and 6.5 design-context gates.
+- Specialist-specific layered behavior: prefers design.md tokens over inline literals, design.md is normative for design-token rules (constitution remains normative for cross-cutting principles).
+
+**Configurable globs (FR-G04):**
+
+Projects can override the net-new component detection globs via `.sigil/config.yaml` `design.component_globs:` for non-standard conventions (e.g., `**/Views/**` for SwiftUI, `**/widgets/**` for Flutter). The defaults cover common React, React Native, Vue, Svelte, SwiftUI, and Flutter conventions.
+
+**Autonomous mode batching (FR-H04 preview):**
+
+When `execution_mode: autonomous` (S4-001 FR-A01), Steps 8.5 and 6.5 do NOT prompt inline. Patches are queued in workflow state. The orchestrator presents the batch at end-of-run alongside the cumulative diff review. Full batching protocol implements with Phase 3.
+
 #### S4-002 Phase 1: Design schema + generator + setup integration (FR-E01–E05, FR-I02–I04)
 
 First layer of the design context system. Ships the schemas, generator, and setup integration; agent integration (Phase 2) and external skills (Phase 3) land separately.
