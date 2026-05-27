@@ -26,11 +26,35 @@ If the hook output indicates files need to be created/updated, follow the instru
 
 ---
 
-### Step 0b: Load Audit Mode
+### Step 0b: Load Audit Mode and Execution Mode
 
-After preflight, read `.sigil/config.yaml` and check the `audit_mode` key. If `audit_mode: true`, carry an `audit_enabled` flag for the remainder of this session. All subsequent steps reference this flag to decide whether to append entries to `.sigil/audit-log.md` per the `shared-protocols/audit-log-protocol.md`.
+After preflight, read `.sigil/config.yaml` and load:
 
-If the flag is true and `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
+- **`audit_mode`** → if `true`, carry an `audit_enabled` flag for the remainder of this session. All subsequent steps reference this flag to decide whether to append entries to `.sigil/audit-log.md` per the `shared-protocols/audit-log-protocol.md`. If the flag is true and `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
+- **`execution_mode`** (S4-001 FR-A01) → one of `automatic` (default), `directed`, or `autonomous`. Carry as `execution_mode` for the remainder of the session.
+
+#### Autonomous Mode Behavior
+
+When `execution_mode: autonomous`:
+
+1. **Skip non-safety checkpoints.** Standard interactive prompts (auto-continue choices, "ready to plan?", "ready to decompose?", "ready to start tasks?") are auto-accepted. Phase transitions in Step 4 happen without intervening user confirmation.
+2. **Safety gates still pause** — these always require explicit user decision regardless of mode:
+   - Constitution Article violations (Foundation, Code Standards, etc.)
+   - Security blockers from security review (Critical or High findings)
+   - Code review verdict "Request changes" with blockers
+   - QA fix loop exhaustion (after 5 attempts for full pipeline, 1 for Quick Flow)
+   - Override expirations and inheritance conflicts (Step 1)
+   - Out-of-scope file detection in per-task commits (FR-A03 Step C)
+   - Fatal errors and unrecoverable state
+3. **Queue propose-and-confirm patches** (forward reference to S4-002 FR-H04 design context patches) and present as batch at end of run.
+4. **End-of-run review.** After the After-All-Tasks phase completes (Step 4b "After All Tasks: Code Review and Security Review"), present a **cumulative diff review** before the final next-action prompt:
+   - Show `git log --oneline <feature-branch> ^<base-branch>` for commit summary
+   - Show `git diff --stat <base-branch>...<feature-branch>` for file-level scope
+   - Offer `AskUserQuestion`: "Review cumulative changes?" with options "Accept all", "Show full diff", "Roll back to <commit>", "Pause for manual review"
+   - In autonomous mode, this batch review replaces per-task interactive checkpoints — it is mandatory, not skippable
+5. **Carry `execution_mode` into the chain context** so downstream skills (specialist-selection, qa-validator, code-reviewer) can adapt their own prompt behavior.
+
+`automatic` and `directed` modes preserve all existing interactive prompts. They are unchanged by this FR.
 
 ---
 

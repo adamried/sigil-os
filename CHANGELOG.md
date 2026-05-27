@@ -4,6 +4,24 @@
 
 ### Added
 
+#### S4-001 FR-A01: Autonomous execution mode
+
+Added a third option to `execution_mode`: `autonomous`. When enabled, the orchestrator runs the entire pipeline without per-step interactive prompts. Standard checkpoints (phase transitions, "ready to plan?", "ready to decompose?") are auto-accepted. The mode ends with a mandatory cumulative-diff review covering all branch commits.
+
+**Safety gates always pause regardless of mode:**
+
+- Constitution Article violations
+- Security blockers (Critical/High findings)
+- Code review "Request changes" with blockers
+- QA fix loop exhaustion
+- Override expirations and inheritance conflicts
+- Out-of-scope file detection in per-task commits (FR-A03)
+- Fatal errors and unrecoverable state
+
+**Requires** `user_track: technical`. Toggling `execution_mode: autonomous` via `/sigil:config` surfaces a one-time acknowledgement explaining the trade-off; users must explicitly opt in.
+
+Affects `commands/config.md`, `commands/draw.md` (Step 0b adds an Autonomous Mode Behavior subsection), `chains/full-pipeline.md` (→ 1.6.0), and `chains/quick-flow.md` (→ 1.5.0). `automatic` and `directed` modes are unchanged.
+
 #### S4-001 FR-A02 / FR-A03 / FR-A04: Feature branch + per-task commits + verified commits
 
 The full-pipeline workflow now produces a cleaner git history without manual intervention:

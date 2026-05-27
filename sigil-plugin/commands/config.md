@@ -51,8 +51,9 @@ To reset:  /sigil:config reset
 |---------|-------|-------------|
 | `user_track` | `non-technical` | "Sigil auto-handles technical decisions and communicates in plain English. Best for product managers, founders, and business stakeholders." |
 | `user_track` | `technical` | "Sigil shows technical details, agent names, and implementation trade-offs. Best for engineers and technical leads." |
-| `execution_mode` | `automatic` | "Sigil automatically selects the best approach for each task." |
+| `execution_mode` | `automatic` | "Sigil automatically selects the best approach for each task, asking you at standard checkpoints." |
 | `execution_mode` | `directed` | "You control which specialists and approaches are used. Requires technical track." |
+| `execution_mode` | `autonomous` | "Sigil runs the entire pipeline without per-step prompts. You review the cumulative diff at the end. Safety gates (security blockers, constitutional violations, fatal errors) still pause. Requires technical track." |
 | `audit_mode` | `false` | "Workflow events are not logged. Use this for normal day-to-day work." |
 | `audit_mode` | `true` | "Every workflow step is logged to `.sigil/audit-log.md` — useful for reviewing what happened after the fact." |
 
@@ -64,16 +65,17 @@ If arguments start with "set":
 2. Validate:
    - **Valid keys:** `user_track`, `execution_mode`, `audit_mode`
    - **Valid values for `user_track`:** `non-technical`, `technical`
-   - **Valid values for `execution_mode`:** `automatic`, `directed`
+   - **Valid values for `execution_mode`:** `automatic`, `directed`, `autonomous`
    - **Valid values for `audit_mode`:** `true`, `false`
-   - **Constraint:** `execution_mode: directed` requires `user_track: technical`. If user tries to set `directed` with `non-technical` track, show:
+   - **Constraint:** `execution_mode: directed` and `execution_mode: autonomous` both require `user_track: technical`. If user tries to set either with `non-technical` track, show:
      ```
-     Directed mode requires the technical track.
+     [Directed | Autonomous] mode requires the technical track.
 
-     To enable directed mode, first switch to technical track:
+     To enable [directed | autonomous] mode, first switch to technical track:
        /sigil:config set user_track technical
-       /sigil:config set execution_mode directed
+       /sigil:config set execution_mode [directed | autonomous]
      ```
+   - **Autonomous-mode acknowledgement:** When setting `execution_mode: autonomous`, surface an `AskUserQuestion` confirmation explaining the trade-off ("You'll review the cumulative diff at the end. Safety gates still pause. Continue?") with options "Enable autonomous" / "Cancel". Do not auto-enable on first request.
    - **On `audit_mode: true`:** If `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
    - **Invalid key:** Show: `Unknown setting "[key]". Available settings: user_track, execution_mode, audit_mode`
    - **Invalid value:** Show: `Invalid value "[value]" for [key]. Allowed values: [list]`

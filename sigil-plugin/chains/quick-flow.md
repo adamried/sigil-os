@@ -1,7 +1,7 @@
 ---
 name: quick-flow
 description: Streamlined workflow for simple changes—bug fixes, small features, well-understood work.
-version: 1.4.0
+version: 1.5.0
 track: quick
 entry_skill: complexity-assessor
 ---
@@ -377,7 +377,7 @@ Between skills, preserve:
 - `spec_path`: Current spec location (if persisted)
 - `track`: `quick`
 - `user_track`: Configuration user track (non-technical | technical)
-- `execution_mode`: Configuration execution mode (automatic | directed)
+- `execution_mode`: Configuration execution mode (automatic | directed | autonomous). Quick Flow honors the same autonomous-mode semantics as full pipeline — per-step prompts auto-accept, safety gates still pause. Quick Flow has fewer checkpoints anyway, so the behavioral delta is small.
 - `audit_enabled`: Whether audit mode is active for this session (from config.yaml)
 - `ticket_key`: External ticket key if input came from ticket-loader
 - `ticket_metadata`: Full ticket metadata from ticket-loader (for handoff-back)
@@ -387,6 +387,7 @@ Between skills, preserve:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.5.0 | 2026-05-27 | S4-001 FR-A01: Added `autonomous` execution mode handling (same semantics as full-pipeline — per-step prompts auto-accept, safety gates still pause). |
 | 1.4.0 | 2026-05-27 | S4-001 FR-A03/A04: Per-task commits via commit-conventions apply here too (same as full-pipeline). Quick Flow **explicitly opts out** of security review, per-feature `security.md`, and the `verified:` commit — these are full-pipeline-only artifacts. |
 | 1.3.0 | 2026-03-05 | Added conditional handoff-back step after qa-fixer/learning-capture — writes results back to originating ticket when ticket_key exists in context. |
 | 1.2.0 | 2026-02-20 | S4-104: Maintenance flag handling — maintenance tickets skip complexity assessor, use lighter quick-spec with ticket metadata. |
