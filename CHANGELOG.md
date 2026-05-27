@@ -4,6 +4,41 @@
 
 ### Added
 
+#### S4-001 Phase 3: PM Copilot plugin (pm-copilot@0.1.0)
+
+New plugin `pm-copilot/` runs in Claude.ai Cowork — no Bash, no file writes, no git. Helps PMs articulate problems, write validated specs, and hand off to engineering. Generalized from gb-code-buddy's PM Copilot, stripped of all GasBuddy-specific content.
+
+**Commands (FR-C01, C02, C03, C04, C05):**
+
+- `/define <problem>` — Problem articulation + Light / Standard / Complex triage. Pushes back on solution-shaped input.
+- `/spec <description>` — 10-section Validated Spec from `references/validated-spec-template.md`. Supports `quick` mode (lightweight) and `from-define` (continues from prior Define). Includes persona selection guide and Discovery Design Brief detection.
+- `/validate [<spec-id>]` — 10-point validation checklist with Villain Check. Max 3 rounds. Promotes to `Validated` status on full pass.
+- `/handoff [<spec-id>] [--target local|confluence|jira]` — Packages spec with mandatory cross-plugin output contract (Epic key, Confluence link, Target team, Context line) for PO Buddy `/receive` consumption.
+
+**Skills (FR-C07, C13, C14, C16):**
+
+- `define` — problem-shape detection, triage axes (scope/ambiguity/risk)
+- `specify` — 10-section writer with persona selection and Discovery Design Brief
+- `validate` — 10-point checklist + Villain Check + Promote/Revise/Escalate verdict
+- `handoff-prep` — output contract emitter, target adapter (local/Confluence/Jira)
+- `business-case` — Complex-track Business Case using `references/business-case-template.md`
+- `persona-lookup` — configurable personas resolver; supports anti-persona (Villain) pattern
+- `scope-check` — scope creep detection + cross-team routing via `references/team-scope.md`
+- `product-knowledge` — token-efficient index + on-demand load pattern (≤ 2K tokens always-on)
+
+**Configurable references (FR-C13, C14, C17):**
+
+- `references/personas.md` (starter template shipped; project customizes)
+- `references/communication-style.md` (synced from `shared-references/`)
+- `references/validated-spec-template.md` (synced)
+- `references/business-case-template.md` (synced)
+- `references/design-ticket-template.md` (synced)
+- `references/team-scope.md` (project provides when multi-team)
+
+**SessionStart hook (FR-D06):** Loads only `communication-style.md` + the product-knowledge index. Other references load on demand. Budget target ~2.5K tokens — well under the 6K cap.
+
+PM Copilot runs in Claude.ai Cowork and depends on the marketplace manifest entry added in Phase 2.
+
 #### S4-001 Phase 2: Multi-plugin infrastructure (FR-D01, FR-D02, FR-D03, FR-D04)
 
 Sigil-os is becoming a three-plugin marketplace (sigil-plugin + pm-copilot + po-buddy). Phase 2 adds the cross-plugin scaffolding:

@@ -1,0 +1,17 @@
+{
+  "description": "PM Copilot lifecycle hooks — loads essential product context at session start (≤ 2 files, ~2.5K tokens per FR-D06)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/load-product-context.sh",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
