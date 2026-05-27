@@ -166,12 +166,46 @@ Or switch back:
 
 ### Execution Mode
 
-The execution mode controls how Sigil selects specialists for tasks:
+The execution mode controls how Sigil runs the workflow:
 
 | Mode | What It Does |
 |------|-------------|
-| **Automatic** (default) | Sigil picks the best specialist for each task based on the files and description |
-| **Directed** | You control which specialists are used (requires technical track) |
+| **Automatic** (default) | Sigil picks the best specialist for each task and asks you at standard checkpoints (after spec, after planning, etc.) |
+| **Directed** | You control which specialists and approaches are used (requires technical track) |
+| **Autonomous** | Sigil runs the entire pipeline end-to-end without per-step prompts. Safety gates still pause. Ends with a cumulative diff review of the whole feature branch. (Requires technical track.) |
+
+**About autonomous mode.** Most users will pick automatic. Autonomous is for cases where you trust Sigil to run unattended (e.g., you're at lunch, or you want a long feature to land without interruption). Critically, autonomous mode still pauses on **safety gates**:
+
+- Constitution violations
+- Security blockers (Critical or High severity findings)
+- Code review verdict of "Request changes" with blockers
+- QA fix loop exhaustion (5 attempts for full pipeline, 1 for Quick Flow)
+- Override expirations and inheritance conflicts
+- Files being changed that aren't in the task's declared scope
+- Fatal errors and unrecoverable state
+
+At the end of an autonomous run, Sigil shows you a cumulative diff covering every change on the feature branch. You can accept, roll back, or pause for manual review.
+
+Toggle autonomous mode with `/sigil:config set execution_mode autonomous` (you'll get a one-time confirmation). To turn it off: `/sigil:config set execution_mode automatic`.
+
+### Three-Layer Configuration
+
+Sigil reads configuration from three layers, in cascade order:
+
+1. **Defaults** — sensible built-in values (non-technical track, automatic mode, audit off).
+2. **Global** — `~/.sigil/config.yaml`, your personal preferences across every Sigil project on your machine.
+3. **Project** — `.sigil/config.yaml`, this project's overrides.
+
+Project wins over global wins over defaults. When you view your config, each value shows where it came from:
+
+```
+User Track:      technical  (project)
+Execution Mode:  autonomous  (global)
+Audit Mode:      false  (default)
+```
+
+To set a value just for this project: `/sigil:config set user_track technical`.
+To set a value for every project: `/sigil:config set --global execution_mode autonomous`.
 
 ### Viewing Your Configuration
 

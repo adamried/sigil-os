@@ -7,8 +7,11 @@ Share learnings and standards across your code projects through a shared GitHub 
 Before you start, make sure you have:
 
 1. **A GitHub account** with access to create repositories.
-2. **GitHub MCP** connected to Claude Code. If you are not sure, `/sigil:connect` will check for you and guide you through setup.
-3. **A git repository** with a remote set for each project you want to connect.
+2. **The `gh` CLI installed and authenticated.** Sigil uses `gh` (the official GitHub command-line tool) to read and write your shared repo. Install from [cli.github.com](https://cli.github.com), then run `gh auth login` once.
+3. **`jq` installed.** Sigil uses `jq` for parsing JSON responses. Most systems already have it; if not, install via `brew install jq` (macOS) or your package manager.
+4. **A git repository** with a remote set for each project you want to connect.
+
+> **Note:** Earlier versions of Sigil used GitHub MCP. Starting with v0.33, shared context uses the `gh` CLI directly through a helper script (`sigil-plugin/scripts/gh-sync.sh`). This is simpler to set up and works without an MCP server. If you previously configured GitHub MCP, you can leave it — Sigil will use `gh` regardless.
 
 ## Step 1: Create a Shared Repository
 
@@ -35,14 +38,14 @@ Open your project in Claude Code and run:
 Replace `your-username/platform-context` with the path to your shared repo.
 
 Sigil will:
-- Check that GitHub MCP is available
+- Check that `gh` and `jq` are installed and that `gh auth status` succeeds
 - Verify access to the shared repo
 - Set up the directory structure (if the repo is empty)
 - Create a local connection file at `~/.sigil/registry.json`
 
 You should now see a confirmation message with your shared repo and project details.
 
-> **Note:** If GitHub MCP is not configured, Sigil will walk you through setting it up. Follow the on-screen instructions, then restart Claude Code and run `/sigil:connect` again.
+> **Note:** If `gh` or `jq` is missing, Sigil tells you which one and how to install it. After installing, retry `/sigil:connect`. For private repos, run `gh auth setup-git` once so git operations reuse your `gh` credentials.
 
 ## Step 3: Verify the Connection
 

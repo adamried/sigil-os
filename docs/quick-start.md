@@ -524,15 +524,34 @@ After updating, start a new Claude Code session and run `/sigil:draw` to verify.
 
 ## Command Cheat Sheet
 
-These four commands cover most use cases:
+These cover most day-to-day use:
 
 | Command | What It Does |
 |---------|--------------|
 | `/sigil:draw` | Show status and what to do next |
 | `/sigil:draw "..."` | Start building a feature from your description |
 | `/sigil:draw continue` | Resume work on an in-progress feature |
+| `/sigil:dashboard` | Quick read-only status overview |
+| `/sigil:status` | Detailed mid-workflow status |
+| `/sigil:continue` | Short version of `/sigil:draw continue` |
 | `/sigil:constitution` | Set up or update project rules |
 | `/sigil:audit` | View the workflow audit log (requires audit mode enabled) |
+
+When you want pipeline stages on their own (without the full automatic flow):
+
+| Command | What It Does |
+|---------|--------------|
+| `/sigil:spec` | Write a specification on its own |
+| `/sigil:tasks` | Break an existing plan into tasks |
+| `/sigil:review` | Run code or security review on demand |
+| `/sigil:export` | Share a feature summary with non-engineering stakeholders |
+| `/sigil:handoff` | Build the engineer review package |
+
+Optional setup for design teams (S4-002 — coming in v0.34+):
+
+| Command | What It Does |
+|---------|--------------|
+| `/sigil:design` | Manage `.sigil/design.md` (your design source-of-truth) and external design skills |
 
 You don't have to remember commands. Just say what you mean — "I want to add user login" works as well as `/sigil:draw "Add login"`.
 
