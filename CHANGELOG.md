@@ -4,6 +4,40 @@
 
 ### Added
 
+#### S4-001 Phase 4: PO Buddy plugin (po-buddy@0.1.0)
+
+New plugin `po-buddy/` runs in Claude.ai Cowork — receives validated specs from PM Copilot, decomposes into stories, refines existing stories, prepares sprint-ready work. Generalized from gb-code-buddy's PO Buddy with all GasBuddy-specific content stripped (FR-C08).
+
+**Commands (FR-C09–C12, C20):**
+
+- `/receive <source> [Epic-key] [Confluence] [Team]` — Ingest a Validated Spec. Enforces the four-field cross-plugin handoff contract (FR-C09). Runs completeness check against the 10-section template.
+- `/decompose [<epic-key>]` — Generate a phased Story Map from a received spec. Mandatory Approval Gate before any individual story is written. Figma MCP phased usage (no calls in Step 1, batching when 3+ frames in Step 2). Backend/Web/Mobile labels (one per story). AC format adapts to output target (FR-C10).
+- `/story "<description>" | from-map <story-id> | from-map all` — Write individual stories. Quick standalone OR from approved Story Map. No-HOW policy. On-demand Figma usage only (FR-C11).
+- `/addendum <description>` — Post-spec scope addition with `[A#]` traceability. Escalation check for substantial changes (FR-C12).
+- `/design-ticket <title> [--target]` — Create UI/UX design request ticket using `references/design-ticket-template.md`. Local / Confluence / Jira targets (FR-C20).
+
+**Skills (FR-C09–C12, C14, C16, C19–C23):**
+
+- `receive` — handoff contract validation, completeness check, team identification
+- `decompose` — Story Map generation with Figma phased rules, label assignment, AC format adaptation, Approval Gate
+- `quick-story` — story writing with No-HOW enforcement and configurable format (FR-C19)
+- `story-refinement` — improve existing stories with format compliance + quality checklist, refine-vs-rewrite logic (FR-C21)
+- `prepare` — two-step Jira create pattern (skeleton + edit), mandatory PO confirmation gate (FR-C22)
+- `sprint-summary` — read-only sprint planning summary; never writes externally (FR-C23)
+- `addendum` — numbered `[A#]` addenda with substance categorization and revalidation routing
+- `persona-lookup`, `scope-check`, `product-knowledge` — shared with PM Copilot (FR-C16)
+
+**Configurable references (FR-C13, C14, C19):**
+
+- `references/personas.md` (starter shipped; project customizes)
+- `references/team-scope.md` (single-team mode by default; multi-team optional)
+- `references/story-formats.md` (default format shipped; project overrides)
+- `references/validated-spec-template.md`, `design-ticket-template.md`, `story-decomposition-template.md`, `communication-style.md` (synced from `shared-references/`)
+
+**SessionStart hook (FR-D06 tightened for PO):** `po-buddy/hooks/hooks.json` declares NO SessionStart hook. All references load on demand. Per the FR-D06 update, PO Buddy is intentionally lighter than PM Copilot — only the skills that need a reference load it.
+
+Marketplace manifest already lists po-buddy@0.1.0 from Phase 2.
+
 #### S4-001 Phase 3: PM Copilot plugin (pm-copilot@0.1.0)
 
 New plugin `pm-copilot/` runs in Claude.ai Cowork — no Bash, no file writes, no git. Helps PMs articulate problems, write validated specs, and hand off to engineering. Generalized from gb-code-buddy's PM Copilot, stripped of all GasBuddy-specific content.
