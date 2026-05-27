@@ -4,6 +4,14 @@
 
 ### Changed
 
+#### S4-001 FR-A08: Dynamic QA fix limits
+
+QA fix-loop iteration limits no longer appear as hardcoded numbers (`5`, `1`) inside chain files. The `qa-engineer` agent (now 1.4.0) is the canonical source: a new **Fix Limits** table specifies max attempts per track (Standard/Enterprise: 5; Quick Flow: 1) and supports per-project overrides via `.sigil/config.yaml`.
+
+`chains/full-pipeline.md` (→ 1.7.0) and `chains/quick-flow.md` (→ 1.6.0) reference the agent's table instead of inlining the numbers. Track-dependent behavior is preserved.
+
+Note: The orchestrator (`commands/draw.md`) keeps progress-display references like `attempt N/5` since it renders the indicator at runtime — those values are derived from the agent's table per the active track.
+
 #### S4-001 FR-B07: Preflight skill-resolution hint (enforcement v2.5.0)
 
 `SIGIL.md` now ships with an explicit Skill Resolution section listing the 12 skill categories and the canonical lookup path:

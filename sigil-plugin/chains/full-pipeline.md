@@ -1,7 +1,7 @@
 ---
 name: full-pipeline
 description: Complete spec-to-implementation workflow for Standard and Enterprise tracks.
-version: 1.6.0
+version: 1.7.0
 track: standard, enterprise
 entry_skill: complexity-assessor
 ---
@@ -124,7 +124,7 @@ When the user provides a ticket key (e.g., `PROJ-123`) instead of a text descrip
 │  │       qa-fixer              │    │
 │  └─────────────────────────────┘    │
 │              │                       │
-│      [Loop max 5 times]              │
+│  [Loop up to qa-engineer fix limit]  │
 │              │                       │
 │  [Escalate to human if still failing]│
 │              │                       │
@@ -443,6 +443,7 @@ If user requests "quick planning":
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.7.0 | 2026-05-27 | S4-001 FR-A08: Removed hardcoded `5` from qa-fixer loop. Limit now references `agents/qa-engineer.md` Fix Limits table. |
 | 1.6.0 | 2026-05-27 | S4-001 FR-A01: Added `autonomous` execution mode. Skips per-step interactive checkpoints; safety gates still pause. Ends with a mandatory cumulative-diff review. Carried via `execution_mode` in chain context. |
 | 1.5.0 | 2026-05-27 | S4-001 FR-A02/A03/A04: Added feature-branch creation at implementation entry, per-task commits via commit-conventions (with out-of-scope detection), per-feature `.sigil/specs/<feature>/security.md` written by security agent, and a feature-level `verified:` commit after security passes. Quick Flow opts out of the verified commit. |
 | 1.4.0 | 2026-02-20 | S4-104: Ticket-loader as alternate entry point. Added ticket_key, ticket_metadata, ticket_category to context preservation. |

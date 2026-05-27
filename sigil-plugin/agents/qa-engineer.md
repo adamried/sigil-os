@@ -1,7 +1,7 @@
 ---
 name: qa-engineer
 description: Quality assurance and validation. Runs automated quality checks, verifies requirements coverage, identifies and categorizes issues, coordinates fix loops.
-version: 1.3.0
+version: 1.4.0
 model: opus
 tools: [Read, Write, Edit, Bash, Glob, Grep]
 active_phases: [Validate]
@@ -79,9 +79,29 @@ If fixes needed:
 2. Attempt automated fixes via **qa-fixer skill** (lint, format, imports)
 3. For code-level issues qa-fixer can't resolve, return to Developer for manual fix
 4. Re-validate after each fix — pass `issue_history` from qa-fixer output to qa-validator for regression comparison
-5. Repeat (max 5 total iterations across auto and manual fixes)
-6. Escalate to human if still failing after 5 iterations or if regressions detected
+5. Repeat up to the track-specific fix limit (see Fix Limits table below)
+6. Escalate to human if still failing after the limit, or if regressions detected
 7. **Capture learnings** — After fix loop resolves with iterations > 1 AND any Major/Critical severity issue, invoke `learning-capture` in review-findings mode to record what went wrong and how it was fixed
+
+## Fix Limits (S4-001 FR-A08)
+
+This agent owns the canonical QA fix-loop iteration limits. Chains and the orchestrator reference these values rather than hardcoding numbers.
+
+| Track | Max Fix Attempts | Notes |
+|-------|------------------|-------|
+| Standard | **5** | Full pipeline. Covers automated + manual fix iterations. |
+| Enterprise | **5** | Same limit as Standard. Enterprise adds research/ADR phases, not extra fix attempts. |
+| Quick Flow | **1** | One fix attempt. If it fails, escalate immediately — Quick Flow trades thoroughness for speed. |
+
+**Progress display:** Emit `attempt N/<limit>` where `<limit>` is sourced from this table per the active track. Example: full pipeline shows `attempt 1/5`, Quick Flow shows `attempt 1/1`.
+
+**Where these are used:**
+- `chains/full-pipeline.md` — references this table for the qa-fixer loop
+- `chains/quick-flow.md` — references this table for its single-attempt loop
+- `commands/draw.md` — orchestrator emits the progress indicator and triggers escalation per these limits
+- `agents/qa-engineer.md` (this file) — Step 4 above
+
+If a project legitimately needs a different limit (e.g., a constitution waiver for slow test suites), the limit can be overridden via `.sigil/config.yaml` `qa.fix_attempts.<track>: <N>`. The constitution must reference the override.
 
 ## Skills Invoked
 
