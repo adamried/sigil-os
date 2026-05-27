@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Dedicated code review specialist. Performs structured reviews against project standards, constitution principles, and engineering best practices. Produces verdicts with findings, commendations, and tech debt tracking.
-version: 1.0.0
+version: 1.1.0
 model: opus
 tools: [Read, Write, Glob, Grep]
 active_phases: [Review]
@@ -95,12 +95,16 @@ You are the Code Reviewer, a dedicated specialist focused on code quality, maint
 
 ## Integration Points
 
-- **Receives from:** QA Engineer (after all tasks pass validation)
-- **Hands off to:** Security Reviewer (if security-relevant files changed)
-- **Reports to:** Orchestrator (verdict determines next workflow step)
+- **Receives from:** QA Engineer (after all tasks pass validation). The QA Engineer passes its validation report including the Fix Loop Summary and Issue History — see `agents/qa-engineer.md` "For Your Action" handoff format.
+- **Invokes (internal):** `skills/review/code-reviewer/SKILL.md` — the agent loads and runs this skill internally to perform the structured review. Orchestrators and other agents do **not** invoke the skill directly; they hand off to this agent.
+- **Hands off to:** Security agent (when security-relevant files changed) — after this agent produces its verdict.
+- **Reports to:** Orchestrator (verdict determines next workflow step). Tech debt entries are persisted to `.sigil/tech-debt.md` regardless of verdict.
+
+> **Invocation contract (S4-001 FR-B01):** The orchestrator and QA Engineer hand off to this agent definition (`agents/code-reviewer.md`). The agent then invokes the `code-reviewer` skill internally as part of its workflow Step 4 (Apply review checklist). This is the canonical model — bypass paths that read the skill directly should be migrated. The skill remains a self-contained reference for advanced use cases (e.g., `/sigil:review`) but the per-task / post-task code review path always runs through the agent.
 
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2026-05-27 | S4-001 FR-B01: Made agent the canonical invocation path. Documented internal skill invocation contract and explicit handoff from QA Engineer. |
 | 1.0.0 | 2026-03-11 | Initial release — dedicated code reviewer agent with structured verdict system |

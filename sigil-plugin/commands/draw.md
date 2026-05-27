@@ -191,7 +191,7 @@ Read project-context.md to find current phase and feature, then route:
 | tasks | Resume task-decomposer |
 | implement | Go to Step 4b — resume implementation loop |
 | validate | Resume qa-validator on current task |
-| review | Resume code review — read the code-reviewer SKILL.md and follow its process |
+| review | Resume code review — read the `code-reviewer` agent definition (`agents/code-reviewer.md`) and adopt its behavior (the agent invokes the `code-reviewer` skill internally per S4-001 FR-B01) |
 | none | Show status, suggest next action |
 
 **Resume behavior for implement phase:**
@@ -391,8 +391,8 @@ For each incomplete task (respecting dependency order):
 
 #### After All Tasks: Code Review and Security Review
 
-1. Read the code-reviewer SKILL.md and run code review with all changed files across all tasks + spec_path
-2. **Audit:** If `audit_enabled`, append a `phase` entry for code review with outcome (blockers/warnings/suggestions counts)
+1. **Hand off to Code Reviewer agent** (S4-001 FR-B01). Read `agents/code-reviewer.md` and adopt its behavior. The agent loads its own `code-reviewer` skill internally and produces a verdict (Approve / Request Changes / Block) with a written report. Pass: all changed files across all tasks, the spec path, the qa-engineer's validation report, and `execution_mode`. Verdict, findings, commendations, and tech debt entries (persisted to `.sigil/tech-debt.md`) all come from the agent.
+2. **Audit:** If `audit_enabled`, append a `phase` entry for code review with the Code Reviewer agent's verdict and counts (blockers/warnings/suggestions)
 3. If blockers found → present to user for decision. Do not proceed until resolved.
 4. **Security review** (conditional, full pipeline only — Quick Flow opts out): If any task touched auth, session, input handling, file upload, user data, PII, or payment files, OR if override triggers fired for security:
    a. Invoke `specialist-selection` for security specialists, passing all files changed across all tasks

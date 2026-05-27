@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+### Changed
+
+#### S4-001 FR-B01: Code Reviewer is now a canonical agent handoff
+
+Reconciled the code review invocation model. Previously the orchestrator and QA Engineer invoked the `code-reviewer` skill directly, despite a `code-reviewer` agent file already existing. The agent and skill now have a clear, single-source contract:
+
+- **Code Reviewer agent** (`agents/code-reviewer.md`, bumped to 1.1.0) is the canonical entry point for all code review work. Receives the QA Engineer's validation report and runs the review using its skill internally.
+- **`code-reviewer` skill** (bumped to 1.4.0) is now invoked only by the agent. Frontmatter `invoked_by` updated. A new Invocation Contract section makes this explicit.
+- **Orchestrator** (`commands/draw.md`) and **QA Engineer** (`agents/qa-engineer.md`) now hand off to the agent, not the skill.
+- **`/sigil:review`** standalone command also routes through the agent for consistency.
+
+Sigil-os retains its existing richer code-reviewer implementation (verdict system, user track adaptation, waiver awareness, review checklist) — only the invocation path changed.
+
 ### Added
 
 #### S4-001 FR-A01: Autonomous execution mode

@@ -1,13 +1,15 @@
 ---
 name: code-reviewer
 description: Perform structured code review against project standards and best practices. Invoke after qa-validator passes to review code quality before deployment.
-version: 1.3.0
+version: 1.4.0
 category: review
 chainable: true
 invokes: []
-invoked_by: [orchestrator]
+invoked_by: [code-reviewer]
 tools: Read, Write, Glob, Grep
 ---
+
+> **Invocation contract (S4-001 FR-B01):** This skill is invoked by the **Code Reviewer agent** (`agents/code-reviewer.md`) only. All code review entry points — the orchestrator's post-task review (`commands/draw.md`), QA Engineer handoff, and the standalone `/sigil:review` command — hand off to the agent. The agent runs this skill internally. Direct skill invocation is not part of the supported contract.
 
 # Skill: Code Reviewer
 

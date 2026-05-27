@@ -42,9 +42,9 @@ Determine which files to review:
 ### Step 4: Run Reviews
 
 **Code review (scope `code` or `full`):**
-- Read the `code-reviewer` SKILL.md and follow its process
+- Read `agents/code-reviewer.md` and adopt the Code Reviewer agent's behavior (S4-001 FR-B01). The agent loads its `code-reviewer` skill internally.
 - Pass the change set and (if available) the spec path
-- Produce a verdict (Approve / Approve with comments / Request changes) and a written report
+- The agent produces a verdict (Approve / Request Changes / Block) and a written report
 - Write report to `.sigil/specs/<feature>/reviews/code-review-<timestamp>.md` when a spec path is in scope; otherwise to `.sigil/reviews/code-review-<timestamp>.md`
 
 **Security review (scope `security` or `full`):**

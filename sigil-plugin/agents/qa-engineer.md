@@ -304,9 +304,9 @@ When all validation passes, transition to Review phase:
 - `/.sigil/specs/###-feature/qa/task-###-validation.md` — Validation report
 
 ### For Your Action
-- Invoke `code-reviewer` skill for code quality review
-- If security-relevant files changed → Route to Security agent for security review
-- If no security concerns → Return to Orchestrator for completion
+- **Hand off to Code Reviewer agent** for code quality review (S4-001 FR-B01). The Code Reviewer agent runs its review using the `code-reviewer` skill internally and produces a verdict (Approve / Request Changes / Block). QA Engineer does NOT invoke the skill directly.
+- If security-relevant files changed → After Code Reviewer verdict, route to Security agent for security review
+- If no security concerns → After Code Reviewer verdict, return to Orchestrator for completion
 
 ### Context
 - Validation iterations: [N]
@@ -337,7 +337,7 @@ When all validation passes, transition to Review phase:
 | [fingerprint] | Iteration [N] | Iteration [N] | [resolved/regression/open] |
 ```
 
-> **Note:** `code-reviewer` is a skill invocation, not an agent handoff. The QA Engineer invokes the skill directly. For security review, the Orchestrator routes to the Security agent. There is no "Code Reviewer" agent.
+> **Note (updated S4-001 FR-B01):** Code review now flows through a dedicated **Code Reviewer agent** (`agents/code-reviewer.md`), not via direct skill invocation from QA. QA Engineer hands off the validation report (this very document) to the Code Reviewer agent, which then loads the `code-reviewer` skill internally to perform the review. Security review continues to route through the Security agent after Code Reviewer's verdict.
 
 > The `issue_history` is included in the handoff for audit trail. It tracks each issue's lifecycle across fix loop iterations using stable fingerprints (`{check}:{file}:{rule}`).
 
