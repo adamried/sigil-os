@@ -26,12 +26,24 @@ If the hook output indicates files need to be created/updated, follow the instru
 
 ---
 
-### Step 0b: Load Audit Mode and Execution Mode
+### Step 0b: Load Configuration (three-layer cascade — S4-001 FR-A07)
 
-After preflight, read `.sigil/config.yaml` and load:
+After preflight, read both configuration layers and compute effective values per the cascade `project > global > default`:
 
-- **`audit_mode`** → if `true`, carry an `audit_enabled` flag for the remainder of this session. All subsequent steps reference this flag to decide whether to append entries to `.sigil/audit-log.md` per the `shared-protocols/audit-log-protocol.md`. If the flag is true and `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
-- **`execution_mode`** (S4-001 FR-A01) → one of `automatic` (default), `directed`, or `autonomous`. Carry as `execution_mode` for the remainder of the session.
+1. Read **global** layer if it exists: `~/.sigil/config.yaml`
+2. Read **project** layer if it exists: `.sigil/config.yaml`
+3. For each known key, the effective value is:
+   - The project value if set
+   - Else the global value if set
+   - Else the built-in default
+
+Then carry into session context:
+
+- **`audit_mode`** (default `false`) → if effective value is `true`, carry an `audit_enabled` flag for the remainder of this session. All subsequent steps reference this flag to decide whether to append entries to `.sigil/audit-log.md` per the `shared-protocols/audit-log-protocol.md`. If the flag is true and `.sigil/audit-log.md` does not exist, create it from `templates/audit-log-template.md`.
+- **`user_track`** (default `non-technical`) → governs output verbosity and jargon suppression throughout the session.
+- **`execution_mode`** (default `automatic`; S4-001 FR-A01) → one of `automatic`, `directed`, or `autonomous`. Carry as `execution_mode` for the remainder of the session.
+
+Provenance (`project | global | default`) is informational only — the orchestrator only needs the effective values. `/sigil:config show` is the place that surfaces provenance to the user.
 
 #### Autonomous Mode Behavior
 

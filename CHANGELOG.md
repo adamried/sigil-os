@@ -4,6 +4,25 @@
 
 ### Added
 
+#### S4-001 FR-A07: Three-layer configuration cascade
+
+Configuration now loads from three layers in cascade order:
+
+1. **Defaults** (built-in)
+2. **Global** — `~/.sigil/config.yaml` (personal preferences across all projects)
+3. **Project** — `.sigil/config.yaml` (current project overrides)
+
+Project wins over Global wins over Defaults.
+
+**`/sigil:config` updates:**
+- Display mode reads both layers and shows each value with a `(project)`, `(global)`, or `(default)` provenance tag, plus a Layers-loaded footer.
+- `set [--global] <key> <value>` writes to the project layer by default; pass `--global` to write to `~/.sigil/config.yaml` (created on first write).
+- `reset [--global]` removes the target file (instead of writing defaults) so lower layers govern cleanly.
+
+**Orchestrator (`commands/draw.md` Step 0b)** now performs the cascade at session start and carries effective values (`user_track`, `execution_mode`, `audit_mode`) into the session context. No skill or chain needs to know about layers — they consume effective values only.
+
+Existing projects that only have `.sigil/config.yaml` continue to work unchanged.
+
 #### S4-001 FR-A10: Greenfield profile interview
 
 `profile-generator` (now 1.2.0) gains a greenfield interview path. When the project has fewer than 5 source files AND no recognizable signal files (`package.json`, `Cargo.toml`, etc.), the skill skips its auto-detection scan and runs a structured six-question interview:
