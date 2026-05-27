@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Added
+
+#### S4-001 FR-A10: Greenfield profile interview
+
+`profile-generator` (now 1.2.0) gains a greenfield interview path. When the project has fewer than 5 source files AND no recognizable signal files (`package.json`, `Cargo.toml`, etc.), the skill skips its auto-detection scan and runs a structured six-question interview:
+
+1. Primary language
+2. Framework or runtime
+3. Test runner
+4. Package manager
+5. Deploy target
+6. Linked product docs (Confluence, Notion, README)
+
+Output schema is unchanged — downstream consumers don't care which path filled the profile. Two metadata flags (`population_method`, `greenfield`) are recorded so later tooling can distinguish detected vs. interviewed projects.
+
 ### Changed
 
 #### S4-001 FR-A08: Dynamic QA fix limits

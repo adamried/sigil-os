@@ -1,7 +1,7 @@
 ---
 name: profile-generator
-description: Auto-detect project tech stack and interactively generate a project profile for cross-repo awareness.
-version: 1.1.0
+description: Auto-detect project tech stack and interactively generate a project profile for cross-repo awareness. Falls back to a structured greenfield interview when no source code exists.
+version: 1.2.0
 category: shared-context
 chainable: false
 invokes: [shared-context-sync]
@@ -58,7 +58,70 @@ Read `.sigil/project-profile.yaml`:
 - **If exists and mode is `view`:** Display formatted profile (see Step 8) and exit.
 - **If missing:** Proceed to Step 2.
 
-### Step 2: Scan Codebase for Signals
+### Step 2: Detect Greenfield (S4-001 FR-A10)
+
+Before attempting signal-file detection, check if the project qualifies as **greenfield** — too little code to detect a stack reliably:
+
+```
+1. Count source files matching common code extensions
+   (ts, tsx, js, jsx, py, go, rs, java, swift, kt, dart, rb).
+   Use Glob with --max-results 5 to avoid scanning large trees:
+     **/*.{ts,tsx,js,jsx,py,go,rs,java,swift,kt,dart,rb}
+   Exclude node_modules, .git, dist, build, .next, target, .venv.
+
+2. If count < 5 AND no signal files in Step 2.5 below exist:
+   → Switch to Step 2b (Greenfield Interview).
+
+3. Otherwise: proceed to Step 2.5 (Signal-File Detection).
+```
+
+### Step 2b: Greenfield Interview (when greenfield detected)
+
+When greenfield is detected, do NOT try to infer a stack from sparse signals. Instead, run a structured interview:
+
+```
+This looks like a new project — not enough source files yet to
+detect your tech stack automatically. Let me ask a few questions
+to set up your profile.
+
+1. Primary language?
+   (e.g., TypeScript, Python, Go, Rust, Swift, Kotlin, ...)
+   >
+
+2. Framework or runtime?
+   (e.g., Next.js 14, FastAPI, Express, SwiftUI, Flutter,
+   or "none / just the language")
+   >
+
+3. Test runner?
+   (e.g., Vitest, Jest, pytest, go test, XCTest, or "none yet")
+   >
+
+4. Package manager?
+   (e.g., npm, pnpm, yarn, pip, poetry, cargo, go mod, swift pm)
+   >
+
+5. Deploy target?
+   (e.g., Vercel, Netlify, AWS Lambda, Fly, Cloudflare, App Store,
+   self-hosted Docker, or "not decided yet")
+   >
+
+6. Linked product docs?
+   (Confluence URL, Notion page, README path, or "none yet")
+   >
+```
+
+Use answers to populate the same profile schema as Step 2.5 — the schema is identical regardless of which path filled it. Mark detected vs. interviewed fields in metadata:
+
+```yaml
+metadata:
+  population_method: interview   # or "auto-detect"
+  greenfield: true               # set when interview ran
+```
+
+Then jump to Step 3 (Display Detected Stack) showing the interview-derived stack for user confirmation. Subsequent steps (Description, Exposes, Consumes, sibling projects) run unchanged.
+
+### Step 2.5: Scan Codebase for Signals
 
 Scan for the following files to detect tech stack:
 
@@ -414,4 +477,6 @@ User reviews the generated profile before it is saved. The detected tech stack, 
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-05-27 | S4-001 FR-A10: Added greenfield interview path (Step 2/2b). When source-file count < 5 and no signal files exist, fall back from auto-detection to a 6-question interview (language, framework/runtime, test runner, package manager, deploy target, linked docs). Output schema unchanged. `metadata.population_method` and `metadata.greenfield` flags recorded. |
+| 1.1.0 | 2026-02-20 | Enhanced detection for databases, API surface, auth model, domain glossary, project structure (the optional Step 7 sub-sections). |
 | 1.0.0 | 2026-02-09 | Initial release — auto-detection, interactive generation, shared repo publish |
