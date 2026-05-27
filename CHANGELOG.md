@@ -4,6 +4,60 @@
 
 ### Added
 
+#### S4-002 Phase 3: External skills loader + propose-and-confirm + full `/sigil:design` (FR-F01–F06, FR-H01–H04, FR-I01)
+
+Completes the design context system. Phase 1 shipped the schema and generator; Phase 2 wired agents; Phase 3 closes the loop with external advisory skills and the propose-and-confirm patch flow.
+
+**External skills loader (FR-F01–F06):**
+
+`sigil-plugin/skills/design/design-skills-loader/` — Manages `.sigil/design-skills/<slug>/` synced from GitHub URLs or local paths. Key behaviors:
+
+- **gh CLI clone** with `--depth 1` (FR-F01). Private repos work via `gh auth setup-git` (FR-F06).
+- **30-day TTL refresh** (FR-F02) with optional force via `/sigil:design refresh`.
+- **Tier-1 manifest** at `.sigil/design-skills/.manifest.json`, budget ~1.5K tokens (FR-F03). Auto-trims summaries first, then drops `references` field, then disables oldest skills.
+- **Network-failure fallback** (FR-F04): sync failures NEVER block a UI task; cached copies are used and a one-line warning surfaces.
+- **Suggested skills with non-endorsement disclaimer** (FR-F05): 4 example URLs presented with explicit "NOT endorsed by sigil-os, Anthropic, or skill authors."
+
+Storage layout:
+
+```
+.sigil/
+├── design.md                       ← normative, committed
+├── design-skills/                  ← gitignored
+│   ├── .manifest.json              ← always-on (~1.5K tokens)
+│   └── <slug>/                     ← per-skill cache
+└── tech-debt.md                    ← lazy-created on first rejection
+```
+
+**Propose-and-confirm skill (FR-H01–H04):**
+
+`sigil-plugin/skills/design/propose-and-confirm/` — Handles drift patches surfaced by `uiux-designer` Step 8.5 and `developer` Step 6.5 (both from Phase 2). Key behaviors:
+
+- **Unified diff view** rendered to the user as Markdown.
+- **Accept / Reject / Edit / Per-change** options via `AskUserQuestion`.
+- **Final-diff confirmation** before any write to design.md — design.md is never auto-edited (FR-H03).
+- **Reject path** writes to `.sigil/tech-debt.md` (created lazily on first rejection).
+- **Autonomous-mode batching** (FR-H04): when `execution_mode: autonomous` (S4-001 FR-A01), patches queue to `.sigil/.autonomous-patches.json`. The orchestrator presents the batch at end-of-run alongside the cumulative diff review.
+- **Write guard:** only `setup`, `design-md-generator`, or this skill (with explicit user Accept) may write to design.md. Other paths are rejected.
+
+**`/sigil:design` command (FR-I01):**
+
+`sigil-plugin/commands/design.md` — Phase 1 shipped this as a stub recognizing all 9 subcommands but only implementing regenerate / enable / disable. Phase 3 makes the remaining 6 subcommands functional by routing to `design-skills-loader`:
+
+| Subcommand | Behavior |
+|------------|----------|
+| (no args) | Regenerate `.sigil/design.md` via `design-md-generator` (Phase 1) |
+| `list` | Show registered skills + manifest size |
+| `add <url-or-path>` | Register + sync a skill |
+| `remove <slug>` | Drop a skill (cached files deleted) |
+| `preview <url-or-slug>` | Fetch metadata without cloning |
+| `refresh [<slug>]` | Force re-sync (resets `cached_at`) |
+| `suggest` | 4 examples + non-endorsement disclaimer |
+| `enable` | Set `design.enabled: true`; offer to generate design.md if missing |
+| `disable` | Set `design.enabled: false`; preserve files |
+
+**Decline absoluteness preserved (FR-E05):** Once disabled, no command may re-prompt the user. Only `/sigil:design enable` can flip the flag back. The SessionStart hook from Phase 1 fast-paths under 100ms when disabled.
+
 #### S4-002 Phase 2: Agent integration — UI-task gate, net-new detection, propose-and-confirm (FR-G01–G04, FR-H01–H03, FR-E02)
 
 Layers the design context system into the existing agent workflow. Backend tasks pay zero overhead via deterministic gates — no LLM calls in the cost-control paths (NFR-004).

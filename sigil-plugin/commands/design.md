@@ -1,13 +1,11 @@
 ---
-description: Manage the design context system — design.md and external design skills (Phase 3 lands full subcommands)
-argument-hint: (no arguments — regenerate design.md) | list | add | remove | preview | refresh | suggest | enable | disable
+description: Manage the design context system — design.md and external design skills
+argument-hint: (no arguments) | list | add <url> | remove <slug> | preview <url-or-slug> | refresh [<slug>] | suggest | enable | disable
 ---
 
 # /sigil:design — Design Context Management
 
 You are the **Design Context Manager** for Sigil OS. Your role is to manage the project's normative design source-of-truth (`.sigil/design.md`) and any registered external design skills.
-
-> **Phase 1 scope (current):** This command supports regeneration of `.sigil/design.md` via the design-md-generator skill. The other subcommands (`list`, `add`, `remove`, `preview`, `refresh`, `suggest`, `enable`, `disable`) are documented and recognized — they ship fully in S4-002 Phase 3 alongside the external skills loader and propose-and-confirm flow.
 
 ## User Input
 
@@ -21,23 +19,23 @@ $ARGUMENTS
 
 Read `.sigil/config.yaml` `design:` block:
 
-- **If `enabled: false`:** report "Design context is disabled. Run `/sigil:design enable` to re-enable." and exit. Never auto-flip.
-- **If config absent:** assume not-yet-configured. Surface: "Run `/sigil:setup` to configure design context, or `/sigil:design enable` to opt in now."
-- **If `enabled: true`:** proceed.
+- **If `enabled: false` AND subcommand ≠ `enable`:** report "Design context is disabled. Run `/sigil:design enable` to re-enable." and exit. Never auto-flip — FR-E05 requires that decline be honored absolutely until the user explicitly enables.
+- **If config absent and subcommand ≠ `enable`:** "Run `/sigil:setup` to configure design context, or `/sigil:design enable` to opt in now."
+- **If `enabled: true` OR subcommand is `enable`:** proceed.
 
 ### Step 2: Route by Subcommand
 
-| Subcommand | Phase 1 behavior | Phase 3 behavior |
-|------------|------------------|------------------|
-| (no args) | Invoke `design-md-generator` (regenerate `.sigil/design.md`). Always confirms overwrite first. | Same. |
-| `list` | "Phase 3 subcommand — coming with the external skills loader." | List registered external skills with sync status. |
-| `add <url-or-path>` | "Phase 3 subcommand — coming with the external skills loader." | Register and sync a skill. |
-| `remove <slug>` | "Phase 3 subcommand — coming with the external skills loader." | Remove a skill from the registry. |
-| `preview <url-or-slug>` | "Phase 3 subcommand — coming with the external skills loader." | Fetch metadata without cloning. |
-| `refresh [<slug>]` | "Phase 3 subcommand — coming with the external skills loader." | Force re-sync (resets `cached_at`). |
-| `suggest` | "Phase 3 subcommand — coming with the external skills loader." | Show 4 example URLs + non-endorsement disclaimer. |
-| `enable` | Set `design.enabled: true` in `.sigil/config.yaml`. If `design.md` is missing, offer to run the generator now. | Same. |
-| `disable` | Set `design.enabled: false`. Surface "Design context disabled. Skills cache and design.md preserved." | Same. |
+| Subcommand | Skill / behavior |
+|------------|------------------|
+| (no args) | `design-md-generator` skill — regenerate `.sigil/design.md` with explicit user confirmation |
+| `list` | `design-skills-loader` action: `list` |
+| `add <url-or-path>` | `design-skills-loader` action: `add` |
+| `remove <slug>` | `design-skills-loader` action: `remove` |
+| `preview <url-or-slug>` | `design-skills-loader` action: `preview` |
+| `refresh [<slug>]` | `design-skills-loader` action: `refresh` |
+| `suggest` | `design-skills-loader` action: `suggest` (with non-endorsement disclaimer — FR-F05) |
+| `enable` | Set `design.enabled: true`; offer to run generator if design.md missing |
+| `disable` | Set `design.enabled: false`; preserve files; surface "design context disabled, files preserved" |
 
 ### Step 3: Bare-Invocation Regeneration
 
@@ -48,38 +46,62 @@ When invoked with no arguments:
    ```
    .sigil/design.md exists. Regenerate?
 
-     1. Yes — interview from scratch
-     2. Yes — explore current code and re-extract tokens
+     1. Yes — interview from scratch (greenfield mode)
+     2. Yes — explore current code and re-extract tokens (explore mode)
      3. Cancel
    ```
 
-   Do NOT auto-overwrite (FR-H03 / FR-E04 require user confirmation).
+   Do NOT auto-overwrite (FR-H03 / FR-E04).
 
 2. Invoke `skills/design/design-md-generator/SKILL.md` with the chosen mode.
 
-3. After write, surface the path and a short note about how it's used by UI tasks.
+3. After write, surface the path and a short note about how UI tasks consume the file (loaded by `uiux-designer` Step 2 and `developer` Step 0b — see S4-002 Phase 2).
 
-### Step 4: Output
+### Step 4: External-Skill Subcommands
 
-For Phase 1 stub subcommands, the message is:
+Invoke `skills/design/design-skills-loader/SKILL.md` with the matching `action`. The loader handles:
 
-```
-That subcommand ships in S4-002 Phase 3.
+- gh CLI credential reuse for private repos (via `gh auth setup-git`) — FR-F06
+- 30-day TTL refresh policy — FR-F02
+- Tier-1 manifest budget (~1.5K tokens) with auto-trim — FR-F03
+- Network-failure fallback to cached copies — FR-F04
+- Non-endorsement disclaimer on `suggest` — FR-F05
 
-Phase 3 adds the external design-skills loader (with 30-day TTL refresh,
-manifest budget, network fallback), the suggested-skills disclaimer, and
-the propose-and-confirm drift updates. Until then, .sigil/design.md is the
-only design surface and is managed via:
+### Step 5: Enable / Disable
 
-  /sigil:design          regenerate (interview or explore mode)
-  /sigil:design enable   re-enable after a previous disable
-  /sigil:design disable  turn off design context (preserves files)
-```
+#### Enable
 
-For full subcommands (regenerate, enable, disable), report success matching `templates/output-formats.md` style.
+1. Read `.sigil/config.yaml`. If `design:` block missing, create it with defaults.
+2. Set `design.enabled: true`.
+3. If `.sigil/design.md` is missing, surface via `AskUserQuestion`:
+   ```
+   Design context is now enabled. .sigil/design.md doesn't exist yet.
+
+     1. Generate it now via interview / explore mode
+     2. Generate later — /sigil:design (no args)
+   ```
+4. Confirm: "Design context enabled."
+
+#### Disable
+
+1. Surface via `AskUserQuestion`:
+   ```
+   Disable design context?
+
+   - .sigil/design.md will be preserved
+   - .sigil/design-skills/ cache will be preserved
+   - SessionStart hook will fast-path under 100ms going forward
+   - No commands will re-prompt to re-enable until you run /sigil:design enable
+
+     1. Yes, disable
+     2. Cancel
+   ```
+2. On Yes: set `design.enabled: false`, confirm.
+3. On Cancel: no change.
 
 ## Guidelines
 
-- **Decline absoluteness:** `enabled: false` is a permanent user choice until the user explicitly runs `/sigil:design enable`. No other code path may flip it back.
-- **No auto-edit of design.md:** All writes go through `design-md-generator` with explicit user confirmation (FR-H03).
-- **Phase 3 awaits:** This command is forward-compatible. Phase 3 fills in the deferred subcommands without breaking Phase 1 invocations.
+- **Decline absoluteness (FR-E05):** `enabled: false` is a permanent user choice. Only `/sigil:design enable` can flip it back.
+- **No auto-edit of design.md (FR-H03):** All writes go through `design-md-generator` (initial / regenerate) or `propose-and-confirm` (drift patches). Direct writes from other code paths are forbidden.
+- **Advisory vs. normative:** External design skills are advisory. design.md is normative. On conflict, design.md wins.
+- **Cost control:** When `enabled: false`, the SessionStart hook fast-paths in <100ms (NFR-002). UI-task gate in agents (Phase 2) keeps backend tasks at zero overhead.
