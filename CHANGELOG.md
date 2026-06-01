@@ -1,6 +1,21 @@
 # Changelog
 
-## [Unreleased]
+## [0.33.0] - 2026-06-01
+
+> **The Buddy + Design Context release.** Major convergence work pulling generalizable improvements from the gb-code-buddy fork (v0.39.0) into sigil-os. Adds autonomous execution mode, the verified-commit git workflow, three-layer configuration, gh CLI shared context, and the first layer of a design context system. PM Copilot and PO Buddy companion plugins are built and gitignored pending validation — they will land in a future release.
+
+### Highlights for non-technical users
+
+- **Autonomous mode** — run features end-to-end without per-step prompts. Safety gates still pause. Configure with `/sigil:config set execution_mode autonomous`.
+- **Three-layer config** — set global preferences once (`~/.sigil/config.yaml`) that apply to every project. Override per-project as needed. Each value shows where it came from.
+- **Verified commits** — full-pipeline features now end with a `verified: <feature> security pass` commit referencing the security review report. Quick Flow features stay simpler — no verified commit, no security review.
+- **Shared context now uses `gh` instead of MCP** — easier setup: install `gh`, run `gh auth login`, done. Existing MCP setups continue to work during the transition.
+- **Design context (optional)** — new `/sigil:design` command and `.sigil/design.md` source-of-truth for design tokens, components, and accessibility. Mobile and web profiles are both first-class. Decline at setup is honored absolutely — no re-prompts.
+- **Eight new commands** — pipeline-stage commands (`/sigil:spec`, `/sigil:tasks`, `/sigil:review`, `/sigil:export`) and companion entries (`/sigil:dashboard`, `/sigil:status`, `/sigil:continue`).
+
+See `docs/releases/v0.33.0.md` for the full release notes and upgrade steps.
+
+---
 
 ### Added
 
