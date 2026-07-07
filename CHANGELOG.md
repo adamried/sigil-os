@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.33.1] - 2026-07-07
+
+> **Cost-optimized agent models.** A tuning release — agent behavior is unchanged; only the model each agent runs on has been remapped. Expensive judgment where it counts (planning, review, security), efficient execution everywhere else.
+
+### Changed
+
+- **Agent model routing** — task-planner moved to Opus (breakdown is the highest-leverage step); developer, qa-engineer, and orchestrator moved to Sonnet (they execute against explicit specs and criteria). architect, code-reviewer, and security stay on Opus as the judgment and safety gates. No functional change to any agent's behavior, tools, or prompts.
+
+See `docs/releases/v0.33.1.md` for the full rationale and upgrade notes.
+
+---
+
 ## [0.33.0] - 2026-06-01
 
 > **The Buddy + Design Context release.** Major convergence work pulling generalizable improvements from the gb-code-buddy fork (v0.39.0) into sigil-os. Adds autonomous execution mode, the verified-commit git workflow, three-layer configuration, gh CLI shared context, and the first layer of a design context system. PM Copilot and PO Buddy companion plugins are built and gitignored pending validation — they will land in a future release.
