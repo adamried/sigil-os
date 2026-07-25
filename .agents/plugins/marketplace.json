@@ -1,0 +1,20 @@
+{
+  "name": "sigil-os",
+  "interface": {
+    "displayName": "Sigil OS Preview"
+  },
+  "plugins": [
+    {
+      "name": "sigil",
+      "source": {
+        "source": "local",
+        "path": "./plugins/sigil"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

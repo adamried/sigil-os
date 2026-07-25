@@ -1,0 +1,12 @@
+{
+  "apps": {
+    "atlassian-rovo": {
+      "id": "connector_692de805e3ec8191834719067174a384",
+      "category": "Work Tracking & Coordination"
+    },
+    "figma": {
+      "id": "connector_68df038e0ba48191908c8434991bbac2",
+      "category": "Design"
+    }
+  }
+}

@@ -67,6 +67,23 @@ config:
     - "Platform Maintenance"
 ```
 
+## Input
+
+A protocol name plus its arguments, passed by the calling skill:
+
+| Protocol | Caller | Input |
+|----------|--------|-------|
+| Fetch Ticket | `ticket-loader` Step 2 | `ticket_key` |
+| Fetch Parent | `ticket-loader` Step 3 | `parent_key` |
+| Categorize | `ticket-loader` Step 4 | `type`, `labels` |
+| Post Summary | `handoff-back` Step 3 | `ticket_key`, `summary` |
+| Transition Status | `handoff-back` Step 3 | `ticket_key`, `target_status` |
+| Link Artifact | `handoff-back` Step 3 | `ticket_key`, `artifact_url`, `artifact_title` |
+
+## Output
+
+Each protocol returns the structured JSON documented in its Procedure below. Read protocols return ticket data or an `{ error, message }` object; write protocols return non-blocking success/failure flags (`{ posted }`, `{ transitioned, new_status }`, `{ linked }`).
+
 ## Protocols
 
 ### Fetch Ticket

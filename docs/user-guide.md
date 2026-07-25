@@ -27,6 +27,7 @@ This guide walks you through every part of Sigil. Start here if you are new. Com
 7. [Specialists](#part-55-specialists)
 8. [Troubleshooting](#part-6-troubleshooting)
 9. [Appendices](#appendices)
+10. [Using the Codex Preview](#using-the-codex-preview)
 
 ---
 
@@ -859,6 +860,58 @@ You do not need to change these. Knowing they exist helps you understand where t
 - [Command Reference](command-reference.md) -- Full syntax for all commands
 - [Example Walkthrough](examples/user-auth-feature/README.md) -- A complete feature example
 - [Troubleshooting Guide](troubleshooting.md) -- Common issues and solutions
+
+## Using the Codex Preview
+
+Codex uses skill mentions instead of Claude slash commands. For example,
+`/sigil:draw continue` becomes `$sigil:draw continue`. Plain-language requests
+such as “use Sigil to build this feature” also work. The preview is available
+in Codex CLI and the ChatGPT desktop app, not as an IDE-extension plugin.
+
+### Workflow pacing is not permission
+
+Sigil's automatic, directed, and autonomous modes decide when the workflow asks
+you to review its progress. Codex permissions decide what files, commands,
+network connections, and external actions the agent may use. Changing Sigil's
+mode never changes Codex sandboxing, approvals, managed policy, or hook trust.
+
+### Files setup manages
+
+| Path | Purpose | Usual Git treatment |
+|---|---|---|
+| `.sigil/SIGIL.md` | Platform-neutral project guidance | Tracked |
+| `.sigil/constitution.md` | Project rules | Tracked |
+| `.sigil/project-foundation.md` | Discovery foundation | Tracked |
+| `.sigil/project-profile.yaml` | Project stack and service profile | Tracked |
+| `.sigil/design.md` | Optional design source | Tracked |
+| `.sigil/waivers.md` | Visible approved exceptions | Tracked |
+| `.sigil/specs/` | Feature artifacts | Tracked |
+| `.sigil/config.yaml` | Local preferences | Ignored |
+| `.sigil/project-context.md` | Resumable state | Ignored |
+| `.sigil/learnings/` | Local learning memory | Ignored |
+| `.sigil/tech-debt.md` | Local review backlog | Ignored |
+| `.sigil/audit/`, `.sigil/audit-*/` | Current and archived local audits | Ignored |
+| `.sigil/queue/` | Authorized failed-write queue | Ignored |
+| `.sigil/update-check.json` | Local update timestamp | Ignored |
+| `AGENTS.md` | Shared guidance; Sigil owns one marked block | Tracked |
+| `.codex/agents/*.toml` | Optional project agents (Sigil names start `sigil_`) | Your choice |
+
+Setup preserves existing files. It inserts or updates only the
+`SIGIL-CODEX` block in `AGENTS.md` and stops for manual review if those markers
+are damaged or duplicated.
+
+### Hooks and optional agents
+
+Hooks add reminders but do not own enforcement. If you do not trust them,
+Sigil's coordinator performs the same checks. Optional agents can speed up role
+work; without them the coordinator follows each role contract in sequence.
+
+To remove Codex-specific project guidance, use `$sigil:setup` to remove its
+marked `AGENTS.md` block and move generated agents to
+`.codex/agents/.sigil-removed/`. Keep `.sigil/` unless you intend to remove
+shared project rules, specs, and waivers. See
+[Codex installation](codex-installation.md) and
+[Codex migration](codex-migration.md).
 
 ---
 

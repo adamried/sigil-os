@@ -71,7 +71,7 @@ Per-task commits via `commit-conventions` still apply (same as full pipeline).
          │
          ▼
 ┌─────────────────────┐
-│  Developer Agent    │ ← Implementation
+│  developer          │ ← Implementation (Developer agent)
 └─────────────────────┘
          │
          ▼

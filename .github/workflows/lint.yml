@@ -3,8 +3,22 @@ name: Lint
 on:
   pull_request:
     branches: [main]
+    paths:
+      - "sigil-plugin/**"
+      - "shared-references/**"
+      - "codex-source/neutral/**"
+      - "tools/workflow-linter.py"
+      - "scripts/sync-references.sh"
+      - ".github/workflows/lint.yml"
   push:
     branches: [main]
+    paths:
+      - "sigil-plugin/**"
+      - "shared-references/**"
+      - "codex-source/neutral/**"
+      - "tools/workflow-linter.py"
+      - "scripts/sync-references.sh"
+      - ".github/workflows/lint.yml"
 
 jobs:
   workflow-linter:

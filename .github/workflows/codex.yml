@@ -1,0 +1,93 @@
+name: Codex
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "codex-source/**"
+      - "codex-source/neutral/**"
+      - "plugins/sigil/**"
+      - ".agents/plugins/**"
+      - "tools/codex-*.py"
+      - "tools/build-codex-plugin.py"
+      - "tools/check-version-sync.py"
+      - "tools/check-codex-doc-state.py"
+      - "tools/vendor/validate_plugin.py"
+      - "tests/test_codex_*.py"
+      - "tests/e2e/test_codex_install.py"
+      - "test-runs/contracts/**"
+      - ".github/workflows/codex.yml"
+  push:
+    branches: [main]
+    tags: ["v*", "codex-parity-v*"]
+    paths:
+      - "codex-source/**"
+      - "codex-source/neutral/**"
+      - "plugins/sigil/**"
+      - ".agents/plugins/**"
+      - "tools/codex-*.py"
+      - "tools/build-codex-plugin.py"
+      - "tools/check-version-sync.py"
+      - "tools/check-codex-doc-state.py"
+      - "tools/vendor/validate_plugin.py"
+      - "tests/test_codex_*.py"
+      - "tests/e2e/test_codex_install.py"
+      - "test-runs/contracts/**"
+      - ".github/workflows/codex.yml"
+
+jobs:
+  deterministic-codex:
+    name: Codex deterministic tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install test-only Python dependencies
+        run: python3 -m pip install "ruamel.yaml==0.18.17" "PyYAML==6.0.3"
+      - name: Verify deterministic package
+        run: python3 tools/build-codex-plugin.py --check
+      - name: Run Codex linter
+        run: python3 tools/codex-plugin-linter.py --verbose
+      - name: Run upstream package validator
+        run: python3 tools/vendor/validate_plugin.py plugins/sigil
+      - name: Run deterministic suites
+        run: python3 -m unittest -v tests.test_codex_helpers tests.test_codex_hooks tests.test_codex_build_and_linter tests.test_codex_release_gates
+      - name: Validate all model contracts without model calls
+        run: python3 tools/codex-contract-runner.py --dry-run
+      - name: Verify setup-file documentation matches its manifest
+        run: python3 tools/check-codex-doc-state.py
+
+  installed-cache:
+    name: Codex isolated install and cache test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned Codex CLI
+        run: npm install --global "@openai/codex@0.145.0"
+      - name: Install from a local marketplace into an isolated Codex home
+        run: python3 -m unittest -v tests.e2e.test_codex_install
+
+  release-version-policy:
+    name: Release version policy
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate preview release versions
+        if: ${{ !startsWith(github.ref_name, 'codex-parity-v') }}
+        run: python3 tools/check-version-sync.py --release
+      - name: Validate exact parity release versions
+        if: startsWith(github.ref_name, 'codex-parity-v')
+        run: python3 tools/check-version-sync.py --release --parity

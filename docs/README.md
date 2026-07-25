@@ -11,6 +11,9 @@ Start here if you use Sigil to build features, manage projects, or work with spe
 | Document | What It Covers | Start Here If... |
 |----------|---------------|------------------|
 | [Quick Start](quick-start.md) | Install, set up, and build your first feature | You're new to Sigil |
+| [Codex Installation](codex-installation.md) | Install the Codex preview safely | You use Codex CLI or the desktop app |
+| [Codex Migration](codex-migration.md) | Claude-to-Codex command and coexistence map | You already use the Claude edition |
+| [Codex Integrations](codex-integrations.md) | Separate Jira, Figma, and GitHub setup | You want external context |
 | [User Guide](user-guide.md) | Complete reference for daily use | You want the full picture |
 | [Command Reference](command-reference.md) | Every slash command with examples | You need command syntax |
 | [Troubleshooting](troubleshooting.md) | Common issues and solutions | Something went wrong |
@@ -28,6 +31,9 @@ Start here if you use Sigil to build features, manage projects, or work with spe
 ## Printable Guides
 
 Downloadable DOCX versions for offline reference or sharing with your team.
+
+These printables currently cover the Claude edition. Codex printables follow
+after the preview reaches Core Parity on one supported surface.
 
 | Guide | Description |
 |-------|-------------|
@@ -50,6 +56,8 @@ These documents cover Sigil's internals, architecture, and extension points.
 | [Context Management](dev/context-management.md) | Project state persistence protocol |
 | [Error Handling](dev/error-handling.md) | Error taxonomy, codes, and recovery |
 | [MCP Integration](mcp-integration.md) | Optional external tool integrations |
+| [Codex Architecture](dev/codex-architecture.md) | Source layers, adapters, state ownership, hooks, and agents |
+| [Codex Testing](dev/codex-testing.md) | Deterministic, installed-cache, contract, and E2E lanes |
 
 ### Reading Order (Contributors)
 

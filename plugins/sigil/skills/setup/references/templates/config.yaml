@@ -1,0 +1,15 @@
+# Sigil project-local preferences. This file is ignored by default.
+user_track: non-technical
+execution_mode: automatic
+audit_mode: false
+commits: disabled
+global_config_opt_in: false
+integrations:
+  jira:
+    enabled: false
+    custom_fields: {}
+    category_mapping: {}
+  figma:
+    enabled: false
+  shared_context:
+    enabled: false

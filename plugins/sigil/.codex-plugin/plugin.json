@@ -1,0 +1,43 @@
+{
+  "name": "sigil",
+  "description": "Preview: specification-driven development workflows for Codex",
+  "author": {
+    "name": "Adam Riedthaler",
+    "url": "https://github.com/araserel"
+  },
+  "homepage": "https://github.com/araserel/sigil-os",
+  "repository": "https://github.com/araserel/sigil-os",
+  "license": "MIT",
+  "keywords": [
+    "workflow",
+    "specification",
+    "development",
+    "qa",
+    "review"
+  ],
+  "skills": "./skills/",
+  "apps": "./.app.json",
+  "interface": {
+    "displayName": "Sigil OS Preview",
+    "shortDescription": "Turn a feature idea into reviewed, tested code",
+    "longDescription": "Preview Codex edition of Sigil OS. It guides a project from plain-language intent through specification, planning, implementation, validation, code review, and security review.",
+    "developerName": "Adam Riedthaler",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/araserel/sigil-os",
+    "defaultPrompt": [
+      "Build a feature from my plain-language description",
+      "Continue my active Sigil workflow",
+      "Set up Sigil safely in this project"
+    ],
+    "brandColor": "#4F46E5",
+    "composerIcon": "./assets/sigil-small.svg",
+    "logo": "./assets/sigil.svg",
+    "screenshots": []
+  },
+  "version": "0.33.0-beta.1"
+}

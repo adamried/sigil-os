@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+from sigil_hooks import main
+raise SystemExit(main("preflight"))

@@ -62,7 +62,7 @@ After preflight, the Orchestrator reads `.sigil/config.yaml` (defaults apply if 
          │
          ▼
 ┌─────────────────────┐
-│   Developer Agent    │ ← Story = single task, AC = spec
+│   developer          │ ← Developer agent: story = single task, AC = spec
 │ (+ specialist overlay)│
 │ (loads learnings     │
 │  internally via      │

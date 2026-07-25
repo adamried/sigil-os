@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Vendored Codex hook-event compatibility canary",
+  "description": "Snapshot verified 2026-07-24 against the Codex Hooks manual. Optional event fields are intentionally permissive.",
+  "type": "object",
+  "required": [
+    "hook_event_name"
+  ],
+  "properties": {
+    "session_id": {
+      "type": "string"
+    },
+    "transcript_path": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cwd": {
+      "type": "string"
+    },
+    "hook_event_name": {
+      "enum": [
+        "SessionStart",
+        "PostToolUse",
+        "SubagentStart",
+        "Stop"
+      ]
+    },
+    "model": {
+      "type": "string"
+    },
+    "permission_mode": {
+      "type": "string"
+    },
+    "tool_name": {
+      "type": "string"
+    },
+    "tool_use_id": {
+      "type": "string"
+    },
+    "tool_input": {
+      "type": "object"
+    },
+    "tool_response": {},
+    "agent_type": {
+      "type": "string"
+    },
+    "stop_hook_active": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}

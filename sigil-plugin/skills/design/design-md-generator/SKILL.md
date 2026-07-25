@@ -5,7 +5,7 @@ version: 1.0.0
 category: design
 chainable: false
 invokes: []
-invoked_by: [setup, sigil-design]
+invoked_by: [setup, design]
 tools: Read, Write, Edit, Glob, Grep, AskUserQuestion
 ---
 

@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": ".sigil/SIGIL.md",
+      "owner": "setup",
+      "durability": "durable guidance",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/constitution.md",
+      "owner": "specification",
+      "durability": "durable governance",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/project-foundation.md",
+      "owner": "architecture",
+      "durability": "durable discovery",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/project-profile.yaml",
+      "owner": "setup",
+      "durability": "durable profile",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/design.md",
+      "owner": "design",
+      "durability": "durable design source",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/specs/",
+      "owner": "phase roles",
+      "durability": "durable feature artifacts",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/config.yaml",
+      "owner": "config",
+      "durability": "project-local preferences",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/project-context.md",
+      "owner": "root coordinator",
+      "durability": "resumable workflow state",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/learnings/",
+      "owner": "learning",
+      "durability": "local working memory",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/waivers.md",
+      "owner": "constitution governance",
+      "durability": "durable active waivers",
+      "git": "track"
+    },
+    {
+      "path": ".sigil/tech-debt.md",
+      "owner": "code review",
+      "durability": "local review backlog",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/audit/",
+      "owner": "root coordinator",
+      "durability": "per-session audit",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/audit-*/",
+      "owner": "audit archive",
+      "durability": "local archive",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/queue/",
+      "owner": "integration adapters",
+      "durability": "offline retry queue",
+      "git": "ignore"
+    },
+    {
+      "path": ".sigil/update-check.json",
+      "owner": "update",
+      "durability": "durable local timestamp",
+      "git": "ignore"
+    },
+    {
+      "path": "AGENTS.md",
+      "owner": "shared; Sigil owns markers only",
+      "durability": "durable guidance",
+      "git": "track"
+    },
+    {
+      "path": ".codex/agents/*.toml",
+      "owner": "optional setup output",
+      "durability": "project configuration",
+      "git": "user-choice"
+    }
+  ]
+}

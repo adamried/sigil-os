@@ -12,6 +12,10 @@ Sigil can connect to external tools through **MCP** (Model Context Protocol — 
 
 MCP lets Claude access project trackers, wikis, chat tools, and more. You add a connection once, and Sigil uses it automatically during your workflow.
 
+Using Codex? Its Jira, Figma, and GitHub authorization paths are separate. See
+the [Codex integrations guide](codex-integrations.md); do not reuse the Claude
+MCP instructions below as Codex configuration.
+
 ---
 
 ## Integration Points

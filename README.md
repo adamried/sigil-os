@@ -2,11 +2,11 @@
 
 **Inscribe it. Ship it.**
 
-**Specification-driven development for Claude Code — built for product managers, works for engineers too.**
+**Specification-driven development for Claude Code and Codex — built for product managers, works for engineers too.**
 
-Sigil is a plugin for Claude Code, Anthropic's AI coding tool. Transform natural language descriptions into implemented, tested features through structured workflows.
+Sigil is a plugin for Claude Code with a Codex preview. Transform natural language descriptions into implemented, tested features through structured workflows.
 
-> **v0.33.0** · Active development — expect breaking changes between minor versions.
+> **Claude v0.33.0 · Codex v0.33.0-beta.1 preview** · Active development
 
 ---
 
@@ -43,6 +43,8 @@ Switch anytime with `/sigil:config set user_track technical` (or `non-technical`
 
 ## Installation
 
+### Claude Code
+
 Sigil requires Claude Code with a Pro, Max, or API plan. See [Anthropic's setup guide](https://docs.anthropic.com/en/docs/claude-code) to install Claude Code if you haven't already.
 
 Once Claude Code is installed, add Sigil:
@@ -70,6 +72,24 @@ Something not working? See the [Troubleshooting Guide](docs/troubleshooting.md).
 - [ ] `claude --version` shows a version number
 - [ ] `claude plugin list` shows `sigil`
 - [ ] `/sigil:draw status` shows the Sigil dashboard
+
+### Codex preview
+
+The Codex preview supports local Codex CLI and the ChatGPT desktop app. From a
+clone of this repository:
+
+```bash
+codex plugin marketplace add /full/path/to/sigil-os
+codex plugin add sigil@sigil-os
+codex plugin list
+```
+
+Then open a project in a new Codex session and say:
+
+> Use `$sigil:setup` to set up this project.
+
+See the [Codex installation guide](docs/codex-installation.md) for runtimes,
+hook trust, optional agents, connectors, migration, and removal.
 
 ---
 

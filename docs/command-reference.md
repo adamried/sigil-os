@@ -6,25 +6,30 @@
 
 ## Command Overview
 
-| Command | Purpose | When to Use |
-|---------|---------|-------------|
-| `/sigil:draw` | **Unified entry point** — status, start, resume | Starting any workflow |
-| `/sigil:setup` | Initialize Sigil OS in a new project | First-time project setup |
-| `/sigil:dashboard` | Project status overview + suggested next action (read-only) | Quick check-in, no prompts |
-| `/sigil:status` | Detailed mid-workflow status view (read-only) | Long-running implementations |
-| `/sigil:continue` | Resume the current workflow | Terser alternative to `/sigil:draw continue` |
-| `/sigil:spec` | Write or manage a specification on its own | Spec-only work, no auto-pipeline |
-| `/sigil:tasks` | Decompose an existing plan into tasks | When `plan.md` exists and you want tasks |
-| `/sigil:review` | Run code or security review on demand | Reviewing changes outside the pipeline |
-| `/sigil:export` | Produce a stakeholder-friendly summary | Sharing progress with non-engineering audiences |
-| `/sigil:handoff` | Generate engineer review package | Ready for technical review |
-| `/sigil:constitution` | View or edit project rules | First-time setup or updates |
-| `/sigil:learn` | View, search, or review learnings | Reviewing institutional memory |
-| `/sigil:connect` | Connect project to shared context repo | Multi-project sharing setup |
-| `/sigil:profile` | Generate or view project profile | Describing your tech stack and APIs |
-| `/sigil:config` | View or change configuration (user track, execution mode, audit mode) | Adjusting Sigil's behavior |
-| `/sigil:audit` | View or manage the workflow audit log | Reviewing what happened in a workflow |
-| `/sigil:update` | Check for and install Sigil updates | Keeping Sigil current |
+The behavior is the same unless the [Codex migration guide](codex-migration.md)
+names a deliberate preview difference. Use slash commands in Claude Code and
+skill mentions in Codex.
+
+| Claude Code | Codex | Purpose |
+|---|---|---|
+| `/sigil:draw` | `$sigil:draw` | **Unified entry point** — status, start, resume |
+| `/sigil:setup` | `$sigil:setup` | Initialize or verify Sigil in a project |
+| `/sigil:dashboard` | `$sigil:draw dashboard` | Read-only project overview |
+| `/sigil:status` | `$sigil:draw status` | Detailed workflow status |
+| `/sigil:continue` | `$sigil:draw continue` | Resume the current workflow |
+| `/sigil:spec` | `$sigil:spec` | Write or manage a specification |
+| `/sigil:tasks` | `$sigil:draw tasks` | Decompose an existing plan |
+| `/sigil:review` | `$sigil:review` | Run code or security review |
+| `/sigil:export` | `$sigil:export` | Produce a stakeholder summary |
+| `/sigil:handoff` | `$sigil:export handoff` | Generate an engineer review package |
+| `/sigil:constitution` | `$sigil:setup constitution` | View or edit project rules |
+| `/sigil:learn` | `$sigil:learn` | Review institutional memory |
+| `/sigil:connect` | `$sigil:config connect` | Connect shared context |
+| `/sigil:profile` | `$sigil:setup profile` | Generate or view the project profile |
+| `/sigil:config` | `$sigil:config` | View or change preferences |
+| `/sigil:audit` | `$sigil:draw audit` | Inspect workflow audit history |
+| `/sigil:update` | `$sigil:update` | Check for plugin updates |
+| `/sigil:design` | `$sigil:draw design` | Manage the design procedure |
 
 ---
 

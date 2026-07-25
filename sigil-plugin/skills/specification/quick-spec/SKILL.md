@@ -45,11 +45,17 @@ When invoking spec-writer, quick-spec applies these four constraints:
 **Optional:**
 ```json
 {
-  "context_file": "string — Path to relevant context file"
+  "context_file": "string — Path to relevant context file",
+  "constitution_context": {
+    "constraints": "list — Project constraints extracted from /.sigil/constitution.md",
+    "tech_stack": "object — Approved technology stack from the constitution"
+  }
 }
 ```
 
 Defaults: `story_type` defaults to `"outcome"`.
+
+When `constitution_context` is provided (injected by the Quick Flow constitution-check step), honor its `constraints` and `tech_stack` when drafting the spec so the generated story respects project guardrails.
 
 ## Quick Spec Template
 

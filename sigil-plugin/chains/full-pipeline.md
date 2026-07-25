@@ -99,7 +99,7 @@ When the user provides a ticket key (e.g., `PROJ-123`) instead of a text descrip
 │              │                       │
 │              ▼                       │
 │  ┌─────────────────────────────┐    │
-│  │    Developer Agent          │    │
+│  │    developer                │    │
 │  │    (+ specialist overlay)   │    │
 │  │    (loads learnings         │    │
 │  │     internally via          │    │
@@ -189,7 +189,7 @@ file documents the sequence and state transitions; the `/sigil:draw` command exe
 
 Most boxes in the diagram are **skills** (invoked by agents). The key exceptions are:
 - **uiux-designer** — This is the **UI/UX Designer agent** (defined in `agents/uiux-designer.md`), not a skill. It has its own routing, tools, and human checkpoint.
-- **Developer Agent** — This is the **Developer agent** (defined in `agents/developer.md`), optionally overlaid with a **specialist** from `agents/specialists/`. Skills like `learning-reader` and `learning-capture` are invoked by the agent.
+- **developer** — This is the **Developer agent** (defined in `agents/developer.md`), optionally overlaid with a **specialist** from `agents/specialists/`. Skills like `learning-reader` and `learning-capture` are invoked by the agent.
 - **specialist-selection** — This is a **skill** (defined in `skills/workflow/specialist-selection/SKILL.md`) invoked twice per task: once to select the developer specialist, once to select validation specialists.
 - All other boxes (complexity-assessor, spec-writer, clarifier, technical-planner, etc.) are **skills** invoked by the Orchestrator or their parent agent.
 

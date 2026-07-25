@@ -1,0 +1,63 @@
+{
+  "description": "Optional advisory context for configured Sigil projects.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/preflight-check",
+            "timeout": 10,
+            "statusMessage": "Checking Sigil project guidance"
+          },
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/load-team-config",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/load-design-context",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/verify-context-update",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/validate-track-routing",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/scripts/session-summary",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -15,6 +15,8 @@ Documentation for contributors and developers extending Sigil OS.
 | [Workflow Diagrams](workflow-diagrams.md) | Command flows, track routing, and agent reference |
 | [Context Management](context-management.md) | Protocol for maintaining project state across sessions |
 | [Error Handling](error-handling.md) | Error taxonomy, codes, escalation paths, and agent error tables |
+| [Codex Architecture](codex-architecture.md) | Package layers, runtime boundaries, and divergence decisions |
+| [Codex Testing](codex-testing.md) | Deterministic, contract, installation, and release validation |
 
 ## Reading Order
 
@@ -23,6 +25,7 @@ Documentation for contributors and developers extending Sigil OS.
 3. Reference **Versioning** when making changes to existing skills
 4. Consult **Context Management** for state persistence details
 5. Use **Error Handling** for error classification and recovery protocols
+6. Use **Codex Architecture** and **Codex Testing** for Codex-specific changes
 
 ## Additional Resources
 

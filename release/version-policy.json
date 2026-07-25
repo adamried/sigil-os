@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "policy": "preview-divergence-until-parity",
+  "claude_release": "0.33.0",
+  "codex_preview": "0.33.0-beta.1",
+  "parity_tag_prefix": "codex-parity-v",
+  "artifacts": {
+    "claude_manifest": "sigil-plugin/.claude-plugin/plugin.json",
+    "claude_marketplace": ".claude-plugin/marketplace.json",
+    "codex_neutral_version": "codex-source/VERSION",
+    "codex_manifest": "plugins/sigil/.codex-plugin/plugin.json",
+    "codex_marketplace": ".agents/plugins/marketplace.json",
+    "public_readme": "README.md",
+    "release_docs": [
+      "docs/releases/v0.33.0.md",
+      "docs/releases/0.33.0-codex-preview.md"
+    ]
+  }
+}

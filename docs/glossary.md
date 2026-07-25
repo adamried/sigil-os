@@ -39,9 +39,13 @@ Plain-English definitions for terms used in Sigil. If a word sounds technical, y
 | **API Endpoint** | A web address where your app sends or receives data — like a mailbox for software |
 | **CLI** | Command Line Interface — the text-based window where you type commands |
 | **Lint / Format** | Tools that check and fix code style automatically — like spell-check for code |
-| **Plugin** | An add-on that gives a program new features (Sigil is a plugin for Claude Code) |
+| **Plugin** | An add-on that gives a program new features. Sigil has packages for Claude Code and Codex. |
+| **Plugin Cache** | Codex's installed copy of a plugin. Reinstall or use a development cachebuster after changing a local plugin source. |
 | **QA Loop** | An automatic fix-and-check cycle that runs up to 5 times before asking for help |
 | **Repository (Repo)** | A folder tracked by Git (version control software) that stores your project's history |
+| **Skill Mention** | The Codex form for invoking a skill, such as `$sigil:draw`; it corresponds to a Claude slash command such as `/sigil:draw`. |
+| **Hook Trust** | Your decision to allow a plugin's event-triggered scripts to run. Sigil hooks are advisory and fail open, but should still be reviewed before trust is granted. |
+| **Workflow Mode vs. Permission** | Sigil's mode controls workflow pacing; Codex sandboxing, approvals, and managed policy control what actions are permitted. One never widens the other. |
 | **WCAG** | Web Content Accessibility Guidelines — the international standard for making websites usable by everyone, including people with disabilities. Sigil targets WCAG AA (the middle level) by default. |
 
 ---

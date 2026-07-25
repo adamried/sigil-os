@@ -5,7 +5,7 @@ version: 1.0.0
 category: design
 chainable: false
 invokes: []
-invoked_by: [sigil-design]
+invoked_by: [design]
 tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion
 ---
 
@@ -190,6 +190,17 @@ Sync failures NEVER block a UI task. The cascade is:
 3. If sync fails AND no cached copy exists → skip this skill (do not include in manifest), log warning.
 
 UI tasks always have a non-fatal manifest to work with.
+
+## Output
+
+Per action:
+
+- `add` / `remove` / `refresh` — updated `.sigil/design-skills/<slug>/` cache, updated `design.skills[]` in `.sigil/config.yaml`, regenerated `.sigil/design-skills/.manifest.json`, and a one-line confirmation to the user
+- `list` — the registry table (Step 8 format)
+- `preview` — rendered SKILL.md frontmatter summary; no files written
+- `suggest` — the 4 example URLs with the mandatory non-endorsement disclaimer (Step 7 format)
+
+Warnings (sync failure, budget trims) are surfaced inline and never block.
 
 ## Anti-patterns
 

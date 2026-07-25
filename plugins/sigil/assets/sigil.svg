@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sigil OS">
+  <rect width="512" height="512" rx="112" fill="#4F46E5"/>
+  <path d="M144 136h224v64H208v48h128v64H208v32h160v64H144z" fill="#fff"/>
+</svg>

@@ -235,7 +235,7 @@ When resuming implement phase:
 ### Step 3: Handle Feature Description
 
 If input came from ticket-loader (enriched context):
-- Constitution and discovery checks still apply (do NOT skip them)
+- **constitution-check** (blocking verification): Read `/.sigil/constitution.md` and verify the incoming story and any existing plan/tasks against its articles (tech stack, code standards, and relevant gates). On a violation, PAUSE and present it to the user with the waiver option (approved waivers are logged to `/memory/waivers.md` per the project's constitutional governance). Discovery checks still apply (do NOT skip them).
 - Pass `ticket_metadata` alongside the `enriched_description` to spec-writer
 - spec-writer receives the ticket context and uses it to pre-populate the spec
 - `ticket_metadata` is preserved in the chain context for downstream skills (complexity-assessor, handoff-back)
@@ -258,7 +258,8 @@ If user provided a feature description (plain text or enriched):
 
    Starting Discovery Track...
    ```
-   → Run Discovery Track, then return to start spec
+   → Run the Discovery Track: read `chains/discovery-chain.md` and execute each step it defines, in order, then return to start spec
+   <!-- delegates-to: chains/discovery-chain.md -->
 
 3. **Run complexity assessment**
    - Read the complexity-assessor SKILL.md and run it with the user's description
@@ -279,18 +280,19 @@ If user provided a feature description (plain text or enriched):
 
 When complexity-assessor returns Quick Flow:
 
-1. Read the quick-spec SKILL.md (not spec-writer) — lightweight spec, no P2/P3 scenarios
-2. Auto-continue to task-decomposer (skip clarifier — Quick Flow trades thoroughness for speed)
-3. Implementation loop with these differences from Standard/Enterprise:
+1. **constitution-check** (context injection, non-blocking): Read `/.sigil/constitution.md`, extract its constraints and tech stack, and pass `constitution_context: { constraints, tech_stack }` into the quick-spec invocation (per the `chains/quick-flow.md` State Transitions). If the constitution is missing, warn the user and continue without blocking.
+2. Read the quick-spec SKILL.md (not spec-writer) — lightweight spec, no P2/P3 scenarios. Honor the injected `constitution_context` constraints when drafting.
+3. Auto-continue to task-decomposer (skip clarifier — Quick Flow trades thoroughness for speed)
+4. Implementation loop with these differences from Standard/Enterprise:
    - No specialist-selection (use base developer and qa-engineer agents)
-   - QA validation: max 1 fix attempt (not 5)
+   - QA validation: fix attempts capped at the Quick Flow limit in the `agents/qa-engineer.md` Fix Limits table (currently 1)
    - Skip formal code review after all tasks
    - Skip security review (unless override trigger fired)
    - **Skip verification commit** (S4-001 FR-A04): no per-feature `security.md`, no `verified:` commit. The Feature-Level Status table marks both gates `[—] N/A (Quick Flow)`.
-4. Per-task commits (FR-A03) still apply — Quick Flow is opted out of security/verification, not commits.
-5. If QA fix resolves a Major/Critical issue, still invoke learning-capture
+5. Per-task commits (FR-A03) still apply — Quick Flow is opted out of security/verification, not commits.
+6. If QA fix resolves a Major/Critical issue, still invoke learning-capture
 
-Constitution is already verified in Step 3.1 (blocking) before reaching this path, so no additional check needed.
+Step 3.1 verifies the constitution *exists* (blocking) before reaching this path; the constitution-check step above injects its *content* (constraints + tech stack) into quick-spec, which the existence check does not do.
 
 ### Step 4: Auto-Continue Logic
 
@@ -373,10 +375,11 @@ For each incomplete task (respecting dependency order):
 - Read the qa-validator SKILL.md, then run validation with task context and specialist behavior
 - Emit progress: `Implementation Loop: [completed]/[total] tasks - Task T### validating (attempt N/5)`
 - If passes -> mark task complete, continue to C
-- If fails -> fix loop:
-  - Apply fixes based on QA feedback
-  - Re-validate (max 5 attempts)
-  - If still failing after 5: PAUSE, present issues to user with options (fix manually / skip task / stop)
+- If fails -> fix loop (under the adopted qa-engineer behavior):
+  - Invoke the `qa-fixer` skill per `skills/qa/qa-fixer/SKILL.md`, passing the chain data contract `{ issues, files_to_fix }` from the qa-validator report. qa-fixer returns `{ fixes_applied, iteration }`.
+  - Re-validate: re-run qa-validator, passing `issue_history` from qa-fixer output for regression comparison
+  - Repeat up to the track's fix limit from the `agents/qa-engineer.md` Fix Limits table (Standard/Enterprise: 5, Quick Flow: 1)
+  - If still failing after the limit is reached: PAUSE, present issues to user with options (fix manually / skip task / stop)
 - **After fix loop resolves:** If the fix loop required more than 1 iteration AND any resolved issue had severity Major or Critical, invoke `learning-capture` in review findings mode. Pass the filtered issue list from the QA validation report using the QA engineer's Fix Loop Summary (iterations count, Major/Critical issues with titles and resolutions). This is silent and non-blocking — do not wait for it before continuing to C.
 
 **C. Task Completion**

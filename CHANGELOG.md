@@ -1,5 +1,34 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **Codex edition preview (`0.33.0-beta.1`).** Added a deterministic Codex
+  package with eight public skills, platform-neutral workflow references,
+  project-safe setup/state helpers, optional advisory hooks, optional custom
+  agents, real Atlassian Rovo and Figma app declarations, guarded GitHub shared
+  context, a local marketplace, dual-lane CI, and install/contract/E2E test
+  infrastructure. Claude edition `0.33.0` remains independently installable.
+- **Codex installation, migration, integration, testing, troubleshooting, and
+  release documentation.** The first Codex release is explicitly preview-only;
+  automatic commits default to off and hooks/agents/integrations remain
+  optional.
+
+### Deferred
+
+- **Codex printable guides.** The existing DOCX/PDF guides continue to cover the
+  Claude edition. Codex printables will be regenerated after Core Parity passes
+  on one claimed surface and the eight-skill public surface remains frozen.
+
+### Fixed
+
+- **QA fix loop now runs the qa-fixer skill (PA-004).** The implementation loop previously applied fixes inline instead of invoking the `qa-fixer` skill the chains define. It now invokes `qa-fixer` with the proper data contract and sources its fix-attempt limits from the QA Engineer agent (5 for Standard/Enterprise, 1 for Quick Flow) rather than hardcoded numbers, so routine validation failures are actually auto-remediated before escalating.
+- **Quick Flow specs now receive constitution constraints (PA-004).** Quick Flow adds an explicit constitution-check that injects the project's constraints and tech stack into the quick spec, so simple changes are drafted with the same guardrails as full-pipeline work instead of blind to the constitution. Non-blocking: if no constitution exists, it warns and continues.
+- **Implementation entry now verifies plans against the constitution (PA-004).** Ticket-driven, pre-decomposed work now runs a blocking constitution-check before implementation, pausing with a waiver option when the story or plan conflicts with a constitutional article. Replaces a bare "do not skip" instruction that had no mechanism.
+- **Discovery Track routing now names its mechanism (PA-004).** Greenfield routing previously said "Run Discovery Track" with no execution path; it now explicitly reads `chains/discovery-chain.md` and executes each step it defines, in order. The chain file remains the single source of truth for Discovery steps.
+- **Chain and skill metadata cleanup (PA-004).** Aligned the "Developer Agent" diagram label in the three chain files to the `developer` agent identifier (naming only, no behavior change); corrected `invoked_by` in the two design skills from the nonexistent `sigil-design` to the `design` command; documented Input/Output for the Jira adapter and design-skills-loader, added trigger words to the Code Reviewer agent, and marked routing-rules as a non-executable reference skill.
+
 ## [0.33.0] - 2026-06-01
 
 > **The Buddy + Design Context release.** Major convergence work pulling generalizable improvements from the gb-code-buddy fork (v0.39.0) into sigil-os. Adds autonomous execution mode, the verified-commit git workflow, three-layer configuration, gh CLI shared context, and the first layer of a design context system. PM Copilot and PO Buddy companion plugins are built and gitignored pending validation — they will land in a future release.

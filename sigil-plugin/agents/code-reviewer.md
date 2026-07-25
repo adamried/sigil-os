@@ -61,6 +61,15 @@ You are the Code Reviewer, a dedicated specialist focused on code quality, maint
 |-------|------|
 | `code-reviewer` | Primary review process — read SKILL.md and follow its workflow |
 
+## Trigger Words
+
+- "review" — Code review request
+- "code review" — Explicit review request
+- "code quality" — Quality assessment
+- "tech debt" — Tech debt review
+
+Primary activation is not word-triggered: this agent is invoked by handoff from the QA Engineer after validation passes (full pipeline) or via the `/sigil:review` command — see Integration Points below.
+
 ## Reference Files
 
 - `skills/review/code-reviewer/references/review-checklist.md` — Detailed review criteria by category

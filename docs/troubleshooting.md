@@ -522,6 +522,23 @@ A: No. Each phase builds on the last. Skipping one creates gaps that cause probl
 
 ---
 
+## Codex preview problems
+
+| What you see | Why it happens | Fix |
+|---|---|---|
+| “Sigil is not visible.” | The plugin is not installed or this Codex surface does not support plugin browsing. | In CLI or the desktop app, run `codex plugin list`; install Sigil if absent. The IDE extension is not a supported preview surface. |
+| “The marketplace is not configured.” | Codex does not know the Sigil marketplace source. | Run `codex plugin marketplace add /full/path/to/sigil-os`, then `codex plugin list --available`. |
+| “I updated Sigil, but old skills are still visible.” | Codex is using an installed cache snapshot. | Remove and add `sigil@sigil-os` again, or use a new cachebuster build during development; then start a new session. |
+| “Setup finished, but nothing changed in this conversation.” | Skills and project agents are discovered when a session starts. | Close this session and start a new Codex session in the project. |
+| “Codex says the hooks are untrusted.” | Hook commands need separate trust. | Review `plugins/sigil/hooks/hooks.json`; trust it only if comfortable. Otherwise decline—core Sigil still works. |
+| “Codex says the project `.codex/` layer is untrusted.” | Project configuration can define agents and behavior. | Review `.codex/config.toml` and `.codex/agents/`, then use Codex's trust prompt. Removing those optional files returns to sequential behavior. |
+| “Jira or Figma is missing or asks me to sign in.” | Connector installation and account authorization are separate from plugin installation. | Follow [Codex integrations](codex-integrations.md). If you skip it, provide local ticket or design context and continue. |
+| “Sigil cannot write to my home folder.” | `~/.sigil` is outside the project permission boundary. | Keep project-only defaults, or record global opt-in and approve that specific outside-workspace write. |
+| “Sigil says `gh` or `jq` is missing.” | Shared context needs `gh`; an older local path may also expect `jq`. | Install the named command, run `gh auth login` and `gh auth status`, or continue with local Sigil work. |
+| “My custom Sigil agents are not loaded.” | They were not generated, are invalid, or the session predates them. | Check `.codex/agents/sigil_*.toml`, run `$sigil:setup` to regenerate after confirmation, and start a new session. |
+| “The Sigil state schema is invalid.” | `.sigil/project-context.md` is old or damaged. | Run the setup/update migration preview, review its diff, then confirm. The helper makes a backup before replacement. |
+| “Sigil works in CLI but not my IDE.” | The Codex IDE extension is not a claimed plugin-browsing surface for this preview. | Use Codex CLI or the ChatGPT desktop app and start a new session there. |
+
 ## Summary
 
 Most issues fall into one of four buckets.
