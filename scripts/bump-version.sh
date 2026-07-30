@@ -11,12 +11,11 @@
 #   bump-version.sh --show               Display current version of each plugin and exit
 #   bump-version.sh --help               Show this usage
 #
-# <plugin> is one of:  sigil-plugin | pm-copilot | po-buddy
+# <plugin> is:  sigil-plugin
 # <new-version> is a semver string like 0.33.0 (no leading "v")
 #
 # Examples:
 #   scripts/bump-version.sh sigil-plugin 0.33.0
-#   scripts/bump-version.sh pm-copilot 0.1.0
 #   scripts/bump-version.sh --show
 #
 # Requires: jq
@@ -41,7 +40,7 @@ show_versions() {
     echo ""
     printf "  %-15s  %s\n" "Plugin" "Version"
     printf "  %-15s  %s\n" "---------------" "-------"
-    for plugin in sigil-plugin pm-copilot po-buddy; do
+    for plugin in sigil-plugin; do
         manifest="$REPO_ROOT/$plugin/.claude-plugin/plugin.json"
         if [ -f "$manifest" ]; then
             version=$(jq -r '.version' "$manifest")
@@ -76,8 +75,8 @@ NEW_VERSION="$2"
 
 # Validate plugin name
 case "$PLUGIN" in
-    sigil-plugin|pm-copilot|po-buddy) ;;
-    *) echo "ERROR: unknown plugin '$PLUGIN' (use sigil-plugin | pm-copilot | po-buddy)" >&2; exit 1 ;;
+    sigil-plugin) ;;
+    *) echo "ERROR: unknown plugin '$PLUGIN' (use sigil-plugin)" >&2; exit 1 ;;
 esac
 
 # Validate semver shape

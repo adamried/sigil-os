@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+### Removed
+
+- **Companion plugins moved to their own marketplace repo (2026-07-29).** The PM
+  Copilot and PO Buddy plugins built under S4-001 Workstream C (v0.1.0, never
+  shipped — gitignored pending validation) were superseded by the newer
+  product-agnostic line in the standalone `product-plugins` repo (v0.4.0, "Validated
+  Spec" renamed to "PRD", adds `/onboard` and `/design-review`). Deleted the local
+  copies along with `shared-references/`, `scripts/sync-references.sh`, the
+  shared-references CI sync job, and the workflow linter's two companion-plugin
+  checks. `scripts/bump-version.sh` now handles sigil-plugin only. Cowork-targeted
+  plugins are developed and distributed from `product-plugins` going forward.
+
 ### Added
 
 - **Codex edition preview (`0.33.0-beta.1`).** Added a deterministic Codex

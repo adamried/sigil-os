@@ -13,13 +13,6 @@
 /feedback/
 /Public Spec Driven Repos/
 
-# Cowork plugins under validation (S4-001 Phase 3/4 — not yet ready to ship)
-# These plugins are built and committed locally but are gitignored until
-# extensive validation and testing complete. Their entries are also removed
-# from .claude-plugin/marketplace.json for now.
-/pm-copilot/
-/po-buddy/
-
 # Archived development artifacts
 /archive/
 

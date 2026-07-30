@@ -5,24 +5,20 @@ on:
     branches: [main]
     paths:
       - "sigil-plugin/**"
-      - "shared-references/**"
       - "codex-source/neutral/**"
       - "tools/workflow-linter.py"
-      - "scripts/sync-references.sh"
       - ".github/workflows/lint.yml"
   push:
     branches: [main]
     paths:
       - "sigil-plugin/**"
-      - "shared-references/**"
       - "codex-source/neutral/**"
       - "tools/workflow-linter.py"
-      - "scripts/sync-references.sh"
       - ".github/workflows/lint.yml"
 
 jobs:
   workflow-linter:
-    name: Workflow linter (sigil-plugin + multi-plugin)
+    name: Workflow linter (sigil-plugin)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,11 +27,3 @@ jobs:
           python-version: "3.11"
       - name: Run workflow linter
         run: python3 tools/workflow-linter.py --verbose
-
-  shared-references-sync-check:
-    name: shared-references / plugin references sync
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Verify shared-references are in sync with plugin copies
-        run: scripts/sync-references.sh --check
