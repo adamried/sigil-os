@@ -35,6 +35,11 @@
 
 ### Fixed
 
+- **Updated GitHub links to the renamed account.** All repository, homepage, and
+  marketplace references now use `adamried/sigil-os` (the account was renamed
+  from `araserel`; old links only work via a GitHub redirect that isn't
+  guaranteed to last). Touches both plugin manifests, install/migration docs,
+  and the shared-context skills.
 - **QA fix loop now runs the qa-fixer skill (PA-004).** The implementation loop previously applied fixes inline instead of invoking the `qa-fixer` skill the chains define. It now invokes `qa-fixer` with the proper data contract and sources its fix-attempt limits from the QA Engineer agent (5 for Standard/Enterprise, 1 for Quick Flow) rather than hardcoded numbers, so routine validation failures are actually auto-remediated before escalating.
 - **Quick Flow specs now receive constitution constraints (PA-004).** Quick Flow adds an explicit constitution-check that injects the project's constraints and tech stack into the quick spec, so simple changes are drafted with the same guardrails as full-pipeline work instead of blind to the constitution. Non-blocking: if no constitution exists, it warns and continues.
 - **Implementation entry now verifies plans against the constitution (PA-004).** Ticket-driven, pre-decomposed work now runs a blocking constitution-check before implementation, pausing with a waiver option when the story or plan conflicts with a constitutional article. Replaces a bare "do not skip" instruction that had no mechanism.
@@ -819,7 +824,7 @@ All cross-references in skills, chains, agents, templates, hooks, and docs updat
 - Renamed all `/prism*` commands → `/sigil*` commands
 - Updated all internal references, paths, and documentation
 - Plugin install is now `claude plugin install sigil@sigil-os`
-- Marketplace is now `claude plugin marketplace add araserel/sigil-os`
+- Marketplace is now `claude plugin marketplace add adamried/sigil-os`
 - Enforcement file renamed from `PRISM.md` → `SIGIL.md`
 
 ### Notes

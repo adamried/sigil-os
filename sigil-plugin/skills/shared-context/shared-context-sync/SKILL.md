@@ -163,7 +163,7 @@ Called by `learning-capture` after writing a learning locally.
 **Procedure:**
 
 1. Check sentinel → if not active, return silently
-2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+2. Determine shared repo from sentinel lookup (e.g., `adamried/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. Determine target file path: `learnings/{repo_name}/{category}.md`
 5. Get contributor email via `git config user.email`
@@ -212,7 +212,7 @@ Called by `prime` at session start.
 **Procedure:**
 
 1. Check sentinel → if not active, return silently
-2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+2. Determine shared repo from sentinel lookup (e.g., `adamried/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. Read `~/.sigil/cache/shared/last-sync.json` for previous content hashes
 5. **List the learnings directory via `gh-sync.sh`:**

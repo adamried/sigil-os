@@ -67,7 +67,7 @@ Sigil is a Claude Code plugin (a set of tools that run inside Claude Code, the A
 ### Step 1: Add the Marketplace
 
 ```bash
-claude plugin marketplace add araserel/sigil-os
+claude plugin marketplace add adamried/sigil-os
 ```
 
 ### Step 2: Install the Plugin

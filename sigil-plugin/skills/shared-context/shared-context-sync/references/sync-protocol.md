@@ -168,7 +168,7 @@ Called by `profile-generator` after writing or updating `.sigil/project-profile.
 **Procedure:**
 
 1. Check sentinel -> if not active, return silently
-2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+2. Determine shared repo from sentinel lookup (e.g., `adamried/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. Determine target file path: `profiles/{repo_name}.yaml`
 5. Read local `.sigil/project-profile.yaml`
@@ -259,7 +259,7 @@ Called by `/sigil:draw` at session start and by `constitution-writer` during set
 **Procedure:**
 
 1. Check sentinel -> if not active, return silently
-2. Determine shared repo from sentinel lookup (e.g., `araserel/platform-context`)
+2. Determine shared repo from sentinel lookup (e.g., `adamried/platform-context`)
 3. Split shared repo into `owner` and `repo` parts
 4. **Read shared-standards directory via MCP:**
    ```

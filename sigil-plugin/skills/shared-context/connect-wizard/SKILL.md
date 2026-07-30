@@ -137,7 +137,7 @@ If yes, use the `shared-context-sync` Scaffolding Protocol, which creates all fi
 # Shared Context
 
 This repository stores shared learnings, project profiles, and organizational
-standards for use across code projects via [Sigil OS](https://github.com/araserel/sigil-os).
+standards for use across code projects via [Sigil OS](https://github.com/adamried/sigil-os).
 
 ## Structure
 

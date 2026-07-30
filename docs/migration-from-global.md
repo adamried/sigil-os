@@ -43,7 +43,7 @@ rm -rf ~/.sigil-os/
 
 ```bash
 # Add marketplace and install
-claude plugin marketplace add araserel/sigil-os
+claude plugin marketplace add adamried/sigil-os
 claude plugin install sigil@sigil-os
 ```
 
@@ -144,5 +144,5 @@ Check that hooks are enabled in your Claude Code settings and that the hook scri
 ## Getting Help
 
 - **Documentation:** `/sigil:draw help`
-- **Issues:** https://github.com/araserel/sigil-os/issues
+- **Issues:** https://github.com/adamried/sigil-os/issues
 - **Updates:** `/sigil:update`

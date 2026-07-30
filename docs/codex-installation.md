@@ -34,7 +34,7 @@ codex plugin marketplace add /full/path/to/sigil-os
 When the repository is published as a Codex marketplace, you can use:
 
 ```bash
-codex plugin marketplace add araserel/sigil-os
+codex plugin marketplace add adamried/sigil-os
 ```
 
 Check that Codex can see it:

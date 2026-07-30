@@ -50,7 +50,7 @@ Sigil requires Claude Code with a Pro, Max, or API plan. See [Anthropic's setup 
 Once Claude Code is installed, add Sigil:
 
 ```bash
-claude plugin marketplace add araserel/sigil-os
+claude plugin marketplace add adamried/sigil-os
 ```
 
 ```bash

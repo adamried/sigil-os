@@ -85,7 +85,7 @@ Sigil OS Update Check
 To install Sigil OS:
 
 1. Add the marketplace:
-   /plugin marketplace add araserel/sigil-os
+   /plugin marketplace add adamried/sigil-os
 
 2. Install the plugin:
    /plugin install sigil@sigil-os
@@ -115,7 +115,7 @@ To migrate:
    rm -rf ~/.sigil-os/
 
 2. Install the new plugin:
-   /plugin marketplace add araserel/sigil-os
+   /plugin marketplace add adamried/sigil-os
    /plugin install sigil@sigil-os
 
 See: docs/migration-from-global.md

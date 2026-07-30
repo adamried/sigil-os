@@ -3,10 +3,10 @@
   "description": "Preview: specification-driven development workflows for Codex",
   "author": {
     "name": "Adam Riedthaler",
-    "url": "https://github.com/araserel"
+    "url": "https://github.com/adamried"
   },
-  "homepage": "https://github.com/araserel/sigil-os",
-  "repository": "https://github.com/araserel/sigil-os",
+  "homepage": "https://github.com/adamried/sigil-os",
+  "repository": "https://github.com/adamried/sigil-os",
   "license": "MIT",
   "keywords": [
     "workflow",
@@ -28,7 +28,7 @@
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/araserel/sigil-os",
+    "websiteURL": "https://github.com/adamried/sigil-os",
     "defaultPrompt": [
       "Build a feature from my plain-language description",
       "Continue my active Sigil workflow",
